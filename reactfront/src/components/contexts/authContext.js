@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { PropTypes } from "prop-types";
+import { Cookies, useCookies } from 'react-cookie';
 
 const MY_AUTH_APP = 'MY_AUTH_APP';
 
@@ -9,35 +10,28 @@ export const AuthData = () => useContext(AuthContext);
 
 export function AuthContextProvider({children}){
 
-    useEffect(() => {
-        const loggedUserJSON = window.localStorage.getItem('loginAppUser');
-        //const UserJSON = JSON.parse(loggedUserJSON);
-        setUser(loggedUserJSON);
-    },[]);
-
+    const [cookies, setCookie, removeCookie] = useCookies(['userToken']);
     const [User, setUser] = useState([])
     const [isAuthenticated, setIsAuthenticated] = useState(window.localStorage.getItem(MY_AUTH_APP) ?? false);
 
     const loginUser = (name, password) => {
-
         setUser(name);
         if (password === "password"){
-            localStorage.setItem('loginAppUser', User);
-            console.log(User, name)
+            setCookie('user', name, {path:'/'})
             login();
-        }
-        
+        } 
     } 
 
     const login = useCallback(function(){
         localStorage.setItem(MY_AUTH_APP, true);
         setIsAuthenticated(true);
-        console.log()
     },[]);
 
     const logout = useCallback(function(){
+        handleRemoveCookie()
         localStorage.removeItem(MY_AUTH_APP);
         setIsAuthenticated(false);
+        console.log("cookies adios", cookies);
     },[]);
 
     const value = useMemo( () => ({
@@ -45,9 +39,13 @@ export function AuthContextProvider({children}){
         login,
         logout,
         isAuthenticated,
-        User
-    }), [loginUser,login,logout,isAuthenticated,User]);
+        User,
+        cookies
+    }), [loginUser,login,logout,isAuthenticated,User,cookies]);
 
+    function handleRemoveCookie() {
+        removeCookie("user");
+    }
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
