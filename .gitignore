@@ -1,0 +1,81 @@
+# This file is used for Git repositories to specify intentionally untracked files that Git should ignore. 
+# If you are not using git, you can delete this file. For more information see: https://git-scm.com/docs/gitignore
+# For useful gitignore templates see: https://github.com/github/gitignore
+
+# Salesforce cache
+.sfdx/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.test
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+
+#React build (reactfront)
+reactfront/build
+reactfront/node_modules
+reactfront/package-lock.json
+# react/public
+.env.development
+#package-locks
+package-lock.json
+
+#node build
+node/build
+node/node_modules
+node/package-lock.json
+
+# vs code
+launch.json
+settings.json
+
+# MacOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+$RECYCLE.BIN/
+
+# Copado
+/.sfdx
+copado_root
+/.vscode
+**config
+/.prettierignore
+/.prettierrc
+force-app/main/default/lwc/.eslintrc.json
+force-app/main/default/lwc/jsconfig.json
+sfdx-project.json
+README.md
+
+reactfront/node_modules/.cache/.eslintcache
+'reactfront\node_modules\.cache/default-development\0.pack'
