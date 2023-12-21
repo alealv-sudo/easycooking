@@ -3,17 +3,14 @@ import React, { useState, useEffect } from 'react'
 import {Link} from 'react-router-dom'
 import { Table } from 'antd'
 import './blog.css'
-
-import { AuthData } from '../contexts/authContext'
+import { useCookies } from 'react-cookie';
 
 const URI = 'http://localhost:8000/blogs/'
 
 const CompShowBlog = () => {
   
+    const [cookies, setCookie] = useCookies(['userToken']);
     const [blogs, setBlogs] = useState([])
-    const { User } = AuthData();
-
-    console.log(User)
 
     useEffect( ()=> {
         getBlogs()
@@ -60,7 +57,7 @@ const CompShowBlog = () => {
 
     return(
         <div className='form-personal'>
-            <h>{User}</h>
+            <h>cokkies - {cookies.user}</h>
             <Table columns={columns} dataSource={blogs}></Table>
             <Table columns={columns} dataSource={blogs}></Table>
             <Table columns={columns} dataSource={blogs}></Table>

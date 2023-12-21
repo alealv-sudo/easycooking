@@ -1,6 +1,7 @@
 import React from 'react'
 import logo from './logo.svg';
 import './App.css';
+import { CookiesProvider } from 'react-cookie';
 
 ///Router
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -28,6 +29,7 @@ import LayoutFront from './components/Layaout/Layout';
 function App() {
   return (
     <AuthContextProvider>
+      <CookiesProvider defaultSetOptions={{ path: '/' }}>
       <Router>
           <Routes>
             
@@ -51,6 +53,7 @@ function App() {
             
           </Routes>
       </Router>
+      </CookiesProvider>
     </AuthContextProvider>
   );
 }
