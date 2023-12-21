@@ -1,0 +1,12 @@
+.siteLayoutBackground {
+    position: sticky;
+    padding: 0;
+    background-color: #fff;
+}
+
+.styleContentLayout {
+    position: sticky;
+    margin: 25px 16px;
+    padding: 24;
+    background-color: #fff;
+}

@@ -1,0 +1,71 @@
+:root{
+  --blue: #202945;
+  --blue2: #00006e;
+  --red: #B12028;
+  --green: #8F993E;
+  --yellow: #FDCF85;
+  --white: #fff;
+  --silver: #C0C0C0;
+  
+  --orangeEmphasis: #fc6404; 
+  --grayEmphasis1: #DADADA;
+  --grayEmphasis2: #B8B8B8;
+  --grayEmphasis3: #CECECE;
+
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Gotham-Book", sans-serif;
+  height: auto;
+}
+
+.app-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  position: relative;
+}
+
+.component-wrapper {
+  position: absolute;
+  right: 0;
+  width: calc(100% - 224px);
+  min-height: 100%;
+  background: rgb(238, 238, 238);
+  box-sizing: border-box;
+  padding: 20px;
+  padding-bottom: 0;
+  border-left: 1px solid #C0C0C0;
+}
+
+.ant-col.ant-form-item-label {
+  font-weight: 500;
+}
+
+.ant-menu-item-selected{
+  font-weight: 700;
+}
+
+.app-wrapper {
+  flex-direction: column;
+}
+
+th {
+    background: var(--blue) !important;
+    color: var(--white) !important;
+}
+
+.ant-table-container { 
+    overflow: auto;
+}
+
+@media(max-width: 864px){
+  .component-wrapper {
+    width: 100%;
+    position: relative;
+    min-height: 100vh;
+    height: 100%;
+  }
+}
