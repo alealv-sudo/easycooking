@@ -9,6 +9,7 @@ import { AuthData } from '../contexts/authContext'
 const URI = 'http://localhost:8000/blogs/'
 
 const CompShowBlog = () => {
+  
     const [blogs, setBlogs] = useState([])
     const { User } = AuthData();
 
