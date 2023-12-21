@@ -33,7 +33,7 @@ const Login = () => {
         <h1>login</h1>
         <form onSubmit={handleSubmit}>
           <input type="text" value={password} onChange={handleInputChange}></input>
-          <button type='submit'>Iniciar sesión perro gua</button>
+          <button type='submit'>Iniciar sesión perro</button>
         </form>
         </div>
     ) 
