@@ -1,6 +1,5 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
-import {Link} from 'react-router-dom'
 import { Table } from 'antd'
 import './blog.css'
 import { useCookies } from 'react-cookie';
@@ -57,7 +56,10 @@ const CompShowBlog = () => {
 
     return(
         <div className='form-personal'>
-            <h>cokkies - {cookies.user}</h>
+            <h>cokkies</h>
+            <h>nombre - {cookies.user}</h>
+            <h>email - {cookies.email}</h>
+            <h>id - {cookies.id}</h>
             <Table columns={columns} dataSource={blogs}></Table>
             <Table columns={columns} dataSource={blogs}></Table>
             <Table columns={columns} dataSource={blogs}></Table>
