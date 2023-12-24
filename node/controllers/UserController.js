@@ -7,7 +7,7 @@ const UserCTRL = {}
 //Mostrar todos los Registros
 UserCTRL.getAllUsers = async (req, res) => {
     try {
-       const blogs =  await BlogModel.findAll()
+       const blogs =  await UserModel.findAll()
        res.json(blogs)
     } catch (error) {
        res.json({message: error.message}) 
@@ -18,7 +18,7 @@ UserCTRL.getAllUsers = async (req, res) => {
 
 UserCTRL.getUser = async (req, res) => {
     try {
-       const blog =  await BlogModel.findAll({
+       const blog =  await UserModel.findAll({
         where: { id: req.params.id }
        })
        res.json(blog[0])
@@ -27,12 +27,25 @@ UserCTRL.getUser = async (req, res) => {
     }
 }
 
+//Mostrar registro por correo
+UserCTRL.getUserByEmail = async (req, res) => {
+    try {
+       const user =  await UserModel.findAll({
+        where: { email: req.params.email}
+       })
+       res.json(user[0])
+    } catch (error) {
+       res.json({message: error.message}) 
+    }
+}
+
 //Crear un registro
 
-blogCTRL.createUser = async (req, res) => {
+UserCTRL.createUser = async (req, res) => {
+    console.log(req.body);
     try {
-        await BlogModel.create(req.body)
-        res.json({"message": "Registro Creado correctamente"})
+        await UserModel.create(req.body)
+        res.json({"message": "Usuario Creado correctamente"})
     } catch (error) {
         res.json({message: error.message}) 
     }
@@ -41,9 +54,8 @@ blogCTRL.createUser = async (req, res) => {
 //Actualizar un registro
 
 UserCTRL.updateUser = async (req, res) => {
-    console.log("ENTRO", req.params.id)
     try {
-         await BlogModel.update(req.body, {
+         await UserModel.update(req.body, {
             where: { id: req.params.id }
         })
         res.json({"message": "Registro Actualizado correctamente"})
@@ -56,7 +68,7 @@ UserCTRL.updateUser = async (req, res) => {
 
 UserCTRL.deleteUser = async (req , res) => {
     try {
-        BlogModel.destroy({
+        UserModel.destroy({
             where:{id: req.params.id}
         })
         res.json({"message": "Registro Eliminado correctamente"})

@@ -6,6 +6,7 @@ import  cors  from "cors";
 
  //Importa Rutas
  import blogRoutes from './routes/routes.js'
+ import userRoutes from './routes/userRoutes.js'
 
  
 const app = express()
@@ -15,6 +16,7 @@ app.use(express.json())
 
 //Rutas Back -> Front
 app.use('/blogs', blogRoutes)
+app.use('/user', userRoutes)
 
 try {
     db.authenticate()

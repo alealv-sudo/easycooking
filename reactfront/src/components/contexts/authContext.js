@@ -14,12 +14,14 @@ export function AuthContextProvider({children}){
     const [User, setUser] = useState([])
     const [isAuthenticated, setIsAuthenticated] = useState(window.localStorage.getItem(MY_AUTH_APP) ?? false);
 
-    const loginUser = (name, password) => {
-        setUser(name);
-        if (password === "password"){
-            setCookie('user', name, {path:'/'})
-            login();
-        } 
+    const loginUser = (userlog) => {
+        const userAuth = userlog
+        setUser(userAuth);
+    
+        setCookie('user', User.name, {path:'/'})
+        setCookie('id', User.id, {path:'/'})
+        setCookie('email', User.email, {path:'/'})
+        login();
     } 
 
     const login = useCallback(function(){
@@ -31,7 +33,6 @@ export function AuthContextProvider({children}){
         handleRemoveCookie()
         localStorage.removeItem(MY_AUTH_APP);
         setIsAuthenticated(false);
-        console.log("cookies adios", cookies);
     },[]);
 
     const value = useMemo( () => ({
