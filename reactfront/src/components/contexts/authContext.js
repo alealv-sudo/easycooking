@@ -11,16 +11,18 @@ export const AuthData = () => useContext(AuthContext);
 export function AuthContextProvider({children}){
 
     const [cookies, setCookie, removeCookie] = useCookies(['userToken']);
-    const [User, setUser] = useState([])
+    const [User, setUser] = useState({})
     const [isAuthenticated, setIsAuthenticated] = useState(window.localStorage.getItem(MY_AUTH_APP) ?? false);
 
     const loginUser = (userlog) => {
         const userAuth = userlog
         setUser(userAuth);
+        console.log("Usuario auth",userlog);
+        console.log("Usuario",User);
     
-        setCookie('user', User.name, {path:'/'})
-        setCookie('id', User.id, {path:'/'})
-        setCookie('email', User.email, {path:'/'})
+        setCookie('user', userlog.name, {path:'/'})
+        setCookie('id', userlog.id, {path:'/'})
+        setCookie('email', userlog.email, {path:'/'})
         login();
     } 
 
@@ -45,7 +47,9 @@ export function AuthContextProvider({children}){
     }), [loginUser,login,logout,isAuthenticated,User,cookies]);
 
     function handleRemoveCookie() {
-        removeCookie("user");
+        removeCookie('user', {path:'/'});
+        removeCookie("id",{path:'/'});
+        removeCookie("email",{path:'/'});
     }
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

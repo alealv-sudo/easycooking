@@ -2,39 +2,27 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../contexts/authContext';
 import { Button, Form, Input} from 'antd';
-import {Link} from 'react-router-dom'
+import {Link, useBeforeUnload} from 'react-router-dom'
 
 
 import './Login.css'
 
 const Login = () => {
     const {loginUser} = useAuthContext();
-    const [user,setUser] = useState({})
 
-    const getUser = (email) =>{
-      console.log(email);
-      axios.get(process.env.REACT_APP_API_URL + 'user/email/' + email )
+    const onFinish = (values) => {
+
+      axios.post(process.env.REACT_APP_API_URL + 'user/email/' , {email: values.email} )
       .then(function response(response) {
+
         const userData = response.data
-        setUser(userData)
+        if(userData.email === values.email && userData.password === values.password){
+          loginUser(userData);
+        }
       })
       .catch(function error(error) {
         console.log(error);
       })
-    }
-
-    const onFinish = (values) => {
-      console.log(values);
-      getUser(values.email)
-      
-      if(user.email === values.email && user.password === values.password){
-        handleSubmit()
-      }
-
-    }
-
-    function handleSubmit() {
-      loginUser(user);
     }
 
     return(

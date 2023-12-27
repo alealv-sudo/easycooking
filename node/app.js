@@ -19,8 +19,12 @@ app.use('/blogs', blogRoutes)
 app.use('/user', userRoutes)
 
 try {
-    db.authenticate()
-    console.log("Conexion exitosa a la base de datos")
+    db.authenticate().then(() =>{
+        console.log("Conexion exitosa a la base de datos")
+    }).catch((error) => {
+        console.log(error);
+    })
+    
 } catch (error) {
     console.log(`El error de conexion es:${error}`)
 }
