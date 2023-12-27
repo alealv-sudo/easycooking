@@ -28,10 +28,10 @@ UserCTRL.getUser = async (req, res) => {
 }
 
 //Mostrar registro por correo
-UserCTRL.getUserByEmail = async (req, res) => {
+UserCTRL.getUserByEmailC = async (req, res) => {
     try {
        const user =  await UserModel.findAll({
-        where: { email: req.params.email}
+        where: { email: req.body.email}
        })
        res.json(user[0])
     } catch (error) {
