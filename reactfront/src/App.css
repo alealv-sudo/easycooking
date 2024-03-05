@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+/* styles.css */
+.colors-bg {
+  background: #b8f7fc; /* Color de fondo inicial */
+}
+
+.colors-bg:focus {
+  background: white; /* Cambia a blanco cuando se enfoca */
+}
