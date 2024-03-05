@@ -6,7 +6,7 @@ import { Table } from 'antd'
 
 const URI = 'http://localhost:8000/blogs/'
 
-const prueba = () => {
+const Prueba = () => {
     return(
         <div>
            <p>Esto es la prueba</p>
@@ -14,4 +14,4 @@ const prueba = () => {
     )
 }
 
-export default prueba
+export default Prueba

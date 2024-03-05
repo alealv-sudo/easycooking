@@ -1,21 +1,14 @@
-import axios from 'axios';
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios'
+import React, { useState, useEffect } from 'react'
 
 import {
     Typography,
-    Input,
-    Checkbox,
-    Form,
-    Space,
-    DatePicker,
-    Select,
-    Button,
-    Image,
-    notification,
     Upload,
-    message,
-    Spin,
+    Form,
+    Input,
+    Space,
+    Checkbox,
+    Select
 } from 'antd';
 
 import countriesData from './countries.json';
@@ -32,23 +25,6 @@ const Publicar = () => {
 
     const [countries, setCountries] = useState([]);
 
-    useEffect(() => {
-        setCountries(countriesData);
-    }, []);
-
-
-    const handleCheckboxChange = (e) => {
-        console.log(e.target.name)
-        if (e.target.name === "N_A_Temp") {
-            setIsDisabledTemp(e.target.checked);
-        }
-        else if (e.target.name === "N_A_Calories") {
-            setIsDisabledCalories(e.target.checked);
-        }
-        else {
-            console.log("Unknow error in handleCheckboxChange")
-        }
-    };
 
     const handleFileSubmit = ({ fileList: newFileList }) => {
         // Actualiza el estado con la lista de archivos seleccionados
@@ -73,13 +49,29 @@ const Publicar = () => {
     };
 
 
+    const handleCheckboxChange = (e) => {
+        console.log(e.target.name)
+        if (e.target.name === "N_A_Temp") {
+            setIsDisabledTemp(e.target.checked);
+        }
+        else if (e.target.name === "N_A_Calories") {
+            setIsDisabledCalories(e.target.checked);
+        }
+        else {
+            console.log("Unknow error in handleCheckboxChange")
+        }
+    };
 
-    {/* ////////////////////////////////////////////////////////////////////////////////////// */ }
+    useEffect(() => {
+        setCountries(countriesData);
+    }, []);
+
+
 
 
     return (
         <React.Fragment>
-            <Typography.Title level={2}>Publicar Receta</Typography.Title>
+            <Typography.Title level={2}>Publicar</Typography.Title>
 
             {/* Form Receta */}
             <Form
@@ -101,18 +93,6 @@ const Publicar = () => {
                 }}
             //    onFinish={onFinish}
             >
-                {/* Input Titulo */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Nombre de la Receta"
-                    name="recipe_name"
-                    normalize={value => (value || '').toUpperCase()}
-                    rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
-                >
-                    <Input
-                        disabled={false}
-                    />
-                </Form.Item>
 
                 {/* Input imagen */}
                 <div type="flex" justify="center" align="middle">
@@ -132,25 +112,24 @@ const Publicar = () => {
                             beforeUpload={() => false} // Evita la carga automática de la imagen
                         >
                             {fileList.length < 1 && '+ Upload'}
-                            {/*
-                            <Button
-                                icon={<UploadOutlined />}
-
-                            >
-                                + Upload
-                            </Button>
-                            */}
 
                         </Upload>
-
-                        {/*
-                        <Button type="primary" onClick={handleFileSubmit}>
-                            Enviar
-                        </Button>
-                        */}
-
+                        
                     </Form.Item>
                 </div>
+
+                {/* Input Titulo */}
+                <Form.Item
+                    className="half-width-slot"
+                    label="Nombre de la Receta"
+                    name="recipe_name"
+                    normalize={value => (value || '').toUpperCase()}
+                    rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
+                >
+                    <Input
+                        disabled={false}
+                    />
+                </Form.Item>
 
 
                 <div type="flex" justify="center" align="middle">
@@ -228,8 +207,6 @@ const Publicar = () => {
                     </Space>
                 </div>
 
-
-
                 {/* Input Descripcion */}
                 <Form.Item
                     className="half-width-slot"
@@ -239,6 +216,7 @@ const Publicar = () => {
                     rules={[{ required: false, message: 'Por favor introduce una descripcion para la receta.' }]}
                 >
                     <Input.TextArea
+                        className="colors-bg"
                         rows={4}
                         disabled={false}
                     />
@@ -254,6 +232,7 @@ const Publicar = () => {
                     rules={[{ required: true, message: 'Por favor introduce los ingredientes de la receta.' }]}
                 >
                     <Input.TextArea
+                        className="colors-bg"
                         rows={4}
                         disabled={false}
                     />
@@ -268,6 +247,7 @@ const Publicar = () => {
                     rules={[{ required: true, message: 'Por favor introduce la preparacion de la receta.' }]}
                 >
                     <Input.TextArea
+                        className="colors-bg"
                         rows={4}
                         disabled={false}
                     />
@@ -295,6 +275,7 @@ const Publicar = () => {
                             </Select>
                         </Form.Item>
                     </Space>
+
                     <Space>
                         {/* Input Origen */}
                         <Form.Item
@@ -331,6 +312,7 @@ const Publicar = () => {
                     normalize={value => (value || '').toUpperCase()}
                 >
                     <Input.TextArea
+                        className="colors-bg"
                         rows={4}
                         disabled={false}
                     />
@@ -338,7 +320,8 @@ const Publicar = () => {
 
             </Form>
         </React.Fragment>
-    )
+    );
+
 }
 
 export default Publicar
