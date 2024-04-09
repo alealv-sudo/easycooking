@@ -44,6 +44,11 @@ const MenuNav = () => {
                     <span>Prueba 2</span>
                     <Link to="/private/prueba2"></Link>         
                </Menu.Item>
+               <Menu.Item key="/private/postShowRecipe" title="Inicio">
+                    <VideoCameraOutlined/>
+                    <span>ShowPost</span>
+                    <Link to="/private/postShowRecipe"></Link>         
+               </Menu.Item>
                <Menu.Item key="/private/logout" title="Logout">
                     <VideoCameraOutlined/>
                     <span>Logout</span>

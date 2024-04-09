@@ -9,5 +9,6 @@ export const BLOG  = '/private/blog'
 export const USER  = '/private/user'
 export const PRUEBA  = '/private/prueba'
 export const PRUEBA2  = '/private/prueba2'
-export const POSTP  = '/private/post'
+export const POSTR  = '/private/post'
+export const SHOWPOSTR  = '/private/postShowRecipe'
 
