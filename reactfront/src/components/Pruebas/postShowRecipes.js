@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from "react";
 import axios from 'axios'
-import React, { useState, useEffect } from 'react'
 import { useCookies } from 'react-cookie';
 
 import {
@@ -16,8 +16,11 @@ import {
 import countriesData from './countries.json';
 
 const URI = 'http://localhost:8000/blogs/'
+const IDRECIPE = "3"
 
 const ShowPostRecipes = () => {
+
+    const [form] = Form.useForm();
     const [cookies, setCookie] = useCookies(['userToken']);
 
     const [fileList, setFileList] = useState([]);
@@ -28,49 +31,61 @@ const ShowPostRecipes = () => {
     const [countries, setCountries] = useState([]);
 
     const [recipe, setRecipe] = useState({});
+    
 
-    useEffect(() => {
-        getRecipe()
-        setCountries(countriesData);
+    function getRecipe(){
+        axios.get(process.env.REACT_APP_API_URL + 'post/' + IDRECIPE ,
+        ).then((response) => {
+            const recipeData = response.data;
+            setRecipe(recipeData)
+        })
+        .catch((error) =>{
+            console.error(error);
+        });
 
-    }, [])
-
-
-    function getRecipe() {
-        axios.get(process.env.REACT_APP_API_URL + 'post/'+ "3")
+    } 
+    
+    /* function getRecipe() {
+        axios.get(process.env.REACT_APP_API_URL + 'post/' + IDRECIPE)
         .then((res) => {
             // Datos binarios de la imagen
-            const imageBinaryData = res.data.image_recipe.data; 
+            //const imageBinaryData = res.data.image_recipe.data; 
             // Convierte los datos binarios en una URL base64
-            const base64String = btoa(String.fromCharCode(...imageBinaryData));
-            const imageBase64Url = `data:image/jpeg;base64,${base64String}`;
+            //const base64String = btoa(String.fromCharCode(...imageBinaryData));
+            //const imageBase64Url = `data:image/jpeg;base64,${base64String}`;
 
-            res.data.image_recipe = imageBase64Url
-            
-            recipe.id = res.data.id
-            recipe.recipe_name = res.data.recipe_name
-            recipe.preparation_time = res.data.preparation_time
-            recipe.temperature = res.data.temperature
-            recipe.calories = res.data.calories
-            recipe.description = res.data.description
-            recipe.ingredients = res.data.ingredients
-            recipe.preparation = res.data.preparation
-            recipe.type_recipe = res.data.type_recipe
-            recipe.originary = res.data.originary
-            recipe.tips = res.data.tips
+            const recipeData = {
+                id: res.data.id,
+                recipe_name:  res.data.recipe_name,
+                image_recipe: res.data.image_recipe,
+                preparation_time: res.data.preparation_time,
+                temperature: res.data.temperature,
+                calories: res.data.calories,
+                description: res.data.description,
+                ingredients: res.data.ingredients,
+                preparation: res.data.preparation,
+                type_recipe: res.data.type_recipe,
+                originary: res.data.originary,
+                tips: res.data.tips,
+                creator_code: res.data.creator_code,
+            }
 
             // setRecipe(res.data)
-
-            console.log("res data", res.data)
-            console.log("recipe", recipe)
+            setRecipe(recipeData);
         })
         .catch((error) => {
             console.log(error)
         })
         console.log("recipe out", recipe)
     }
-    
+ */
 
+    useEffect(() => {
+        getRecipe();
+        form.resetFields();
+        //setCountries(countriesData);
+    },[])
+    
     const onPreview = async (file) => {
         let src = file.url;
         if (!src) {
@@ -94,7 +109,7 @@ const ShowPostRecipes = () => {
     };
 
     const handleCheckboxChange = (e) => {
-        console.log(e.target.name)
+
         if (e.target.name === "N_A_Temp") {
             setIsDisabledTemp(e.target.checked);
         }
@@ -119,7 +134,6 @@ const ShowPostRecipes = () => {
             type_recipe:        values.type_recipe,
             originary:          values.originary,
             tips:               values.tips,
-
             creator_code:       values.creator_code,
         }
 
@@ -136,32 +150,27 @@ const ShowPostRecipes = () => {
         <React.Fragment>
             <Typography.Title level={2}>Publicar</Typography.Title>
             {/* Form Receta */}
+            {form.setFieldsValue({
+                 id:                  recipe.id,
+                 name:         recipe.recipe_name,
+                 preparation_time:    recipe.preparation_time,
+                 temperature:         recipe.temperature,
+                 calories:            recipe.calories,
+                 description:         recipe.description,
+                 ingredients:         recipe.ingredients,
+                 preparation:         recipe.preparation,
+                 type_recipe:         recipe.type_recipe,
+                 originary:           recipe.originary,
+                 tips:                recipe.tips,
+            })}
+
             <Form
                 layout="vertical"
                 requiredMark={false}
-                name="recipe"
-                initialValues={{
-
-                    id:                  recipe.id,
-                    recipe_name:         recipe.recipe_name,
-                    preparation_time:    recipe.preparation_time,
-                    temperature:         recipe.temperature,
-                    calories:            recipe.calories,
-                    description:         recipe.description,
-                    ingredients:         recipe.ingredients,
-                    preparation:         recipe.preparation,
-                    type_recipe:         recipe.type_recipe,
-                    originary:           recipe.originary,
-                    tips:                recipe.tips,
-                    // image_recipe:        recipe.image_recipe,
-
-                    // creator_code:        recipe.creator_code,
-                    // CreatedAt:
-                    // updatedAt:
-                }}
-                
+                name="recipes"
+                form={form}
                 onFinish={onFinish}
-                // autoComplete="off"
+                autoComplete="off"
             >
                 
                 {/* Input imagen */}
@@ -192,12 +201,11 @@ const ShowPostRecipes = () => {
                 <Form.Item
                     className="half-width-slot"
                     label="Nombre de la Receta"
-                    name="recipe_name"
+                    name="name"
                     normalize={value => (value || '').toUpperCase()}
                     rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
                     >
                     <Input
-                        value = {recipe.name_recipe}
                         disabled={false}
                     />
                 </Form.Item>
