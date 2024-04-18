@@ -45,3 +45,8 @@
 .colors-bg:focus {
   background: white; /* Cambia a blanco cuando se enfoca */
 }
+
+.my-form-container {
+  display: flex;
+  justify-content: center;
+}

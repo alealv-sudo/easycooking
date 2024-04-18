@@ -6,7 +6,7 @@ import { CookiesProvider } from 'react-cookie';
 ///Router
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTP} from './config/routes/paths';
+import { BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, SHOWPOSTR} from './config/routes/paths';
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
 import Register from './components/Login/Register';
@@ -22,6 +22,7 @@ import Prueba from './components/Pruebas/prueba';
 import Prueba2 from './components/Pruebas/prueba2';
 import Usuario from './components/Pruebas/user';
 import Publicar from './components/Pruebas/post';
+import ShowPostRecipes from './components/Pruebas/postShowRecipes';
 
 ///Layout
 import LayoutFront from './components/Layaout/Layout';
@@ -44,7 +45,8 @@ function App() {
                 <Route index exact  element={<CompShowBlog/>}/>
                 <Route path={BLOG}   element={<CompShowBlog/>}/>
                 <Route path={USER}   element={<Usuario/>}/>
-                <Route path={POSTP}   element={<Publicar/>}/>
+                <Route path={POSTR}   element={<Publicar/>}/>
+                <Route path={SHOWPOSTR}   element={<ShowPostRecipes/>}/>
                 <Route path={PRUEBA}   element={<Prueba/>}/>
                 <Route path={PRUEBA2}   element={<Prueba2/>}/>
                 <Route path={LOGOUT}   element={<Logout/>}/>
