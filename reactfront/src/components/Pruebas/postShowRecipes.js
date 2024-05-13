@@ -24,9 +24,6 @@ const ShowPostRecipes = () => {
 
     const [fileList, setFileList] = useState([]);
 
-    const [isDisabledTemp, setIsDisabledTemp] = useState(false);
-    const [isDisabledCalories, setIsDisabledCalories] = useState(false);
-
     const [countries, setCountries] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
@@ -47,7 +44,7 @@ const ShowPostRecipes = () => {
 
     useEffect(() => {
         getRecipe();
-        //setCountries(countriesData);
+        setCountries(countriesData);
     },[])
     
     const onPreview = async (file) => {
@@ -72,21 +69,9 @@ const ShowPostRecipes = () => {
         // console.log('Archivos seleccionados:', newFileList);
     };
 
-    const handleCheckboxChange = (e) => {
-
-        if (e.target.name === "N_A_Temp") {
-            setIsDisabledTemp(e.target.checked);
-        }
-        else if (e.target.name === "N_A_Calories") {
-            setIsDisabledCalories(e.target.checked);
-        }
-        else {
-            console.log("Unknow error in handleCheckboxChange")
-        }
-    };
-
     const onFinish = (values) => {
         const recipes = {
+            id:                 recipe.id,
             recipe_name:        values.recipe_name,
             image_recipe:       values.image_recipe,
             preparation_time:   values.preparation_time,
@@ -101,7 +86,9 @@ const ShowPostRecipes = () => {
             creator_code:       values.creator_code,
         }
 
-        axios.post(process.env.REACT_APP_API_URL + 'post/', recipe.id)
+        axios.put(process.env.REACT_APP_API_URL + 'post/', {
+            recipes
+            })
             .then(function response(response) {
                 console.log(response.data);
             })
@@ -369,7 +356,7 @@ const ShowPostRecipes = () => {
                 <Form.Item
                     className = "my-form-container"
                 >
-                    <Button type="primary" shape="round" htmlType="submit"> Publicar </Button>
+                    <Button type="primary" shape="round" htmlType="submit"> Actualizar </Button>
                 </Form.Item>
 
             </Form>
