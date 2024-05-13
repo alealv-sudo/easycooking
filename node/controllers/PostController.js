@@ -1,3 +1,4 @@
+import { request } from "express";
 import PostModel from "../models/PostModel.js";
 
 const PostCTRL = {}
@@ -42,9 +43,10 @@ PostCTRL.createPost = async (req, res) => {
 //Actualizar un registro
 
 PostCTRL.updatePost = async (req, res) => {
+    // console.log(req.body);
     try {
          await PostModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { id: req.body.id }
         })
         res.json({"message": "Registro Actualizado correctamente"})
     } catch (error) {
