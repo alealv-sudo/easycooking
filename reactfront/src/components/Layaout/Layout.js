@@ -9,44 +9,38 @@ import {
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
 import { Outlet } from 'react-router-dom';
+import { Footer } from 'antd/es/layout/layout';
 const { Header, Sider, Content } = Layout;
 
 const LayoutFront = (props) => {
-    const [collapsed, setCollapsed] = useState(false);
 
-    const {
-      token: { colorBgContainer },
-    } = theme.useToken();
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
-    return (
-          <Layout>
-            <Sider trigger={null} collapsible collapsed={collapsed}  style={{
-              overflow: 'auto',
-              height: '100vh',
-              position: 'fixed',
-            }}>
-              <MenuNav></MenuNav>
-            </Sider>
-            <Layout className="site-layout" style={{
-              marginLeft: 200,
-            }}>
-              <Header className='siteLayoutBackground'>
-                {/* {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                  className: 'trigger',
-                  style: {color: "#fff"},
-                  onClick: () => setCollapsed(!collapsed),
-                })} */}
-              </Header>
-              <Content style={{
-                margin: '24px 16px 0',
-                overflow: 'initial',
-                minHeight: '100vh',
-              }}>
-                {props.children}
-                <Outlet></Outlet>
-              </Content>
-            </Layout>
-          </Layout>
-    );
-  };
-  export default LayoutFront;
+  return (
+    <Layout>
+
+      <Layout>
+        <Header className='siteHeader' color={colorBgContainer}>
+          <h1>Recetas</h1>
+        </Header>
+        <Content style={{
+          margin: "10dvh 0",
+          overflow: "hidden",
+          height: '80dvh',
+        }}>
+          <Content style={{
+            overflowY: "auto",
+            height: '100%',
+          }}>
+            <Outlet />
+          </Content>
+        </Content>
+        <Footer className='siteFooter' color={colorBgContainer}>
+        </Footer>
+      </Layout>
+    </Layout>
+  );
+};
+export default LayoutFront;
