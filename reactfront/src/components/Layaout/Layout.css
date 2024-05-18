@@ -1,7 +1,21 @@
-.siteLayoutBackground {
-    position: sticky;
-    padding: 0;
-    background-color: #fff;
+.siteHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: 10dvh;
+    background-color: #202945;
+    color: #fff;
+}
+
+.siteFooter {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100dvw;
+    height: 10dvh;
+    background-color: #202945;
+    color: #fff;
 }
 
 .styleContentLayout {

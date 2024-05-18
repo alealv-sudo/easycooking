@@ -17,6 +17,9 @@ const PostModel = db.define('recipes', {
     originary:           { type: DataTypes.STRING   },
     tips:                { type: DataTypes.STRING   },
 
+    likes:                { type: DataTypes.INTEGER   },
+    publishDate:                { type: DataTypes.DATE   },
+
     creator_code:        { type: DataTypes.INTEGER  }
 })
 

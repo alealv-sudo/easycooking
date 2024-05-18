@@ -6,7 +6,7 @@ import { CookiesProvider } from 'react-cookie';
 ///Router
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, SHOWPOSTR} from './config/routes/paths';
+import { BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER, POSTR, SHOWPOSTR } from './config/routes/paths';
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
 import Register from './components/Login/Register';
@@ -31,30 +31,33 @@ function App() {
   return (
     <AuthContextProvider>
       <CookiesProvider defaultSetOptions={{ path: '/' }}>
-      <Router>
-          <Routes>
-            
-            <Route path='/' element={<PublicRoute/>}>
-              <Route index element={<Login/>}/>
-              <Route path={LOGIN} exact  element={<Login/>}/>
-              <Route path={REGISTER} exact  element={<Register/>}/>
-            </Route>
+        <div className='App'>
+          <Router>
+            <Routes>
 
-            <Route path={PRIVATE} element={<PrivateRoute/>}>
-              <Route element={<LayoutFront/>}>
-                <Route index exact  element={<CompShowBlog/>}/>
-                <Route path={BLOG}   element={<CompShowBlog/>}/>
-                <Route path={USER}   element={<Usuario/>}/>
-                <Route path={POSTR}   element={<Publicar/>}/>
-                <Route path={SHOWPOSTR}   element={<ShowPostRecipes/>}/>
-                <Route path={PRUEBA}   element={<Prueba/>}/>
-                <Route path={PRUEBA2}   element={<Prueba2/>}/>
-                <Route path={LOGOUT}   element={<Logout/>}/>
+              <Route path='/' element={<PublicRoute />}>
+                <Route index element={<Login />} />
+                <Route path={LOGIN} exact element={<Login />} />
+                <Route path={REGISTER} exact element={<Register />} />
               </Route>
-            </Route>
-            
-          </Routes>
-      </Router>
+
+              <Route path={PRIVATE} element={<PrivateRoute />}>
+                <Route element={<LayoutFront />}>
+                  <Route index exact element={<CompShowBlog />} />
+                  <Route path={BLOG} element={<CompShowBlog />} />
+                  <Route path={USER} element={<Usuario />} />
+                  <Route path={POSTR} element={<Publicar />} />
+                  <Route path={SHOWPOSTR} element={<ShowPostRecipes />} />
+                  <Route path={PRUEBA} element={<Prueba />} />
+                  <Route path={PRUEBA2} element={<Prueba2 />} />
+                  <Route path={LOGOUT} element={<Logout />} />
+                </Route>
+              </Route>
+
+            </Routes>
+          </Router>
+        </div>
+
       </CookiesProvider>
     </AuthContextProvider>
   );
