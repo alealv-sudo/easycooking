@@ -8,6 +8,7 @@ import  cors  from "cors";
  import blogRoutes from './routes/routes.js'
  import userRoutes from './routes/userRoutes.js'
  import postRoutes from './routes/postRoutes.js'
+ import googleRoutes  from './routes/googleRoutes.js'
 
  
 const app = express()
@@ -19,6 +20,11 @@ app.use(express.json())
 app.use('/blogs', blogRoutes)
 app.use('/user', userRoutes)
 app.use('/post', postRoutes)
+
+
+//GOOGLE
+app.use("/google", googleRoutes)
+
 
 try {
     db.authenticate().then(() =>{

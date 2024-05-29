@@ -86,9 +86,8 @@ const ShowPostRecipes = () => {
             creator_code:       values.creator_code,
         }
 
-        axios.put(process.env.REACT_APP_API_URL + 'post/', {
-            recipes
-            })
+        axios.put(process.env.REACT_APP_API_URL + 'post/', recipes
+            )
             .then(function response(response) {
                 console.log(response.data);
             })

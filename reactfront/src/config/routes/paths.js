@@ -11,4 +11,5 @@ export const PRUEBA  = '/private/prueba'
 export const PRUEBA2  = '/private/prueba2'
 export const POSTR  = '/private/post'
 export const SHOWPOSTR  = '/private/postShowRecipe'
+export const UPLOADTEST = '/private/uploadTest'
 
