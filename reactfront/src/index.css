@@ -1,4 +1,4 @@
-:root{
+:root {
   --blue: #202945;
   --blue2: #00006e;
   --red: #B12028;
@@ -6,8 +6,8 @@
   --yellow: #FDCF85;
   --white: #fff;
   --silver: #C0C0C0;
-  
-  --orangeEmphasis: #fc6404; 
+
+  --orangeEmphasis: #fc6404;
   --grayEmphasis1: #DADADA;
   --grayEmphasis2: #B8B8B8;
   --grayEmphasis3: #CECECE;
@@ -44,7 +44,7 @@ body {
   font-weight: 500;
 }
 
-.ant-menu-item-selected{
+.ant-menu-item-selected {
   font-weight: 700;
 }
 
@@ -53,19 +53,19 @@ body {
 }
 
 th {
-    background: var(--blue) !important;
-    color: var(--white) !important;
+  background: var(--blue) !important;
+  color: var(--white) !important;
 }
 
-.ant-table-container { 
-    overflow: auto;
-}
+/* .ant-table-container {
+  overflow: auto;
+} */
 
-@media(max-width: 864px){
+@media(max-width: 864px) {
   .component-wrapper {
     width: 100%;
     position: relative;
-    min-height: 100vh;
+    min-height: 100dvh;
     height: 100%;
   }
 }

@@ -5,16 +5,16 @@ import { Navigate, Outlet } from "react-router-dom";
 
 
 
-export default function PublicRoute(){
-    const {isAuthenticated} = useAuthContext();
+export default function PublicRoute() {
+    const { isAuthenticated } = useAuthContext();
 
     if (isAuthenticated) {
-        return <Navigate to={PRIVATE}/>;
+        return <Navigate to={PRIVATE} />;
     }
 
     return (
-        <div>
+        <>
             <Outlet></Outlet>
-        </div>
+        </>
     );
 }
