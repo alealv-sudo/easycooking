@@ -10,7 +10,7 @@ import blogRoutes from './routes/routes.js'
 import userRoutes from './routes/userRoutes.js'
 import postRoutes from './routes/postRoutes.js'
 import followerRoutes from "./routes/followerRoutes.js";
-
+import googleRoutes  from './routes/googleRoutes.js'
 
 const app = express()
 
@@ -22,6 +22,11 @@ app.use('/blogs', blogRoutes)
 app.use('/user', userRoutes)
 app.use('/post', postRoutes)
 app.use('/followers', followerRoutes)
+
+
+//GOOGLE
+app.use("/google", googleRoutes)
+
 
 try {
     db.authenticate().then(() => {

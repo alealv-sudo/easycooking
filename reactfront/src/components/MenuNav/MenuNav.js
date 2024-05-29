@@ -11,6 +11,7 @@ import {
 
 const MenuNav = () => {
 
+
      return (
           <>
                <Menu
@@ -48,6 +49,11 @@ const MenuNav = () => {
                          <span>ShowPost</span>
                          <Link to="/private/postShowRecipe"></Link>
                     </Menu.Item>
+                    <Menu.Item key="/private/logout" title="upload">
+                          <VideoCameraOutlined/>
+                          <span>UPLOADTEST</span>
+                          <Link to="/private/uploadTest"></Link>         
+                    </Menu.Item>
                     <Menu.Item key="/private/logout" title="Logout">
                          <VideoCameraOutlined />
                          <span>Logout</span>
@@ -56,6 +62,7 @@ const MenuNav = () => {
                </Menu>
           </>
      )
+
 }
 
 

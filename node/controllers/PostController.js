@@ -43,7 +43,7 @@ PostCTRL.createPost = async (req, res) => {
 //Actualizar un registro
 
 PostCTRL.updatePost = async (req, res) => {
-    // console.log(req.body);
+    //console.log(req.body.id);
     try {
          await PostModel.update(req.body, {
             where: { id: req.body.id }
@@ -51,7 +51,7 @@ PostCTRL.updatePost = async (req, res) => {
         res.json({"message": "Registro Actualizado correctamente"})
     } catch (error) {
         res.json({message: error.message}) 
-    }
+    } 
 }
 
 //Eliminar un registro
