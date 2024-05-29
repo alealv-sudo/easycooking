@@ -1,5 +1,14 @@
+*,
+.root {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
 .App {
   text-align: center;
+  width: 100dvw;
+  height: 100dvh;
 }
 
 .App-logo {
@@ -32,6 +41,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,11 +49,13 @@
 
 /* styles.css */
 .colors-bg {
-  background: #b8f7fc; /* Color de fondo inicial */
+  background: #b8f7fc;
+  /* Color de fondo inicial */
 }
 
 .colors-bg:focus {
-  background: white; /* Cambia a blanco cuando se enfoca */
+  background: white;
+  /* Cambia a blanco cuando se enfoca */
 }
 
 .my-form-container {
