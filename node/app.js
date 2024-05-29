@@ -4,11 +4,13 @@ import cors from "cors";
 //Importa Conexion a la base de datos
 import db from "./database/db.js";
 
- //Importa Rutas
- import blogRoutes from './routes/routes.js'
- import userRoutes from './routes/userRoutes.js'
- import postRoutes from './routes/postRoutes.js'
-
+db.sync()
+//Importa Rutas
+import blogRoutes from './routes/routes.js'
+import userRoutes from './routes/userRoutes.js'
+import postRoutes from './routes/postRoutes.js'
+import followerRoutes from "./routes/followerRoutes.js";
+import googleRoutes  from './routes/googleRoutes.js'
 
 const app = express()
 
