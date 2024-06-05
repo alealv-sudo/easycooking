@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 
-const db = new Sequelize('easycooking', 'fl0user', 'FdL3fMV1CijO', {
-    host: 'ep-curly-recipe-80170337.us-east-2.aws.neon.fl0.io',
+const db = new Sequelize('easycooking_db', 'EasyCooking', 'FdL3fMV1CijO', {
+    host: 'database.cjq0m8sayf8o.us-east-1.rds.amazonaws.com',
     port: 5432,
     dialect: 'postgres',
     protocol: 'postgres',
