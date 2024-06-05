@@ -60,7 +60,7 @@ const { fileList } = state;
             };
           });
           return false;
-      }
+        }
       setState((state) => ({
         fileList: [...state.fileList, file],
       }));
@@ -72,20 +72,20 @@ const { fileList } = state;
   const handleUpload = () => {
     const { fileList } = state;
     const formData = new FormData();
+
     fileList.forEach((file) => {
-      formData.append('files[]', file);
+      formData.append("myFiles", file, '-' + file.name);
     });
 
+  
     setUploading(true);
 
-    console.log(formData);
-    axios
-      .post(process.env.REACT_APP_API_URL + "google/upload/", formData)
+    axios.post(process.env.REACT_APP_API_URL + "google/upload/", formData)
       .then(res => {
-        console.log("llegada", res);
+
+        console.log("ID", res);
         setState({
-          //fileList: [],
-          //uploading: false,
+          fileList: [],
         });
         setUploading(false);
 
@@ -98,6 +98,7 @@ const { fileList } = state;
         });
         message.error("Error al subir el archivo.");
     });
+    
   };
 
   /* const handleUpload = () => {
@@ -123,7 +124,7 @@ const { fileList } = state;
         <Button
           type="primary"
           onClick={handleUpload}
-          disabled={fileList.length === 0}
+          //disabled={fileList.length === 0}
           loading={uploading}
           style={{
             marginTop: 16,

@@ -3,10 +3,10 @@ import  fs  from "fs";
 
 const google_Ctrl = {};
 //const credentials = require("./credentials.json");
-import credentials from './credentials.json'  assert  { type: "json" }; 
+import credentials from './easycookingCredentials.json'  assert  { type: "json" }; 
 //import  file  from "googleapis/build/src/apis/file";
 
-const folderId = "1v-Q_3LzdTfinD3bq51YaWg0VA1vymj1b";
+const recipesID = "1v-Q_3LzdTfinD3bq51YaWg0VA1vymj1b";
 const profileID = "1VTuf7vltW-AFEO2NkhYtdCgISH9zsezu";
 
 //const backupId = "1MpIbGA2F5yAmGcMibp7z-spOsDsOH7de";
@@ -24,7 +24,6 @@ const auth = new google.auth.JWT(
 
 const drive = google.drive({ version: "v3", auth });
 
-
 google_Ctrl.getFiles = async (req, res) => {
   let Google = await drive.files.list({
     fields: "files(name, webViewLink, id)",
@@ -40,47 +39,45 @@ google_Ctrl.deleteFile = async function (fileID) {
   return {message: "Documento eliminado correctamente"};
 };
 
-google_Ctrl.uploadFile = async function (myFiles, folderID) {
+google_Ctrl.uploadFile = async function (myFiles, res) {
 
-  console.log(myFiles);
-
-  /* const folderId = folderID;
-  // console.log(folderId)
-  // console.log(req.files);
   // Authenticating drive API
   const drive = google.drive({ version: "v3", auth });
-  var files = myFiles;
+  var files = myFiles.files.myFiles;
   var response = "";
 
   const multipleFiles = async (_) => {
+
     if (files.name) files = [files];
+    
     for (let index = 0; index < files.length; index++) {
+
       const file = files[index];
+     
       var fileMetadata = {
         name: file.name, // file name that will be saved in google drive
-        parents: [folderId],
+        parents: [recipesID],
       };
+
       var media = {
         mimeType: file.mimetype,
         body: fs.createReadStream(file.tempFilePath), // Reading the file from our server
       };
-      await drive.files
-        .create({ resource: fileMetadata, media: media })
+
+      await drive.files.create({ resource: fileMetadata, media: media })
         .then(function (file) {
           response += file.data.id + ",";
         });
     }
 
     response = response.substr(0, response.length - 1);
-    console.log(response, "el response");
-    console.log("END");
-
-    // return ({files: response});
+    
   };
   await multipleFiles();
-  // console.log(response);
-  return { files: response }; */
+  
+  res.json(response)
 };
+
 
 google_Ctrl.editFile = async function (myFiles, folderID,fileID) {
   const folderId = folderID;

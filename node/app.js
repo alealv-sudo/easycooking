@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import fileUpload from "express-fileupload";
 
 //Importa Conexion a la base de datos
 import db from "./database/db.js";
@@ -16,6 +17,10 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+}));
 
 //Rutas Back -> Front
 app.use('/blogs', blogRoutes)
