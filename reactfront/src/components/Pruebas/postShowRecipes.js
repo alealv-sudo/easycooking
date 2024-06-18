@@ -42,6 +42,8 @@ const ShowPostRecipes = () => {
         });
     } 
 
+    
+
     useEffect(() => {
         getRecipe();
         setCountries(countriesData);
@@ -90,6 +92,7 @@ const ShowPostRecipes = () => {
             )
             .then(function response(response) {
                 console.log(response.data);
+                
             })
             .catch(function error(error) {
                 console.log(error);
