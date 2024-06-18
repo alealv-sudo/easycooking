@@ -5,6 +5,8 @@ export const PRIVATE  = '/private'
 
 export const LOGOUT  = '/private/logout'
 
+
+export const PROFILE = '/private/profile'
 export const BLOG  = '/private/blog'
 export const USER  = '/private/user'
 export const PRUEBA  = '/private/prueba'

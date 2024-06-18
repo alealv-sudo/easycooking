@@ -33,8 +33,9 @@ PostCTRL.getPost = async (req, res) => {
 PostCTRL.createPost = async (req, res) => {
     console.log(req.body);
     try {
-        await PostModel.create(req.body)
-        res.json({"message": "Receta Creada correctamente"})
+        const post = new PostModel(req.body);
+        await post.save();
+        res.json(post)
     } catch (error) {
         res.json({message: error.message}) 
     }

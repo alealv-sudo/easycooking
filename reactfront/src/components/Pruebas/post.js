@@ -88,10 +88,9 @@ const Publicar = () => {
   };
 
     const onFinish = (values) => {
-        handleUpload();  
-        /* const recipes = {
+        
+        const recipes = {
             recipe_name:        values.recipe_name,
-            image_recipe:       values.image_recipe,
             preparation_time:   values.preparation_time,
             temperature:        values.temperature,
             calories:           values.calories,
@@ -107,11 +106,12 @@ const Publicar = () => {
 
         axios.post(process.env.REACT_APP_API_URL + 'post/', recipes)
             .then(function response(response) {
-                console.log(response.data);
+                console.log("data", response.data);
+                handleUpload();  
             })
             .catch(function error(error) {
                 console.log(error);
-            }) */
+            })
     }
 
     const handleFileSubmit = ({ fileList: newFileList }) => {
@@ -137,6 +137,7 @@ const Publicar = () => {
             });
             
             message.success("Archivo subido con exito.");
+            //put 
          })
           .catch((error) => {
             //console.error(error);
