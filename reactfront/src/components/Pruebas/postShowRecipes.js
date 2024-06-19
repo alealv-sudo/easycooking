@@ -16,7 +16,7 @@ import {
 import countriesData from './countries.json';
 
 const URI = 'http://localhost:8000/blogs/'
-const IDRECIPE = "3"
+const IDRECIPE = "1"
 
 const ShowPostRecipes = () => {
 
@@ -41,8 +41,6 @@ const ShowPostRecipes = () => {
             console.error(error);
         });
     } 
-
-    
 
     useEffect(() => {
         getRecipe();
@@ -92,7 +90,6 @@ const ShowPostRecipes = () => {
             )
             .then(function response(response) {
                 console.log(response.data);
-                
             })
             .catch(function error(error) {
                 console.log(error);
