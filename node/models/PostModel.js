@@ -6,7 +6,7 @@ import { DataTypes } from "sequelize";
 const PostModel = db.define('recipes', {
     
     recipe_name:         { type: DataTypes.STRING   },
-    image_recipe:        { type: DataTypes.BLOB     },
+    image_recipe:        { type: DataTypes.STRING   },
     preparation_time:    { type: DataTypes.INTEGER  },
     temperature:         { type: DataTypes.INTEGER  },
     calories:            { type: DataTypes.INTEGER  },
@@ -17,8 +17,8 @@ const PostModel = db.define('recipes', {
     originary:           { type: DataTypes.STRING   },
     tips:                { type: DataTypes.STRING   },
 
-    likes:                { type: DataTypes.INTEGER   },
-    publishDate:                { type: DataTypes.DATE   },
+    likes:               { type: DataTypes.INTEGER  },
+    publishDate:         { type: DataTypes.DATE     },
 
     creator_code:        { type: DataTypes.INTEGER  }
 })
