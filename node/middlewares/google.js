@@ -195,9 +195,9 @@ google_Ctrl.getDownload = async (req, res) => {
     .get({ fileId: req.params.id, alt: "media" }, { responseType: "stream" })
     .then((request) => {
       console.log(request);
-      fileType = request.headers["content-type"];
-      fileName = "file" + "." + fileType;
-      fileData = request.data;
+      const fileType = request.headers["content-type"];
+      const fileName = "file" + "." + fileType;
+      const fileData = request.data;
       // res.set(request.headers)
       console.log(fileType);
       res.set("Content-Type", fileType);
