@@ -126,8 +126,6 @@ const Publicar = () => {
           formData.append("myFiles", file, '-' + file.name);
         });
     
-        console.log(formData.myFiles)
-
         axios.post(process.env.REACT_APP_API_URL + "google/upload/", formData)
           .then(res => {
     
