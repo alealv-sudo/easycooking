@@ -10,6 +10,6 @@ router.get('/files/:id', google_Ctrl.getFileByID);
 router.get('/download/:id', google_Ctrl.getDownload);
 router.post('/upload', google_Ctrl.uploadFile);
 router.get('/folder', google_Ctrl.addFolder);
-router.delete('/delete', google_Ctrl.deleteFile);
+router.delete('/delete/:id', google_Ctrl.deleteFile);
 
 export default router

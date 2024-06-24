@@ -16,7 +16,7 @@ import {
 import countriesData from './countries.json';
 
 const URI = 'http://localhost:8000/blogs/'
-const IDRECIPE = "1"
+const IDRECIPE = "2"
 
 const ShowPostRecipes = () => {
 
@@ -35,8 +35,8 @@ const ShowPostRecipes = () => {
         ).then((response) => {
             const recipeData = response.data;
             setRecipe(recipeData)
-            setLoading(false);
             DownloadFile(recipeData.image_recipe)
+            setLoading(false);
         })
             .catch((error) => {
                 console.error(error);
@@ -74,7 +74,8 @@ const ShowPostRecipes = () => {
         const id = {
             image_recipe: image_recipe_id
         }
-        axios.delete(process.env.REACT_APP_API_URL + "google/delete/", id)
+        
+        axios.delete(process.env.REACT_APP_API_URL + "google/delete/" + image_recipe_id)
             .then((response) => {
                 
                 console.log("Respuesta google API delete", response.data);
@@ -105,7 +106,7 @@ const ShowPostRecipes = () => {
             .then(function response(response) {
                 
                 // ### peticion para borrar la imagen
-                deleteImage(recipes.image_recipe)
+                deleteImage(recipe.image_recipe)
                 // ### Peticion para editar id en postgres
             })
             .catch(function error(error) {
@@ -114,21 +115,22 @@ const ShowPostRecipes = () => {
     }
 
     const DownloadFile = (image_recipe) => {
-        console.log(image_recipe);
         axios.get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, { responseType: "blob" })
             .then((res) => {
                 // Get IMG in format BLOB
                 // Crear una URL a partir del blob
                 const url = URL.createObjectURL(new Blob([res.data], { type: 'image/png' }));
-                const ImageToFilelist =
-                    [{
-                        uid: '-1',
-                        // name: 'image.png',
-                        status: 'done',
-                        url: url,
-                    }]
 
-                setFileList(ImageToFilelist);
+                const imageUpload = [
+                    {
+                    uid: '-1',
+                    name: 'image.png',
+                    status: 'done',
+                    url: url,
+                    },
+                ]
+                
+                setFileList(imageUpload);
                 // Crear un nuevo elemento de imagen y establecer la URL como src
                 const img = document.createElement('img');
                 img.src = url;
@@ -190,7 +192,7 @@ const ShowPostRecipes = () => {
                             onPreview={onPreview}
                             beforeUpload={() => false} // Evita la carga automática de la imagen
                         >
-                            {fileList.length < 1 && '+ Upload'}
+                        {fileList.length < 1 && '+ Upload'}
 
                         </Upload>
 

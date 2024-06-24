@@ -31,7 +31,6 @@ PostCTRL.getPost = async (req, res) => {
 //Crear un registro
 
 PostCTRL.createPost = async (req, res) => {
-    console.log(req.body);
     try {
         const post = new PostModel(req.body);
         await post.save();

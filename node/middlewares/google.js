@@ -33,11 +33,16 @@ google_Ctrl.getFiles = async (req, res) => {
 };
 
 google_Ctrl.deleteFile = async function (fileID) {
-  console.log("Perro", fileID);
-  // let Google = await drive.files.delete({
-  //   'fileId': fileID
-  // });
-  // return {message: "Documento eliminado correctamente"};
+
+  try {
+    const Google = await drive.files.delete({
+      'fileId': fileID.params.id
+    });
+    return {message: "Documento eliminado correctamente"};
+  } catch (error) {
+    res.json({message: error.message}) 
+  } 
+  
 };
 
 google_Ctrl.uploadFile = async function (myFiles, res) {
@@ -144,7 +149,6 @@ google_Ctrl.uploadPP = async function (myFiles, folderID) {
 
     response = response.substr(0, response.length - 1);
 
-    // return ({files: response});
   };
   await multipleFiles();
   return { picture: response };
@@ -181,7 +185,9 @@ google_Ctrl.getFileByID = async (req, res) => {
 };
 
 google_Ctrl.getDownload = async (req, res) => {
-  let Google = await drive.files
+
+  try {
+    let Google = await drive.files
     .get({ fileId: req.params.id, alt: "media" }, { responseType: "stream" })
     .then((request) => {
       const fileType = request.headers["content-type"];
@@ -191,7 +197,11 @@ google_Ctrl.getDownload = async (req, res) => {
       res.set("Content-Type", fileType);
       res.set("Content-Disposition", "attachment; filename='archivo.png'");
       fileData.pipe(res);
-    });
+  });
+  } catch (error) {
+      res.json({message: error.message}) 
+  } 
+  
 };
 
 google_Ctrl.addFolder = async function (folderName) {
