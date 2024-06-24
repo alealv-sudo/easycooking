@@ -70,6 +70,21 @@ const ShowPostRecipes = () => {
         // console.log('Archivos seleccionados:', newFileList);
     };
 
+    const deleteImage = (image_recipe_id) => {
+        const id = {
+            image_recipe: image_recipe_id
+        }
+        
+        axios.delete(process.env.REACT_APP_API_URL + "google/delete/" + image_recipe_id)
+            .then((response) => {
+                
+                console.log("Respuesta google API delete", response.data);
+            })
+            .catch((error) => {
+
+            })
+    }
+
     const onFinish = (values) => {
         const recipes = {
             recipe_id: recipe.id,
@@ -89,11 +104,14 @@ const ShowPostRecipes = () => {
 
         axios.put(process.env.REACT_APP_API_URL + 'post/', recipes)
             .then(function response(response) {
-                console.log(response.data);
-        })
-        .catch(function error(error) {
-            console.log(error);
-        })
+                
+                // ### peticion para borrar la imagen
+                deleteImage(recipe.image_recipe)
+                // ### Peticion para editar id en postgres
+            })
+            .catch(function error(error) {
+                console.log(error);
+            })
     }
 
     const DownloadFile = (image_recipe) => {
@@ -127,6 +145,7 @@ const ShowPostRecipes = () => {
                 // message.error("Descarga fallida.");
             });
     };
+
 
     if (isLoading) {
         return <div className="App">Loading...</div>;
