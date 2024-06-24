@@ -16,39 +16,39 @@ import {
 import countriesData from './countries.json';
 
 const URI = 'http://localhost:8000/blogs/'
-const IDRECIPE = "3"
+const IDRECIPE = "1"
 
 const ShowPostRecipes = () => {
 
     const [cookies, setCookie] = useCookies(['userToken']);
 
     const [fileList, setFileList] = useState([]);
+    const [imageUrl, setImageUrl] = useState(null);
 
     const [countries, setCountries] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
     const [recipe, setRecipe] = useState('');
-    
 
-    function getRecipe(){
-        axios.get(process.env.REACT_APP_API_URL + 'post/' + IDRECIPE ,
+
+    function getRecipe() {
+        axios.get(process.env.REACT_APP_API_URL + 'post/' + IDRECIPE,
         ).then((response) => {
             const recipeData = response.data;
             setRecipe(recipeData)
             setLoading(false);
+            DownloadFile(recipeData.image_recipe)
         })
-        .catch((error) =>{
-            console.error(error);
-        });
-    } 
-
-    
+            .catch((error) => {
+                console.error(error);
+            });
+    }
 
     useEffect(() => {
         getRecipe();
         setCountries(countriesData);
-    },[])
-    
+    }, [])
+
     const onPreview = async (file) => {
         let src = file.url;
         if (!src) {
@@ -73,30 +73,56 @@ const ShowPostRecipes = () => {
 
     const onFinish = (values) => {
         const recipes = {
-            id:                 recipe.id,
-            recipe_name:        values.recipe_name,
-            image_recipe:       values.image_recipe,
-            preparation_time:   values.preparation_time,
-            temperature:        values.temperature,
-            calories:           values.calories,
-            description:        values.description,
-            ingredients:        values.ingredients,
-            preparation:        values.preparation,
-            type_recipe:        values.type_recipe,
-            originary:          values.originary,
-            tips:               values.tips,
-            creator_code:       values.creator_code,
+            id: recipe.id,
+            recipe_name: values.recipe_name,
+            image_recipe: values.image_recipe,
+            preparation_time: values.preparation_time,
+            temperature: values.temperature,
+            calories: values.calories,
+            description: values.description,
+            ingredients: values.ingredients,
+            preparation: values.preparation,
+            type_recipe: values.type_recipe,
+            originary: values.originary,
+            tips: values.tips,
+            creator_code: values.creator_code,
         }
 
-        axios.put(process.env.REACT_APP_API_URL + 'post/', recipes
-            )
+        axios.put(process.env.REACT_APP_API_URL + 'post/', recipes)
             .then(function response(response) {
                 console.log(response.data);
-                
             })
             .catch(function error(error) {
                 console.log(error);
             })
+    }
+
+    const DownloadFile = (image_recipe) => {
+        console.log(image_recipe);
+        axios.get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, { responseType: "blob" })
+            .then((res) => {
+                // Get IMG in format BLOB
+                // Crear una URL a partir del blob
+                const url = URL.createObjectURL(new Blob([res.data], { type: 'image/png' }));
+                setImageUrl(url);
+                handleFileSubmit(imageUrl)
+                // Crear un nuevo elemento de imagen y establecer la URL como src
+                const img = document.createElement('img');
+                img.src = url;
+                // Revocar la URL del objeto para liberar recursos
+                return () => {
+                    URL.revokeObjectURL(url);
+                };
+
+            })
+            .catch((error) => {
+                console.error(error);
+                // message.error("Descarga fallida.");
+            });
+    };
+
+    if (!imageUrl) {
+        return <div>Cargando imagen...</div>;
     }
 
     if (isLoading) {
@@ -105,29 +131,31 @@ const ShowPostRecipes = () => {
 
     return (
         <React.Fragment>
+            <div id='image-container'>
+                <img src={imageUrl} alt='Imagen dinámica' onLoad={() => URL.revokeObjectURL(imageUrl)} />
+            </div>
             <Typography.Title level={2}>Publicar</Typography.Title>
             {/* Form Receta */}
-            
+
             <Form
                 layout="vertical"
                 requiredMark={false}
                 name="recipes"
                 onFinish={onFinish}
                 initialValues={{
-                    id:                  recipe.id,
-                    recipe_name:         recipe.recipe_name,
-                    preparation_time:    recipe.preparation_time,
-                    temperature:         recipe.temperature,
-                    calories:            recipe.calories,
-                    description:         recipe.description,
-                    ingredients:         recipe.ingredients,
-                    preparation:         recipe.preparation,
-                    type_recipe:         recipe.type_recipe,
-                    originary:           recipe.originary,
-                    tips:                recipe.tips,
+                    id: recipe.id,
+                    recipe_name: recipe.recipe_name,
+                    preparation_time: recipe.preparation_time,
+                    temperature: recipe.temperature,
+                    calories: recipe.calories,
+                    description: recipe.description,
+                    ingredients: recipe.ingredients,
+                    preparation: recipe.preparation,
+                    type_recipe: recipe.type_recipe,
+                    originary: recipe.originary,
+                    tips: recipe.tips,
                 }}
             >
-                
                 {/* Input imagen */}
                 <div type="flex" justify="center" align="middle">
                     <Form.Item
@@ -159,7 +187,7 @@ const ShowPostRecipes = () => {
                     name="recipe_name"
                     normalize={value => (value || '').toUpperCase()}
                     rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
-                    >
+                >
                     <Input
                         disabled={false}
                     />
@@ -356,7 +384,7 @@ const ShowPostRecipes = () => {
 
                 {/* Boton Submit */}
                 <Form.Item
-                    className = "my-form-container"
+                    className="my-form-container"
                 >
                     <Button type="primary" shape="round" htmlType="submit"> Actualizar </Button>
                 </Form.Item>

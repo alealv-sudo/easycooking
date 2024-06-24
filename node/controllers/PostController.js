@@ -44,10 +44,9 @@ PostCTRL.createPost = async (req, res) => {
 //Actualizar un registro
 
 PostCTRL.updatePost = async (req, res) => {
-    //console.log(req.body.id);
     try {
          await PostModel.update(req.body, {
-            where: { id: req.body.id }
+            where: { id: req.body.recipe_id }
         })
         res.json({"message": "Registro Actualizado correctamente"})
     } catch (error) {
