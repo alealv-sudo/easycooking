@@ -148,9 +148,7 @@ google_Ctrl.uploadPP = async function (myFiles, folderID) {
     }
 
     response = response.substr(0, response.length - 1);
-    console.log("END");
 
-    // return ({files: response});
   };
   await multipleFiles();
   // console.log(response);
@@ -189,17 +187,15 @@ google_Ctrl.getFileByID = async (req, res) => {
 };
 
 google_Ctrl.getDownload = async (req, res) => {
-  console.log(req.params);
-  console.log(req.body);
+
   let Google = await drive.files
     .get({ fileId: req.params.id, alt: "media" }, { responseType: "stream" })
     .then((request) => {
-      console.log(request);
+  
       const fileType = request.headers["content-type"];
       const fileName = "file" + "." + fileType;
       const fileData = request.data;
-      // res.set(request.headers)
-      console.log(fileType);
+    
       res.set("Content-Type", fileType);
       res.set("Content-Disposition", "attachment; filename='archivo.png'");
       fileData.pipe(res);

@@ -16,14 +16,13 @@ import {
 import countriesData from './countries.json';
 
 const URI = 'http://localhost:8000/blogs/'
-const IDRECIPE = "1"
+const IDRECIPE = "2"
 
 const ShowPostRecipes = () => {
 
     const [cookies, setCookie] = useCookies(['userToken']);
 
     const [fileList, setFileList] = useState([]);
-    const [imageUrl, setImageUrl] = useState(null);
 
     const [countries, setCountries] = useState([]);
     const [isLoading, setLoading] = useState(true);
@@ -36,8 +35,8 @@ const ShowPostRecipes = () => {
         ).then((response) => {
             const recipeData = response.data;
             setRecipe(recipeData)
-            setLoading(false);
             DownloadFile(recipeData.image_recipe)
+            setLoading(false);
         })
             .catch((error) => {
                 console.error(error);
@@ -73,7 +72,7 @@ const ShowPostRecipes = () => {
 
     const onFinish = (values) => {
         const recipes = {
-            id: recipe.id,
+            recipe_id: recipe.id,
             recipe_name: values.recipe_name,
             image_recipe: values.image_recipe,
             preparation_time: values.preparation_time,
@@ -91,21 +90,29 @@ const ShowPostRecipes = () => {
         axios.put(process.env.REACT_APP_API_URL + 'post/', recipes)
             .then(function response(response) {
                 console.log(response.data);
-            })
-            .catch(function error(error) {
-                console.log(error);
-            })
+        })
+        .catch(function error(error) {
+            console.log(error);
+        })
     }
 
     const DownloadFile = (image_recipe) => {
-        console.log(image_recipe);
         axios.get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, { responseType: "blob" })
             .then((res) => {
                 // Get IMG in format BLOB
                 // Crear una URL a partir del blob
                 const url = URL.createObjectURL(new Blob([res.data], { type: 'image/png' }));
-                setImageUrl(url);
-                handleFileSubmit(imageUrl)
+
+                const imageUpload = [
+                    {
+                    uid: '-1',
+                    name: 'image.png',
+                    status: 'done',
+                    url: url,
+                    },
+                ]
+                
+                setFileList(imageUpload);
                 // Crear un nuevo elemento de imagen y establecer la URL como src
                 const img = document.createElement('img');
                 img.src = url;
@@ -121,19 +128,12 @@ const ShowPostRecipes = () => {
             });
     };
 
-    if (!imageUrl) {
-        return <div>Cargando imagen...</div>;
-    }
-
     if (isLoading) {
         return <div className="App">Loading...</div>;
     }
 
     return (
         <React.Fragment>
-            <div id='image-container'>
-                <img src={imageUrl} alt='Imagen dinámica' onLoad={() => URL.revokeObjectURL(imageUrl)} />
-            </div>
             <Typography.Title level={2}>Publicar</Typography.Title>
             {/* Form Receta */}
 
@@ -173,7 +173,7 @@ const ShowPostRecipes = () => {
                             onPreview={onPreview}
                             beforeUpload={() => false} // Evita la carga automática de la imagen
                         >
-                            {fileList.length < 1 && '+ Upload'}
+                        {fileList.length < 1 && '+ Upload'}
 
                         </Upload>
 
