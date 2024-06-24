@@ -33,10 +33,11 @@ google_Ctrl.getFiles = async (req, res) => {
 };
 
 google_Ctrl.deleteFile = async function (fileID) {
-  let Google = await drive.files.delete({
-    'fileId': fileID
-  });
-  return {message: "Documento eliminado correctamente"};
+  console.log("Perro", fileID);
+  // let Google = await drive.files.delete({
+  //   'fileId': fileID
+  // });
+  // return {message: "Documento eliminado correctamente"};
 };
 
 google_Ctrl.uploadFile = async function (myFiles, res) {
@@ -88,7 +89,6 @@ google_Ctrl.editFile = async function (myFiles, folderID,fileID) {
   var response = "";
 
   const multipleFiles = async (_) => {
-    // console.log(files.length);
     if (files.name) files = [files];
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
@@ -100,7 +100,6 @@ google_Ctrl.editFile = async function (myFiles, folderID,fileID) {
         mimeType: file.mimetype,
         body: fs.createReadStream(file.tempFilePath), // Reading the file from our server
       };
-      console.log({ fileMetadata }, { media }, "***");
       await drive.files
         .create({ resource: fileMetadata, media: media })
         .then(function (file) {
@@ -119,16 +118,12 @@ google_Ctrl.editFile = async function (myFiles, folderID,fileID) {
 
 google_Ctrl.uploadPP = async function (myFiles, folderID) {
   const folderId = profileID;
-  // console.log(folderId)
-  // console.log(req.files);
   // Authenticating drive API
   const drive = google.drive({ version: "v3", auth });
   var files = myFiles;
   var response = "";
 
   const multipleFiles = async (_) => {
-    console.log("START");
-    // console.log(files.length);
     if (files.name) files = [files];
     for (let index = 0; index < files.length; index++) {
       const file = files[index];
@@ -148,12 +143,10 @@ google_Ctrl.uploadPP = async function (myFiles, folderID) {
     }
 
     response = response.substr(0, response.length - 1);
-    console.log("END");
 
     // return ({files: response});
   };
   await multipleFiles();
-  // console.log(response);
   return { picture: response };
 };
 
@@ -181,7 +174,6 @@ google_Ctrl.uploadBackup = async function (myBackup) {
 };
 
 google_Ctrl.getFileByID = async (req, res) => {
-  console.log(req.params);
   let Google = await drive.files.get({
     fileId: req.params.id,
   });
@@ -189,17 +181,13 @@ google_Ctrl.getFileByID = async (req, res) => {
 };
 
 google_Ctrl.getDownload = async (req, res) => {
-  console.log(req.params);
-  console.log(req.body);
   let Google = await drive.files
     .get({ fileId: req.params.id, alt: "media" }, { responseType: "stream" })
     .then((request) => {
-      console.log(request);
       const fileType = request.headers["content-type"];
       const fileName = "file" + "." + fileType;
       const fileData = request.data;
       // res.set(request.headers)
-      console.log(fileType);
       res.set("Content-Type", fileType);
       res.set("Content-Disposition", "attachment; filename='archivo.png'");
       fileData.pipe(res);
@@ -207,7 +195,6 @@ google_Ctrl.getDownload = async (req, res) => {
 };
 
 google_Ctrl.addFolder = async function (folderName) {
-  console.log(folderName);
   var fileMetadata = {
     name: folderName,
     mimeType: "application/vnd.google-apps.folder",

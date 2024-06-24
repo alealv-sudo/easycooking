@@ -23,7 +23,6 @@ const ShowPostRecipes = () => {
     const [cookies, setCookie] = useCookies(['userToken']);
 
     const [fileList, setFileList] = useState([]);
-    const [imageUrl, setImageUrl] = useState(null);
 
     const [countries, setCountries] = useState([]);
     const [isLoading, setLoading] = useState(true);
@@ -71,9 +70,23 @@ const ShowPostRecipes = () => {
         // console.log('Archivos seleccionados:', newFileList);
     };
 
+    const deleteImage = (image_recipe_id) => {
+        const id = {
+            image_recipe: image_recipe_id
+        }
+        axios.delete(process.env.REACT_APP_API_URL + "google/delete/", id)
+            .then((response) => {
+                
+                console.log("Respuesta google API delete", response.data);
+            })
+            .catch((error) => {
+
+            })
+    }
+
     const onFinish = (values) => {
         const recipes = {
-            id: recipe.id,
+            recipe_id: recipe.id,
             recipe_name: values.recipe_name,
             image_recipe: values.image_recipe,
             preparation_time: values.preparation_time,
@@ -90,7 +103,10 @@ const ShowPostRecipes = () => {
 
         axios.put(process.env.REACT_APP_API_URL + 'post/', recipes)
             .then(function response(response) {
-                console.log(response.data);
+                
+                // ### peticion para borrar la imagen
+                deleteImage(recipes.image_recipe)
+                // ### Peticion para editar id en postgres
             })
             .catch(function error(error) {
                 console.log(error);
@@ -104,8 +120,15 @@ const ShowPostRecipes = () => {
                 // Get IMG in format BLOB
                 // Crear una URL a partir del blob
                 const url = URL.createObjectURL(new Blob([res.data], { type: 'image/png' }));
-                setImageUrl(url);
-                handleFileSubmit(imageUrl)
+                const ImageToFilelist =
+                    [{
+                        uid: '-1',
+                        // name: 'image.png',
+                        status: 'done',
+                        url: url,
+                    }]
+
+                setFileList(ImageToFilelist);
                 // Crear un nuevo elemento de imagen y establecer la URL como src
                 const img = document.createElement('img');
                 img.src = url;
@@ -121,9 +144,6 @@ const ShowPostRecipes = () => {
             });
     };
 
-    if (!imageUrl) {
-        return <div>Cargando imagen...</div>;
-    }
 
     if (isLoading) {
         return <div className="App">Loading...</div>;
@@ -131,9 +151,6 @@ const ShowPostRecipes = () => {
 
     return (
         <React.Fragment>
-            <div id='image-container'>
-                <img src={imageUrl} alt='Imagen dinámica' onLoad={() => URL.revokeObjectURL(imageUrl)} />
-            </div>
             <Typography.Title level={2}>Publicar</Typography.Title>
             {/* Form Receta */}
 
