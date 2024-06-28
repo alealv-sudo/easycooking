@@ -12,12 +12,20 @@ import {
     Space,
     Checkbox,
     Select,
-    Button
+    Button,
+    Tag
 } from 'antd';
 
 import countriesData from './countries.json';
 
 const URI = 'http://localhost:8000/blogs/'
+
+const customizeRequiredMark = (label, { required }) => (
+    <>
+      {required ? <Tag color="error">Required</Tag> : ""}
+      {label}
+    </>
+);
 
 const Publicar = () => {
     const [cookies, setCookie] = useCookies(['userToken']);
@@ -29,6 +37,8 @@ const Publicar = () => {
     const [isDisabledCalories, setIsDisabledCalories] = useState(false);
 
     const [countries, setCountries] = useState([]);
+    const [isImage, setIsimage] = useState(true);
+    const [requiredMark, setRequiredMarkType] = useState(<>{<Tag color="error">Required</Tag>}{}</>);
 
     const [state, setState] = useState({
         fileList: [],
@@ -41,6 +51,8 @@ const Publicar = () => {
 
     const props = {
         onRemove: (file) => {
+            changeboleantrue()
+            console.log("remova", isImage);
             setState((state) => {
                 const index = state.fileList.indexOf(file);
                 const newFileList = state.fileList.slice();
@@ -48,10 +60,13 @@ const Publicar = () => {
                 return {
                     fileList: newFileList,
                 };
+                
             });
         },
 
         beforeUpload: (file) => {
+            changeboleanfalse()
+            console.log("before",isImage);
             if (state.fileList.length >= 1) {
                 message.error('Solo puedes subir un archivo a la vez');
                 setState((state) => {
@@ -91,30 +106,43 @@ const Publicar = () => {
         fileList
     };
 
+    const  changeboleantrue = () => {
+        setIsimage(true)
+    }
+
+    const  changeboleanfalse = () => {
+        setIsimage(false)
+    }
+
     const onFinish = (values) => {
 
-        const recipes = {
-            recipe_name: values.recipe_name,
-            preparation_time: values.preparation_time,
-            temperature: values.temperature,
-            calories: values.calories,
-            description: values.description,
-            ingredients: values.ingredients,
-            preparation: values.preparation,
-            type_recipe: values.type_recipe,
-            originary: values.originary,
-            tips: values.tips,
-
-            creator_code: cookies.id,
+        if (isImage) {
+            console.log("Ponga una imagen");
+        } else {
+            console.log("datos completos");
+            /* const recipes = {
+                recipe_name: values.recipe_name,
+                preparation_time: values.preparation_time,
+                temperature: values.temperature,
+                calories: values.calories,
+                description: values.description,
+                ingredients: values.ingredients,
+                preparation: values.preparation,
+                type_recipe: values.type_recipe,
+                originary: values.originary,
+                tips: values.tips,
+    
+                creator_code: cookies.id,
+            }
+    
+            axios.post(process.env.REACT_APP_API_URL + 'post/', recipes)
+                .then(function response(response) {
+                    handleUpload(response.data.id);
+                })
+                .catch(function error(error) {
+                    console.log(error);
+            }) */
         }
-
-        axios.post(process.env.REACT_APP_API_URL + 'post/', recipes)
-            .then(function response(response) {
-                handleUpload(response.data.id);
-            })
-            .catch(function error(error) {
-                console.log(error);
-            })
     }
 
     const handleFileSubmit = ({ fileList: newFileList }) => {
@@ -217,7 +245,7 @@ const Publicar = () => {
             {/* Form Receta */}
             <Form
                 layout="vertical"
-                requiredMark={true}
+                //requiredMark={true}
                 name="recipe"
                 initialValues={{
 
@@ -237,8 +265,9 @@ const Publicar = () => {
                     // creator_code:        user.code,
                     // CreatedAt:
                     // updatedAt:
-
+                   
                 }}
+                requiredMark={customizeRequiredMark}
                 onFinish={onFinish}
                 autoComplete="off"
             >
@@ -251,6 +280,7 @@ const Publicar = () => {
 
                         label="Imagen de la Receta"
                         name="image_recipe"
+                        rules={[{ required: isImage, message: 'Imagen' }]}
                     >
                         <Upload
                             //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
@@ -274,7 +304,7 @@ const Publicar = () => {
                     label="Nombre de la Receta"
                     name="recipe_name"
                     normalize={value => (value || '').toUpperCase()}
-                //rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
+                    rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
                 >
                     <Input
                         disabled={false}

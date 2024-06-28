@@ -104,7 +104,7 @@ const ShowPostRecipes = () => {
 
         axios.put(process.env.REACT_APP_API_URL + 'post/', recipes)
             .then(function response(response) {
-                
+                console.log(response)
                 // ### peticion para borrar la imagen
                 deleteImage(recipe.image_recipe)
                 // ### Peticion para editar id en postgres
