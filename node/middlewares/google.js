@@ -32,7 +32,7 @@ google_Ctrl.getFiles = async (req, res) => {
   res.status(200).json(Google.data.files);
 };
 
-google_Ctrl.deleteFile = async function (fileID) {
+google_Ctrl.deleteFile = async function (fileID, res) {
 
   try {
     const Google = await drive.files.delete({
