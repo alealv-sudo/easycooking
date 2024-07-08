@@ -22,7 +22,7 @@ const URI = 'http://localhost:8000/blogs/'
 
 const customizeRequiredMark = (label, { required }) => (
     <>
-      {required ? <Tag color="error">Required</Tag> : ""}
+      {required ? <Tag color="error">Req</Tag> : ""}
       {label}
     </>
 );
@@ -38,8 +38,7 @@ const Publicar = () => {
 
     const [countries, setCountries] = useState([]);
     const [isImage, setIsimage] = useState(true);
-    const [requiredMark, setRequiredMarkType] = useState(<>{<Tag color="error">Required</Tag>}{}</>);
-
+    
     const [state, setState] = useState({
         fileList: [],
         uploading: false,
@@ -52,7 +51,6 @@ const Publicar = () => {
     const props = {
         onRemove: (file) => {
             changeboleantrue()
-            console.log("remova", isImage);
             setState((state) => {
                 const index = state.fileList.indexOf(file);
                 const newFileList = state.fileList.slice();
@@ -66,7 +64,6 @@ const Publicar = () => {
 
         beforeUpload: (file) => {
             changeboleanfalse()
-            console.log("before",isImage);
             if (state.fileList.length >= 1) {
                 message.error('Solo puedes subir un archivo a la vez');
                 setState((state) => {

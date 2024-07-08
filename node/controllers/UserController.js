@@ -1,5 +1,4 @@
 import UserModel from "../models/UserModel.js";
-import google_Ctrl from "../middlewares/google.js";
 
 const UserCTRL = {}
 
@@ -45,8 +44,9 @@ UserCTRL.getUserByEmailC = async (req, res) => {
 UserCTRL.createUser = async (req, res) => {
     console.log(req.body);
     try {
-        await UserModel.create(req.body)
-        res.json({"message": "Usuario Creado correctamente"})
+        const user = new UserModel(req.body)
+        await user.save();
+        res.json(user)
     } catch (error) {
         res.json({message: error.message}) 
     }
