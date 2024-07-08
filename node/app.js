@@ -10,6 +10,7 @@ db.sync()
 import blogRoutes from './routes/routes.js'
 import userRoutes from './routes/userRoutes.js'
 import postRoutes from './routes/postRoutes.js'
+import profileRoutes from './routes/profileRoutes.js'
 import followerRoutes from "./routes/followerRoutes.js";
 import googleRoutes  from './routes/googleRoutes.js'
 
@@ -27,7 +28,7 @@ app.use('/blogs', blogRoutes)
 app.use('/user', userRoutes)
 app.use('/post', postRoutes)
 app.use('/followers', followerRoutes)
-
+app.use('/profile', profileRoutes)
 
 //GOOGLE
 app.use("/google", googleRoutes)
@@ -43,10 +44,6 @@ try {
 } catch (error) {
     console.log(`El error de conexion es:${error}`)
 }
-
-/* app.get('/', (req, res) =>{
-    res.send("Hola Mundo")
-}) */
 
 app.listen(8000, () => {
     console.log('server UP running in http://localhost:8000/')
