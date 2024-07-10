@@ -1,8 +1,6 @@
+import React, { useEffect, useState } from "react";
 import axios from 'axios'
-import React, { useState, useEffect, message } from 'react'
-import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-
 
 import {
     Typography,
@@ -12,187 +10,43 @@ import {
     Space,
     Checkbox,
     Select,
-    Button,
-    Tag
+    Button
 } from 'antd';
 
-import countriesData from './countries.json';
+import countriesData from '../recipes/countries.json';
 
 const URI = 'http://localhost:8000/blogs/'
+const IDRECIPE = "2"
 
-const customizeRequiredMark = (label, { required }) => (
-    <>
-      {required ? <Tag color="error">Req</Tag> : ""}
-      {label}
-    </>
-);
+const ShowPostRecipes = () => {
 
-const Publicar = () => {
     const [cookies, setCookie] = useCookies(['userToken']);
 
-    const [recipe, setRecipe] = useState([]);
-    const [imgFileList, setFileList] = useState([]);
-
-    const [isDisabledTemp, setIsDisabledTemp] = useState(false);
-    const [isDisabledCalories, setIsDisabledCalories] = useState(false);
+    const [fileList, setFileList] = useState([]);
 
     const [countries, setCountries] = useState([]);
-    const [isImage, setIsimage] = useState(true);
-    
-    const [state, setState] = useState({
-        fileList: [],
-        uploading: false,
-    });
+    const [isLoading, setLoading] = useState(true);
 
-    const { fileList } = state;
+    const [recipe, setRecipe] = useState('');
 
-    const navigate = useNavigate();
 
-    const props = {
-        onRemove: (file) => {
-            changeboleantrue()
-            setState((state) => {
-                const index = state.fileList.indexOf(file);
-                const newFileList = state.fileList.slice();
-                newFileList.splice(index, 1);
-                return {
-                    fileList: newFileList,
-                };
-                
-            });
-        },
-
-        beforeUpload: (file) => {
-            changeboleanfalse()
-            if (state.fileList.length >= 1) {
-                message.error('Solo puedes subir un archivo a la vez');
-                setState((state) => {
-                    const index = state.fileList.indexOf(file);
-                    const newFileList = state.fileList.slice();
-                    newFileList.splice(index, 1);
-                    return {
-                        fileList: newFileList,
-                    };
-                });
-                return false || Upload.LIST_IGNORE;
-            }
-            // Check that the file is pdf
-            const isFile = file.type === 'application/pdf'
-                || file.type === 'image/png'
-                || file.type === 'image/jpg'
-                || file.type === 'image/jpeg'
-                ;
-            // If it isn't pdf then delete the file
-            if (!isFile) {
-                message.error('Solo puedes subir archivos PDF');
-                setState((state) => {
-                    const index = state.fileList.indexOf(file);
-                    const newFileList = state.fileList.slice();
-                    newFileList.splice(index, 1);
-                    return {
-                        fileList: newFileList,
-                    };
-                });
-                return false;
-            }
-            setState((state) => ({
-                fileList: [...state.fileList, file],
-            }));
-            return false;
-        },
-        fileList
-    };
-
-    const  changeboleantrue = () => {
-        setIsimage(true)
-    }
-
-    const  changeboleanfalse = () => {
-        setIsimage(false)
-    }
-
-    const onFinish = (values) => {
-
-        if (isImage) {
-            console.log("Ponga una imagen");
-        } else {
-            console.log("datos completos");
-            /* const recipes = {
-                recipe_name: values.recipe_name,
-                preparation_time: values.preparation_time,
-                temperature: values.temperature,
-                calories: values.calories,
-                description: values.description,
-                ingredients: values.ingredients,
-                preparation: values.preparation,
-                type_recipe: values.type_recipe,
-                originary: values.originary,
-                tips: values.tips,
-    
-                creator_code: cookies.id,
-            }
-    
-            axios.post(process.env.REACT_APP_API_URL + 'post/', recipes)
-                .then(function response(response) {
-                    handleUpload(response.data.id);
-                })
-                .catch(function error(error) {
-                    console.log(error);
-            }) */
-        }
-    }
-
-    const handleFileSubmit = ({ fileList: newFileList }) => {
-        setFileList(newFileList);
-    };
-
-    const updateIMG = (recipe_id, img_id) => {
-
-        //put 
-        const ImageRecipes = {
-            image_recipe: img_id,
-            recipe_id: recipe_id,
-        }
-
-        axios.put(process.env.REACT_APP_API_URL + 'post/', ImageRecipes)
-            .then(function response(response) {
-                message.success("Receta publicada con exito.");
-            })
-            .catch(function error(error) {
-                console.log(error);
-            })
-
-        Salir();
-    }
-
-    const handleUpload = (recipe_id) => {
-        const { fileList } = state;
-        const formData = new FormData();
-
-        fileList.forEach((file) => {
-            formData.append("myFiles", file, '-' + file.name);
-        });
-
-        axios.post(process.env.REACT_APP_API_URL + "google/upload/", formData)
-            .then(res => {
-
-                updateIMG(recipe_id, res.data);
-
-                setState({
-                    fileList: [],
-                });
-
-                message.success("Archivo subido con exito.");
-            })
+    function getRecipe() {
+        axios.get(process.env.REACT_APP_API_URL + 'post/' + IDRECIPE,
+        ).then((response) => {
+            const recipeData = response.data;
+            setRecipe(recipeData)
+            DownloadFile(recipeData.image_recipe)
+            setLoading(false);
+        })
             .catch((error) => {
-                //console.error(error);
-                setState({
-                    uploading: false,
-                });
-                //message.error("Error al subir el archivo.");
+                console.error(error);
             });
+    }
 
-    };
+    useEffect(() => {
+        getRecipe();
+        setCountries(countriesData);
+    }, [])
 
     const onPreview = async (file) => {
         let src = file.url;
@@ -209,66 +63,118 @@ const Publicar = () => {
         imgWindow?.document.write(image.outerHTML);
     };
 
-
-    const handleCheckboxChange = (e) => {
-        console.log(e.target.name)
-        if (e.target.name === "N_A_Temp") {
-            setIsDisabledTemp(e.target.checked);
-        }
-        else if (e.target.name === "N_A_Calories") {
-            setIsDisabledCalories(e.target.checked);
-        }
-        else {
-            console.log("Unknow error in handleCheckboxChange")
-        }
+    const handleFileSubmit = ({ fileList: newFileList }) => {
+        // Actualiza el estado con la lista de archivos seleccionados
+        setFileList(newFileList);
+        //setImageURL(info.file.response.url);
+        // console.log('Archivos seleccionados:', newFileList);
     };
 
-    useEffect(() => {
-        setCountries(countriesData);
-    }, []);
+    const deleteImage = (image_recipe_id) => {
+        const id = {
+            image_recipe: image_recipe_id
+        }
+        
+        axios.delete(process.env.REACT_APP_API_URL + "google/delete/" + image_recipe_id)
+            .then((response) => {
+                
+                console.log("Respuesta google API delete", response.data);
+            })
+            .catch((error) => {
+
+            })
+    }
+
+    const onFinish = (values) => {
+        const recipes = {
+            recipe_id: recipe.id,
+            recipe_name: values.recipe_name,
+            image_recipe: values.image_recipe,
+            preparation_time: values.preparation_time,
+            temperature: values.temperature,
+            calories: values.calories,
+            description: values.description,
+            ingredients: values.ingredients,
+            preparation: values.preparation,
+            type_recipe: values.type_recipe,
+            originary: values.originary,
+            tips: values.tips,
+            creator_code: values.creator_code,
+        }
+
+        axios.put(process.env.REACT_APP_API_URL + 'post/', recipes)
+            .then(function response(response) {
+                console.log(response)
+                // ### peticion para borrar la imagen
+                deleteImage(recipe.image_recipe)
+                // ### Peticion para editar id en postgres
+            })
+            .catch(function error(error) {
+                console.log(error);
+            })
+    }
+
+    const DownloadFile = (image_recipe) => {
+        axios.get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, { responseType: "blob" })
+            .then((res) => {
+                // Get IMG in format BLOB
+                // Crear una URL a partir del blob
+                const url = URL.createObjectURL(new Blob([res.data], { type: 'image/png' }));
+
+                const imageUpload = [
+                    {
+                    uid: '-1',
+                    name: 'image.png',
+                    status: 'done',
+                    url: url,
+                    },
+                ]
+                
+                setFileList(imageUpload);
+                // Crear un nuevo elemento de imagen y establecer la URL como src
+                const img = document.createElement('img');
+                img.src = url;
+                // Revocar la URL del objeto para liberar recursos
+                return () => {
+                    URL.revokeObjectURL(url);
+                };
+
+            })
+            .catch((error) => {
+                console.error(error);
+                // message.error("Descarga fallida.");
+            });
+    };
 
 
-    const Salir = () => {
-        navigate("/private/BLOG");
+    if (isLoading) {
+        return <div className="App">Loading...</div>;
     }
 
     return (
         <React.Fragment>
             <Typography.Title level={2}>Publicar</Typography.Title>
-
-
-
-
             {/* Form Receta */}
+
             <Form
                 layout="vertical"
-                //requiredMark={true}
-                name="recipe"
-                initialValues={{
-
-                    // id:                  recipe.id,
-                    // recipe_name:         recipe.name,
-                    // preparation_time:    recipe.preparation_time,
-                    // temperature:         recipe.temperature,
-                    // calories:            recipe.calories,
-                    // description:         recipe.description,
-                    // ingredients:         recipe.ingredients,
-                    // preparation:         recipe.preparation,
-                    // type_recipe:         recipe.type_recipe,
-                    // originary:           recipe.originary,
-                    // tips:                recipe.tips,
-                    // image_recipe:        recipe.image_recipe,
-
-                    // creator_code:        user.code,
-                    // CreatedAt:
-                    // updatedAt:
-                   
-                }}
-                requiredMark={customizeRequiredMark}
+                requiredMark={false}
+                name="recipes"
                 onFinish={onFinish}
-                autoComplete="off"
+                initialValues={{
+                    id: recipe.id,
+                    recipe_name: recipe.recipe_name,
+                    preparation_time: recipe.preparation_time,
+                    temperature: recipe.temperature,
+                    calories: recipe.calories,
+                    description: recipe.description,
+                    ingredients: recipe.ingredients,
+                    preparation: recipe.preparation,
+                    type_recipe: recipe.type_recipe,
+                    originary: recipe.originary,
+                    tips: recipe.tips,
+                }}
             >
-
                 {/* Input imagen */}
                 <div type="flex" justify="center" align="middle">
                     <Form.Item
@@ -277,18 +183,16 @@ const Publicar = () => {
 
                         label="Imagen de la Receta"
                         name="image_recipe"
-                        rules={[{ required: isImage, message: 'Imagen' }]}
                     >
                         <Upload
-                            //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                             listType="picture-card"
-                            {...props}
-                            fileList={imgFileList}
+                            fileList={fileList}
                             onChange={handleFileSubmit}
                             onPreview={onPreview}
-                        //beforeUpload={() => false} // Evita la carga automática de la imagen
+                            beforeUpload={() => false} // Evita la carga automática de la imagen
                         >
-                            {fileList != null && (fileList.length < 1 && '+ Upload')}
+                        {fileList.length < 1 && '+ Upload'}
 
                         </Upload>
 
@@ -501,15 +405,13 @@ const Publicar = () => {
                 <Form.Item
                     className="my-form-container"
                 >
-                    <Button type="primary" shape="round" htmlType="submit"> Publicar </Button>
+                    <Button type="primary" shape="round" htmlType="submit"> Actualizar </Button>
                 </Form.Item>
 
             </Form>
-
-            <Button type="primary" shape="round" onClick={Salir}> Cancelar </Button>
         </React.Fragment>
     );
 
 }
 
-export default Publicar
+export default ShowPostRecipes
