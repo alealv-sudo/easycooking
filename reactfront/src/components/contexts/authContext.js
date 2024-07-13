@@ -17,10 +17,8 @@ export function AuthContextProvider({children}){
     const loginUser = (userlog) => {
         const userAuth = userlog
         setUser(userAuth);
-        console.log("Usuario auth",userlog);
-        console.log("Usuario",User);
-    
-        setCookie('user', userlog.name, {path:'/'})
+     
+        setCookie('user', userlog.userName, {path:'/'})
         setCookie('id', userlog.id, {path:'/'})
         setCookie('email', userlog.email, {path:'/'})
         login();

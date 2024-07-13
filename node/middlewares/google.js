@@ -47,41 +47,46 @@ google_Ctrl.deleteFile = async function (fileID, res) {
 
 google_Ctrl.uploadFile = async function (myFiles, res) {
 
-  // Authenticating drive API
+ // Authenticating drive API
   const drive = google.drive({ version: "v3", auth });
   var files = myFiles.files.myFiles;
+  var folderId = myFiles.body.folderId
   var response = "";
 
-  const multipleFiles = async (_) => {
+  if (files !== null && folderId !== null) {
 
-    if (files.name) files = [files];
-    
-    for (let index = 0; index < files.length; index++) {
+    const multipleFiles = async (_) => {
 
-      const file = files[index];
-     
-      var fileMetadata = {
-        name: file.name, // file name that will be saved in google drive
-        parents: [recipesID],
-      };
-
-      var media = {
-        mimeType: file.mimetype,
-        body: fs.createReadStream(file.tempFilePath), // Reading the file from our server
-      };
-
-      await drive.files.create({ resource: fileMetadata, media: media })
-        .then(function (file) {
-          response += file.data.id + ",";
-        });
-    }
-
-    response = response.substr(0, response.length - 1);
-    
-  };
-  await multipleFiles();
+      if (files.name) files = [files];
+      
+      for (let index = 0; index < files.length; index++) {
   
-  res.json(response)
+        const file = files[index];
+       
+        var fileMetadata = {
+          name: file.name, // file name that will be saved in google drive
+          parents: [folderId],
+        };
+  
+        var media = {
+          mimeType: file.mimetype,
+          body: fs.createReadStream(file.tempFilePath), // Reading the file from our server
+        };
+  
+        await drive.files.create({ resource: fileMetadata, media: media })
+          .then(function (file) {
+            response += file.data.id + ",";
+          });
+      }
+  
+      response = response.substr(0, response.length - 1); 
+      
+    };
+    await multipleFiles();
+    
+    res.json(response)
+  }
+
 };
 
 
