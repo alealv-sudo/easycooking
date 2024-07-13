@@ -43,7 +43,7 @@ profileCTRL.createProfile = async (req, res) => {
 profileCTRL.updateProfile = async (req, res) => {
     try {
          await ProfileModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { id: req.body.id }
         })
         res.json({"message": "Registro Actualizado correctamente"})
     } catch (error) {

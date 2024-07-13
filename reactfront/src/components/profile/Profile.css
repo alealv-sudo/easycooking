@@ -21,14 +21,6 @@ img.profile-img {
     justify-content: space-between;
 }
 
-.full-width-slot-profile{
-    width: 100%;
-}
-
-.half-width-slot-profile{
-    width: 48%;
-}
-
 .ant-row.ant-form-item.full-width-slot .ant-picker,
 .ant-row.ant-form-item.half-width-slot .ant-picker {
     width: 100%;
@@ -89,14 +81,14 @@ img.profile-img {
   align-items: center;
   justify-content: center;
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
   padding: 10px;
 }
 
 /*background image*/
 .profile-background {
     width: 100%;
-    height: 450px;
+    height: 350px;
 }
 
 .profile-img {
@@ -120,10 +112,6 @@ img.profile-img-br {
   font-size: 140%;
   color: rgb(110, 110, 110);
   font: sans-serif;
-}
-
-#udg-p {
-  font-size: 120%;
 }
 
 .card-container p {
@@ -198,10 +186,7 @@ img.profile-img-br {
 
 }
 
-
-
-
-/*Estilo form*/
+/*Estilo form tabs*/
 
 .profile-personal-form-tabs{
   padding: 16px;
@@ -223,3 +208,104 @@ img.profile-img-br {
   margin-top: 1%;
 }
 
+/*Modal Style*/
+
+.picture-profile-modal {
+  width: 100%;
+  height: 150px;
+  padding-top: 8%;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-evenly;
+ 
+}
+
+.customSizedUpload .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container, .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container, .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container, .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload-list.ant-upload-list-picture-circle .ant-upload-list-item-container{
+  width: 180px;
+  height: 180px;
+}
+
+.customSizedUpload .ant-upload.ant-upload-select, .ant-upload-wrapper.ant-upload-picture-circle-wrapper .ant-upload.ant-upload-select{
+  width: 180px;
+  height: 180px;
+}
+
+.customSizedUploadBG.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container{
+  width: 350px;
+  height: 180px;
+}
+
+.customSizedUploadBG.ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select {
+  width: 350px;
+  height: 180px;
+}
+
+/* Form styles */
+.full-width-slot-profile{
+  padding-top: 10%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.half-width-slot-profile{
+  width: 45%;
+}
+
+.ant-picker{
+  width: 100%;
+}
+
+.half-width-slot-profile-btn{
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end; 
+}
+
+.btnBlue{
+  padding-right: 5px;
+}
+
+/* Estilos Biografia */
+
+.profile-bio{
+  width: 100%;
+  padding-left: 5%;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  margin-bottom: 1%;
+}
+
+/* Imagen Porfile ant button */
+
+.profile-btn{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 5%;
+  padding-right: 5%;
+  margin-top: -2%;
+}
+
+.profile-biografia{
+  display: flex;
+  align-items: start;
+  width: 100%;
+  padding-bottom: 1%;
+}
+
+.profile-text-bio{
+  width: 100%;
+  display: inline;
+  margin-top: 1%;
+}
+.text-bio{
+  display: inline;
+  padding-right: 30px;
+}

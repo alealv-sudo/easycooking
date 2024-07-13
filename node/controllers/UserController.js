@@ -1,4 +1,5 @@
 import UserModel from "../models/UserModel.js";
+import Profile from "../models/ProfileModel.js";
 
 const UserCTRL = {}
 
@@ -19,7 +20,11 @@ UserCTRL.getAllUsers = async (req, res) => {
 UserCTRL.getUser = async (req, res) => {
     try {
        const blog =  await UserModel.findAll({
-        where: { id: req.params.id }
+        where: { id: req.params.id },
+        include: {
+            model: Profile,
+            as: 'profile'
+        }
        })
        res.json(blog[0])
     } catch (error) {
