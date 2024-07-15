@@ -90,6 +90,8 @@ export default function Profile() {
                 const userData = (response.data)
                 const profileData = userData.profile
 
+                console.log("Data", response.data);
+
                 profileData[['fechaDeNacimiento']] = dayjs(profileData[['fechaDeNacimiento']], dateFormat)
 
                 const userTemp = {
@@ -129,8 +131,6 @@ export default function Profile() {
             sitioWeb: values.sitioWeb,
             fechaDeNacimiento: values.fechaDeNacimiento.format('DD-MM-YYYY'), 
         }
-
-        console.log("Error", profileTemp,fileList,fileListBG,);
 
         axios.put(process.env.REACT_APP_API_URL + 'profile/', profileTemp)
             .then((response) => {

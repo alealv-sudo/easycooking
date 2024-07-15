@@ -1,6 +1,6 @@
 import UserModel from "../models/UserModel.js";
 import Profile from "../models/ProfileModel.js";
-
+import GeneralPost from "../models/GeneralPostModel.js";
 const UserCTRL = {}
 
 //* Metodos para el CRUD*//
@@ -21,10 +21,13 @@ UserCTRL.getUser = async (req, res) => {
     try {
        const blog =  await UserModel.findAll({
         where: { id: req.params.id },
-        include: {
+        include: [{
             model: Profile,
             as: 'profile'
-        }
+            },
+            {
+            model: GeneralPost,
+            }]
        })
        res.json(blog[0])
     } catch (error) {

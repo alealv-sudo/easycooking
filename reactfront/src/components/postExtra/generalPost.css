@@ -1,0 +1,35 @@
+.div-general-post{
+    margin-top: 3%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.div-form-general-post{
+    width: 70%;
+}
+
+.customSizedUploadGP .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container{
+    width: 450px;
+    height: 200px;
+  }
+  
+.customSizedUploadGP .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select {
+    width: 450px;
+    height: 200px;
+}
+  
+.btnBlueGP{
+    padding-right: 5px;
+}
+
+.half-width-slot-profile-btnGP{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  
+  
+
