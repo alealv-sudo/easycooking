@@ -17,4 +17,6 @@ export const SHOWPOSTR  = '/private/postShowRecipe'
 export const UPLOADTEST = '/private/uploadTest'
 export const GPOST = '/private/gpost'
 export const EDITGPOST = '/private/editGPost'
+export const REVIEWPOST = '/private/newreview'
+export const  EDITREVIEWPOST = '/private/editreview'
 

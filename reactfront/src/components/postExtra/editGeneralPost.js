@@ -226,7 +226,7 @@ const EditarGeneralPost = () => {
     const onFinish = (values) => {
             const post = {
                 id: gPost.id,
-                titel_post: values.titel_post,
+                title_post: values.title_post,
                 text_post: values.text_post,
                 image_post_id: gPost.image_post_id,            
             }
@@ -296,7 +296,6 @@ const EditarGeneralPost = () => {
             <Spin color="#000106" tip="Loading..."/></div>;
     }
 
-
     return (
         <React.Fragment>
             <Typography.Title level={2}>Editar Publicacion</Typography.Title>
@@ -308,7 +307,7 @@ const EditarGeneralPost = () => {
                     layout="vertical"
                     name="recipe"
                     initialValues={{
-                        titel_post: gPost.titel_post,
+                        title_post: gPost.title_post,
                         text_post: gPost.text_post, 
                     }}
                     requiredMark={customizeRequiredMark}
@@ -320,7 +319,7 @@ const EditarGeneralPost = () => {
                     <Form.Item
                         className="half-width-slot-generalpost"
                         label="Titulo"
-                        name="titel_post"
+                        name="title_post"
                         normalize={value => (value || '').toUpperCase()}
                         rules={[{ required: true, message: 'Campo Obligatorio.' }]}
                     >
@@ -364,7 +363,7 @@ const EditarGeneralPost = () => {
                                 onPreview={onPreview}
                             //beforeUpload={() => false} // Evita la carga automática de la imagen
                             >
-                                {fileList != null && (fileList.length < 1 && '+ Upload')}
+                                {fileList.length < 1 && '+ Upload'}
 
                             </Upload>
 

@@ -7,7 +7,7 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
-import {EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE} from './config/routes/paths';
+import {EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE} from './config/routes/paths';
 
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
@@ -30,6 +30,8 @@ import UploadTest from './components/Pruebas/UploadTest';
 import UserProfile from './components/profile/userProfile';
 import GeneralPost from './components/postExtra/generalPost'
 import EditGeneralPost from './components/postExtra/editGeneralPost'
+import RecipeReviewPost from './components/postExtra/recipeReviewPost'
+import EditRecipeReviewPost from './components/postExtra/editRecipeReviewPost'
 
 ///Layout
 import LayoutFront from './components/Layaout/Layout';
@@ -63,6 +65,8 @@ function App() {
                   <Route path={UPLOADTEST} element={<UploadTest/>} />
                   <Route path={GPOST} element={<GeneralPost/>} />
                   <Route path={EDITGPOST} element={<EditGeneralPost/>} />
+                  <Route path={REVIEWPOST} element={<RecipeReviewPost/>} />
+                  <Route path={EDITREVIEWPOST} element={<EditRecipeReviewPost/>} />
                 </Route>
               </Route>
 
