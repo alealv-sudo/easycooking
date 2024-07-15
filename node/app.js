@@ -14,6 +14,7 @@ import generalPostRoutes from './routes/generalPostRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
 import followerRoutes from "./routes/followerRoutes.js";
 import googleRoutes  from './routes/googleRoutes.js'
+import recipeReviewRoutes from './routes/recipeReviewRoutes.js'
 
 const app = express()
 
@@ -31,10 +32,10 @@ app.use('/post', postRoutes)
 app.use('/followers', followerRoutes)
 app.use('/profile', profileRoutes)
 app.use('/generalPost', generalPostRoutes)
+app.use('/reviewPost', recipeReviewRoutes)
 
 //GOOGLE
 app.use("/google", googleRoutes)
-
 
 try {
     db.authenticate().then(() => {

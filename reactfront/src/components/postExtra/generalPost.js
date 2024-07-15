@@ -102,7 +102,7 @@ const PublicarPost = () => {
 
     const onFinish = (values) => {
             const post = {
-                titel_post: values.titel_post,
+                title_post: values.title_post,
                 text_post: values.text_post,
                 creatorId: cookies.id,
             }
@@ -216,7 +216,7 @@ const PublicarPost = () => {
                     <Form.Item
                         className="half-width-slot-generalpost"
                         label="Titulo"
-                        name="titel_post"
+                        name="title_post"
                         normalize={value => (value || '').toUpperCase()}
                         rules={[{ required: true, message: 'Campo Obligatorio.' }]}
                     >
