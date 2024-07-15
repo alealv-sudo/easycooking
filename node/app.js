@@ -10,6 +10,7 @@ db.sync()
 import blogRoutes from './routes/routes.js'
 import userRoutes from './routes/userRoutes.js'
 import postRoutes from './routes/postRoutes.js'
+import generalPostRoutes from './routes/generalPostRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
 import followerRoutes from "./routes/followerRoutes.js";
 import googleRoutes  from './routes/googleRoutes.js'
@@ -29,6 +30,7 @@ app.use('/user', userRoutes)
 app.use('/post', postRoutes)
 app.use('/followers', followerRoutes)
 app.use('/profile', profileRoutes)
+app.use('/generalPost', generalPostRoutes)
 
 //GOOGLE
 app.use("/google", googleRoutes)

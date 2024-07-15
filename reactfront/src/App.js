@@ -7,7 +7,7 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
-import { BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE} from './config/routes/paths';
+import {EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE} from './config/routes/paths';
 
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
@@ -28,6 +28,8 @@ import UpdateRecipes from './components/recipes/postUpdates';
 import ShowPostRecipes from './components/recipes/postShowRecipes';
 import UploadTest from './components/Pruebas/UploadTest';
 import UserProfile from './components/profile/userProfile';
+import GeneralPost from './components/postExtra/generalPost'
+import EditGeneralPost from './components/postExtra/editGeneralPost'
 
 ///Layout
 import LayoutFront from './components/Layaout/Layout';
@@ -59,6 +61,8 @@ function App() {
                   <Route path={LOGOUT} element={<Logout />} />
                   <Route path={PROFILE} element={<UserProfile />} />
                   <Route path={UPLOADTEST} element={<UploadTest/>} />
+                  <Route path={GPOST} element={<GeneralPost/>} />
+                  <Route path={EDITGPOST} element={<EditGeneralPost/>} />
                 </Route>
               </Route>
 
