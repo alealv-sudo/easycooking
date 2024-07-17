@@ -1,5 +1,6 @@
 import { request } from "express";
 import PostModel from "../models/PostModel.js";
+import IngredientsModel from "../models/IngredientsModel.js";
 
 const PostCTRL = {}
 
@@ -20,7 +21,8 @@ PostCTRL.getAllPost = async (req, res) => {
 PostCTRL.getPost = async (req, res) => {
     try {
        const post =  await PostModel.findAll({
-        where: { id: req.params.id }
+        where: { id: req.params.id },
+        include: [{model: IngredientsModel ,attributes: {exclude: ['id','recipeId']}}]
        })
        res.json(post[0])
     } catch (error) {

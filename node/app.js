@@ -15,6 +15,8 @@ import profileRoutes from './routes/profileRoutes.js'
 import followerRoutes from "./routes/followerRoutes.js";
 import googleRoutes  from './routes/googleRoutes.js'
 import recipeReviewRoutes from './routes/recipeReviewRoutes.js'
+import IngredientsRutes from './routes/ingredientRoutes.js'
+import RatingsRoutes from './routes/ratingRoutes.js'
 
 const app = express()
 
@@ -33,6 +35,8 @@ app.use('/followers', followerRoutes)
 app.use('/profile', profileRoutes)
 app.use('/generalPost', generalPostRoutes)
 app.use('/reviewPost', recipeReviewRoutes)
+app.use('/ingredients', IngredientsRutes)
+app.use('/ratings', RatingsRoutes)
 
 //GOOGLE
 app.use("/google", googleRoutes)
