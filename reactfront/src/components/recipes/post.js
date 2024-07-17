@@ -3,6 +3,7 @@ import React, { useState, useEffect, message } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
+import { MinusCircleOutlined ,PlusOutlined } from '@ant-design/icons';
 
 import {
     Typography,
@@ -10,15 +11,16 @@ import {
     Form,
     Input,
     Space,
-    Checkbox,
     Select,
     Button,
-    Tag
+    Tag,
+    notification
 } from 'antd';
 
 import countriesData from '../recipes/countries.json';
+import './recipePost.css';
 
-const URI = 'http://localhost:8000/blogs/'
+const folderID = "1v-Q_3LzdTfinD3bq51YaWg0VA1vymj1b"
 
 const customizeRequiredMark = (label, { required }) => (
     <>
@@ -30,14 +32,13 @@ const customizeRequiredMark = (label, { required }) => (
 const Publicar = () => {
     const [cookies, setCookie] = useCookies(['userToken']);
 
-    const [recipe, setRecipe] = useState([]);
     const [imgFileList, setFileList] = useState([]);
 
     const [isDisabledTemp, setIsDisabledTemp] = useState(false);
     const [isDisabledCalories, setIsDisabledCalories] = useState(false);
 
     const [countries, setCountries] = useState([]);
-    const [isImage, setIsimage] = useState(true);
+    const [isImage, setIsimage] = useState(false);
     
     const [state, setState] = useState({
         fileList: [],
@@ -50,7 +51,7 @@ const Publicar = () => {
 
     const props = {
         onRemove: (file) => {
-            changeboleantrue()
+            changeboleanfalse()
             setState((state) => {
                 const index = state.fileList.indexOf(file);
                 const newFileList = state.fileList.slice();
@@ -63,7 +64,7 @@ const Publicar = () => {
         },
 
         beforeUpload: (file) => {
-            changeboleanfalse()
+            changeboleantrue()
             if (state.fileList.length >= 1) {
                 message.error('Solo puedes subir un archivo a la vez');
                 setState((state) => {
@@ -111,35 +112,62 @@ const Publicar = () => {
         setIsimage(false)
     }
 
-    const onFinish = (values) => {
+    const setIngredients = (id_recipe ,ingredientValue) => {
 
-        if (isImage) {
-            console.log("Ponga una imagen");
-        } else {
-            console.log("datos completos");
-            /* const recipes = {
+        var ingredientsData = []
+        
+        for (let index = 0; index < ingredientValue.length; index++) {
+
+            var newElement = {
+                recipeId: id_recipe,
+                ingredient: ingredientValue[index].ingredientes
+            } 
+
+            ingredientsData.push(newElement) 
+        }
+
+        axios.post(process.env.REACT_APP_API_URL + 'ingredients/', ingredientsData)
+        .then(function response(response) {
+           
+        })
+        .catch(function error(error) {
+            console.log(error);
+        })
+
+    }
+
+    const onFinish = (values) => {
+           
+        if (isImage && fileList.length !== 0) {
+            const recipes = {
                 recipe_name: values.recipe_name,
                 preparation_time: values.preparation_time,
                 temperature: values.temperature,
                 calories: values.calories,
                 description: values.description,
-                ingredients: values.ingredients,
                 preparation: values.preparation,
                 type_recipe: values.type_recipe,
                 originary: values.originary,
                 tips: values.tips,
-    
-                creator_code: cookies.id,
+        
+                creatorId: cookies.id,
             }
-    
+        
             axios.post(process.env.REACT_APP_API_URL + 'post/', recipes)
                 .then(function response(response) {
+                    setIngredients(response.data.id, values.ingredients)
                     handleUpload(response.data.id);
-                })
-                .catch(function error(error) {
+                    
+            })
+            .catch(function error(error) {
                     console.log(error);
-            }) */
+            })
+        }else{
+            notification.error({
+                message: 'Foto Obligatoria'
+            });
         }
+
     }
 
     const handleFileSubmit = ({ fileList: newFileList }) => {
@@ -156,7 +184,9 @@ const Publicar = () => {
 
         axios.put(process.env.REACT_APP_API_URL + 'post/', ImageRecipes)
             .then(function response(response) {
-                message.success("Receta publicada con exito.");
+                notification.success({
+                    message: 'Receta creado con exito'
+                });
             })
             .catch(function error(error) {
                 console.log(error);
@@ -173,23 +203,17 @@ const Publicar = () => {
             formData.append("myFiles", file, '-' + file.name);
         });
 
+        formData.append("folderId", folderID);
+
         axios.post(process.env.REACT_APP_API_URL + "google/upload/", formData)
             .then(res => {
-
                 updateIMG(recipe_id, res.data);
-
-                setState({
-                    fileList: [],
-                });
-
-                message.success("Archivo subido con exito.");
             })
             .catch((error) => {
-                //console.error(error);
+                console.error(error);
                 setState({
                     uploading: false,
                 });
-                //message.error("Error al subir el archivo.");
             });
 
     };
@@ -229,284 +253,312 @@ const Publicar = () => {
 
 
     const Salir = () => {
-        navigate("/private/BLOG");
+        navigate("/private/blog");
     }
 
     return (
         <React.Fragment>
-            <Typography.Title level={2}>Publicar</Typography.Title>
+            <Typography.Title level={2}>Nueva Receta</Typography.Title>
 
+            <div className='div-general-recipe-post'>
+                {/* Form Receta */}
+                <Form
+                    className='div-form-general-recipe-post'
+                    layout="vertical"
+                    name="recipe"
+                    
+                    requiredMark={customizeRequiredMark}
+                    onFinish={onFinish}
+                    autoComplete="off"
+                >
+                    {/* Input imagen */}
+                    <div type="flex" justify="center" align="middle">
+                        <Form.Item
+                            className="customSizedUploadGP"
+                            justify="center" align="middle"
+                            label="Imagen"
+                            name="image_post_id"
+                        >
+                            <Upload
+                                //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                                listType="picture-card"
+                                {...props}
+                                fileList={imgFileList}
+                                onChange={handleFileSubmit}
+                                onPreview={onPreview}
+                            //beforeUpload={() => false} // Evita la carga automática de la imagen
+                            >
+                                {fileList.length < 1 && '+ Upload'}
 
+                            </Upload>
 
+                        </Form.Item>
+                    </div>
 
-            {/* Form Receta */}
-            <Form
-                layout="vertical"
-                //requiredMark={true}
-                name="recipe"
-                initialValues={{
-
-                    // id:                  recipe.id,
-                    // recipe_name:         recipe.name,
-                    // preparation_time:    recipe.preparation_time,
-                    // temperature:         recipe.temperature,
-                    // calories:            recipe.calories,
-                    // description:         recipe.description,
-                    // ingredients:         recipe.ingredients,
-                    // preparation:         recipe.preparation,
-                    // type_recipe:         recipe.type_recipe,
-                    // originary:           recipe.originary,
-                    // tips:                recipe.tips,
-                    // image_recipe:        recipe.image_recipe,
-
-                    // creator_code:        user.code,
-                    // CreatedAt:
-                    // updatedAt:
-                   
-                }}
-                requiredMark={customizeRequiredMark}
-                onFinish={onFinish}
-                autoComplete="off"
-            >
-
-                {/* Input imagen */}
-                <div type="flex" justify="center" align="middle">
+                    {/* Input Titulo */}
                     <Form.Item
                         className="half-width-slot"
-                        justify="center" align="middle"
-
-                        label="Imagen de la Receta"
-                        name="image_recipe"
-                        rules={[{ required: isImage, message: 'Imagen' }]}
+                        label="Titulo"
+                        name="recipe_name"
+                        normalize={value => (value || '').toUpperCase()}
+                        rules={[{ required: true, message: 'Campo obligatorio' }]}
                     >
-                        <Upload
-                            //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                            listType="picture-card"
-                            {...props}
-                            fileList={imgFileList}
-                            onChange={handleFileSubmit}
-                            onPreview={onPreview}
-                        //beforeUpload={() => false} // Evita la carga automática de la imagen
-                        >
-                            {fileList != null && (fileList.length < 1 && '+ Upload')}
-
-                        </Upload>
-
+                        <Input
+                            disabled={false}
+                        />
                     </Form.Item>
-                </div>
-
-                {/* Input Titulo */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Nombre de la Receta"
-                    name="recipe_name"
-                    normalize={value => (value || '').toUpperCase()}
-                    rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
-                >
-                    <Input
-                        disabled={false}
-                    />
-                </Form.Item>
 
 
-                <div type="flex" justify="center" align="middle">
-                    {/* Input Tiempo de Preparacion */}
-                    <Space>
-                        <Form.Item
-                            className="half-width-slot"
-                            type="flex" justify="center" align="middle"
+                    <div type="flex" justify="center" align="middle">
+                        {/* Input Tiempo de Preparacion */}
+                        <Space className='btnBlueRP'>
+                            <Form.Item
+                                className="half-width-slot"
+                                type="flex" justify="center" align="middle"
 
 
-                            label="Tiempo de preparacion"
-                            name="preparation_time"
-                            normalize={value => (value || '')}
-                            rules={[{ required: true, message: 'Por favor introduce el tiempo de preparacion de la receta.' }]}
-                        >
-                            <Input
-                                placeholder="Tinempo en Minutos"
-                                type="number"
-                                min="0" step="15"
-                                disabled={false}
-                            />
-
-                        </Form.Item>
-                    </Space>
-                    {/* Input Temperatura de Coccion */}
-                    <Space>
-                        <Form.Item
-                            className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-
-                            label="Temp Preparacion"
-                            name="temperature"
-                            normalize={value => (value || '')}
-                            rules={[{ required: false, message: 'Por favor introduce el tiempo de preparacion de la receta.' }]}
-                        >
-
-                            <Input
-                                placeholder="Temperatura en °C"
-                                type="number"
-                                min="" step="10"
-
-                                // disabled={isDisabledTemp}
-                                disabled={false}
-                            />
-                            {/* <Checkbox type="checkbox" label="N/A" name="N_A_Temp" onChange={handleCheckboxChange}
+                                label="Tiempo de preparacion"
+                                name="preparation_time"
+                                normalize={value => (value || '')}
+                                rules={[{ required: true, message: 'Campo obligatorio' }]}
                             >
-                                N/A
-                            </Checkbox> */}
+                                <Input
+                                    placeholder="Tinempo en Minutos"
+                                    type="number"
+                                    min="0" step="15"
+                                    disabled={false}
+                                />
 
+                            </Form.Item>
+                        </Space>
+                        {/* Input Temperatura de Coccion */}
+                        <Space className='btnBlueRP'>
+                            <Form.Item
+                                className="half-width-slot"
+                                type="flex" justify="center" align="middle"
 
-                        </Form.Item>
-                    </Space>
-                    {/* Input Calorias */}
-                    <Space>
-                        <Form.Item
-                            className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-
-                            label="Calorias"
-                            name="calories"
-                            normalize={value => (value || '')}
-                            rules={[{ required: false, message: 'Por favor introduce el tiempo de preparacion de la receta.' }]}
-                        >
-                            <Input
-                                placeholder="Cantidad de Calorias"
-                                type="number"
-                                min="0"
-                                // disabled={isDisabledCalories}
-                                disabled={false}
-                            />
-                            {/* <Checkbox type="checkbox" label="N/A" name="N_A_Calories" onChange={handleCheckboxChange}
+                                label="Temp Preparacion"
+                                name="temperature"
+                                normalize={value => (value || '')}
+                                rules={[{ required: false, message: 'Campo obligatorio' }]}
                             >
-                                N/A
-                            </Checkbox> */}
 
-                        </Form.Item>
-                    </Space>
-                </div>
+                                <Input
+                                    placeholder="Temperatura en °C"
+                                    type="number"
+                                    min="" step="10"
 
-                {/* Input Descripcion */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Descripcion de receta"
-                    name="description"
-                    normalize={value => (value || '')}
-                    rules={[{ required: false, message: 'Por favor introduce una descripcion para la receta.' }]}
-                >
-                    <Input.TextArea
-                        className="colors-bg"
-                        autoSize={{ minRows: 1, maxRows: 6 }}
-                        disabled={false}
-                    />
-                </Form.Item>
+                                    // disabled={isDisabledTemp}
+                                    disabled={false}
+                                />
+                                {/* <Checkbox type="checkbox" label="N/A" name="N_A_Temp" onChange={handleCheckboxChange}
+                                >
+                                    N/A
+                                </Checkbox> */}
 
-                {/* Input Ingredientes */}
-                <Form.Item
-                    className="half-width-slot"
 
-                    label="Ingredientes de la receta"
+                            </Form.Item>
+                        </Space>
+                        {/* Input Calorias */}
+                        <Space>
+                            <Form.Item
+                                className="half-width-slot"
+                                type="flex" justify="center" align="middle"
+
+                                label="Calorias"
+                                name="calories"
+                                normalize={value => (value || '')}
+                                rules={[{ required: false, message: 'Campo obligatorio' }]}
+                            >
+                                <Input
+                                    placeholder="Cantidad de Calorias"
+                                    type="number"
+                                    min="0"
+                                    // disabled={isDisabledCalories}
+                                    disabled={false}
+                                />
+                                {/* <Checkbox type="checkbox" label="N/A" name="N_A_Calories" onChange={handleCheckboxChange}
+                                >
+                                    N/A
+                                </Checkbox> */}
+
+                            </Form.Item>
+                        </Space>
+                    </div>
+
+                    {/* Input Descripcion */}
+                    <Form.Item
+                        className="half-width-slot"
+                        label="Descripcion"
+                        name="description"
+                        normalize={value => (value || '')}
+                        rules={[{ required: false, message: 'Campo obligatorio' }]}
+                    >
+                        <Input.TextArea
+                            className="colors-bg"
+                            autoSize={{ minRows: 1, maxRows: 6 }}
+                            disabled={false}
+                        />
+                    </Form.Item>
+
+                    {/* Input Ingredientes */}
+                    <label className="label-ingedient">Ingredient</label>
+                    
+                    <div type="flex" justify="center" align="middle">
+                    <Form.List 
                     name="ingredients"
-                    normalize={value => (value || '')}
-                    rules={[{ required: true, message: 'Por favor introduce los ingredientes de la receta.' }]}
-                >
-                    <Input.TextArea
-                        className="colors-bg"
-                        autoSize={{ minRows: 1, maxRows: 6 }}
-                        disabled={false}
-                    />
-                </Form.Item>
+                    rules={[
 
-                {/* Input Metodo de Preparacion */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Preparacion de la receta"
-                    name="preparation"
-                    normalize={value => (value || '')}
-                    rules={[{ required: true, message: 'Por favor introduce la preparacion de la receta.' }]}
-                >
-                    <Input.TextArea
-                        className="colors-bg"
-                        autoSize={{ minRows: 1, maxRows: 6 }}
-                        disabled={false}
-                    />
-                </Form.Item>
-
-                <div type="flex" justify="center" align="middle">
-                    <Space>
-                        {/* Input Tipo */}
-                        <Form.Item
-                            className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-
-                            label="Tipo de receta"
-                            name="type_recipe"
-                            normalize={value => (value || '').toUpperCase()}
-                            rules={[{ required: true, message: 'Por favor introduce un tipo de receta.' }]}
-                        >
-                            <Select
-                                disabled={false}
-                                showSearch
+                        {
+                          validator: async (_, names) => {
+                            if (!names || names.length < 2) {
+                              return Promise.reject(new Error('Requerido Minimo 2 ingredientes'));
+                            }
+                          },
+                        },
+                    ]}
+                    >
+                    {(fields, { add, remove } , { errors }) => (
+                        <>
+                        {fields.map(({ key, name, ...restField } ) => (
+                            <div
+                            key={key}
+                            className='item-form-list'
                             >
-                                <Select.Option value="Comida">Comida</Select.Option>
-                                <Select.Option value="Bebida">Bebida</Select.Option>
-                                <Select.Option value="Postre">Postre</Select.Option>
-                            </Select>
-                        </Form.Item>
-                    </Space>
-
-                    <Space>
-                        {/* Input Origen */}
-                        <Form.Item
-                            className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-
-                            label="País de origen"
-                            name="originary"
-                            normalize={value => (value || '').toUpperCase()}
-                            rules={[{ required: true, message: 'Por favor introduce un Lugar de origen de la receta.' }]}
-                        >
-                            <Select
-                                disabled={false}
-                                showSearch
+                            <Form.Item
+                                style={{
+                                    width: '100%',
+                                    marginRight: 4,
+                                }}
+                                {...restField}
+                                name={[name, 'ingredientes']}
+                                rules={[
+                                {
+                                    required: true,
+                                    message: 'Missing ingredient',
+                                },
+                                ]}
                             >
-                                {countries.map((country) => (
-                                    <Select.Option
-                                        key={country.code}
-                                        value={country.name}
-                                    >
-                                        {country.name}
-                                    </Select.Option>
-                                ))}
-                            </Select>
+                                <Input  placeholder="ingredient" />
+                            </Form.Item>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                            </div>
+                        ))}
+                        <Form.Item
+                        style={{
+                            width: '60%'
+                        }}
+                        >
+                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                            Add field
+                            </Button>
+                            <Form.ErrorList errors={errors} />
                         </Form.Item>
-                    </Space>
-                </div>
+                        
+                        </>
+                        
+                    )}
+                    </Form.List>
+                    </div>
 
-                {/* Input Tips y Notas */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Tips & Notes"
-                    name="tips"
-                    normalize={value => (value || '')}
-                >
-                    <Input.TextArea
-                        className="colors-bg"
-                        autoSize={{ minRows: 1, maxRows: 6 }}
-                        disabled={false}
-                    />
-                </Form.Item>
+                    {/* Input Metodo de Preparacion */}
+                    <Form.Item
+                        className="half-width-slot"
+                        label="Preparacion"
+                        name="preparation"
+                        normalize={value => (value || '')}
+                        rules={[{ required: true, message: 'Campo obligatorio' }]}
+                    >
+                        <Input.TextArea
+                            className="colors-bg"
+                            autoSize={{ minRows: 1, maxRows: 6 }}
+                            disabled={false}
+                        />
+                    </Form.Item>
 
-                {/* Boton Submit */}
-                <Form.Item
-                    className="my-form-container"
-                >
-                    <Button type="primary" shape="round" htmlType="submit"> Publicar </Button>
-                </Form.Item>
+                    <div type="flex" justify="center" align="middle">
+                        
+                        <Space className='btnBlueRP'>
+                            {/* Input Tipo */}
+                            <Form.Item
+                                className="half-width-slot"
+                                type="flex" justify="center" align="middle"
 
-            </Form>
+                                label="Tipo de receta"
+                                name="type_recipe"
+                                normalize={value => (value || '').toUpperCase()}
+                                rules={[{ required: true, message: 'Campo obligatorio' }]}
+                            >
+                                <Select
+                                    disabled={false}
+                                    showSearch
+                                >
+                                    <Select.Option value="Comida">Comida</Select.Option>
+                                    <Select.Option value="Bebida">Bebida</Select.Option>
+                                    <Select.Option value="Postre">Postre</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Space>
 
-            <Button type="primary" shape="round" onClick={Salir}> Cancelar </Button>
+                        <Space>
+                            {/* Input Origen */}
+                            <Form.Item
+                                className="half-width-slot"
+                                type="flex" justify="center" align="middle"
+
+                                label="País de origen"
+                                name="originary"
+                                normalize={value => (value || '').toUpperCase()}
+                                rules={[{ required: true, message: 'Campo obligatorio' }]}
+                            >
+                                <Select
+                                    disabled={false}
+                                    showSearch
+                                >
+                                    {countries.map((country) => (
+                                        <Select.Option
+                                            key={country.code}
+                                            value={country.name}
+                                        >
+                                            {country.name}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </Space>
+                    </div>
+
+                    {/* Input Tips y Notas */}
+                    <Form.Item
+                        className="half-width-slot"
+                        label="Tips & Notes"
+                        name="tips"
+                        normalize={value => (value || '')}
+                    >
+                        <Input.TextArea
+                            className="colors-bg"
+                            autoSize={{ minRows: 1, maxRows: 6 }}
+                            disabled={false}
+                        />
+                    </Form.Item>
+
+                    {/* Boton Submit */}
+                    <Form.Item
+                        className="my-form-container"
+                    >
+                        <div className='half-width-slot-profile-btnRP'>
+                            <div className='btnBlueRP'>
+                                <Button type="primary" shape="round" htmlType="submit"> Publicar </Button>     
+                            </div>
+                            <div>
+                                <Button danger type="primary" shape="round" onClick={Salir}> Cancelar </Button>
+                            </div>
+                        </div>
+                    </Form.Item>
+
+                </Form>
+            </div>                       
+            
         </React.Fragment>
     );
 

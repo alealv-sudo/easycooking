@@ -1,6 +1,8 @@
 import UserModel from "../models/UserModel.js";
 import Profile from "../models/ProfileModel.js";
 import GeneralPost from "../models/GeneralPostModel.js";
+import IngredientsModel from "../models/IngredientsModel.js";
+import PostModel from "../models/PostModel.js";
 const UserCTRL = {}
 
 //* Metodos para el CRUD*//
@@ -27,7 +29,12 @@ UserCTRL.getUser = async (req, res) => {
             },
             {
             model: GeneralPost,
-            }]
+            },
+            {
+            model:  PostModel,
+            include: [{model: IngredientsModel}]
+            }
+        ]
        })
        res.json(blog[0])
     } catch (error) {

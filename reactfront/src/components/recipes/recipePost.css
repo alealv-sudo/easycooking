@@ -1,0 +1,90 @@
+.all-page{
+  display: flex;
+  flex-direction: column;
+}
+
+.bottom-page{
+  padding-bottom: 10%;
+}
+.buttom-div {
+  padding-top: 5%;
+}
+
+.div-general-recipe-post{
+    margin-top: 3%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.div-form-general-recipe-post{
+    width: 70%;
+}
+
+.customSizedUploadRP .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container{
+    width: 450px;
+    height: 200px;
+  }
+  
+.customSizedUploadRP .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload.ant-upload-select {
+    width: 450px;
+    height: 200px;
+}
+  
+.btnBlueRP{
+    padding-right: 5px;
+}
+
+.half-width-slot-profile-btnRP{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  
+/* Input dynamic */
+.dynamic-delete-button {
+    position: relative;
+    top: 4px;
+    margin: 0 8px;
+    color: #999;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .dynamic-delete-button:hover {
+    color: #777;
+  }
+  .dynamic-delete-button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  .item-form-list{
+    width: 60%;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-left: 4px,
+  }
+
+  .label-ingedient{
+    display: flex;
+    justify-content: flex-start;
+    font-size: medium;
+    font-weight: 500;
+    margin-bottom: 2%;
+  }
+
+  /* Regle input disable */
+
+  :where(.css-dev-only-do-not-override-2rgkd4).ant-input-disabled, :where(.css-dev-only-do-not-override-2rgkd4).ant-input[disabled] {
+    color: #040816;
+    background-color: #fff;
+    border-color: #d9d9d9;
+    box-shadow: none;
+    cursor: default;
+    opacity: 1;
+}
+
