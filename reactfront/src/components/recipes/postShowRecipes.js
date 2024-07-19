@@ -20,19 +20,18 @@ import {
 
 import './recipePost.css';
 
-const IDRECIPE = "6"
+const IDRECIPE = "5"
 
 const PostShowRecipes = () => {
 
     const [cookies, setCookie] = useCookies(['userToken']);
-
-    const [imgFileList, setFileList] = useState([]);
-
-    const [countries, setCountries] = useState([]);
     const [isLoading, setLoading] = useState(true);
 
     const [recipe, setRecipe] = useState('');
+    const [rating, setRating] = useState({score: 2.5});
+    const [isEmpty, setIsEmpty] = useState(true); 
 
+    const [imgFileList, setFileList] = useState([]);
     const [state, setState] = useState({
         fileList: [],
         uploading: false,
@@ -40,14 +39,29 @@ const PostShowRecipes = () => {
 
     const { fileList } = state;
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     function getRecipe() {
         axios.get(process.env.REACT_APP_API_URL + 'post/' + IDRECIPE,
         ).then((response) => {
             const recipeData = response.data;
+            getScore(recipeData.id)
             setRecipe(recipeData)
             DownloadFile(recipeData.image_recipe)
+        })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+    function getScore(recipeId) {
+        axios.get(process.env.REACT_APP_API_URL + 'ratings/' + cookies.id + '/recipes/' + recipeId
+        ).then((response) => {
+            const ratingData = response.data    
+            if(ratingData.length !== 0 && ratingData !== undefined && ratingData !== null){
+                setRating(ratingData)
+                setIsEmpty(false)
+            }
         })
             .catch((error) => {
                 console.error(error);
@@ -62,8 +76,37 @@ const PostShowRecipes = () => {
         navigate("/private/blog");
     }
 
-    const setValue = (values) =>{
-        console.log("Valores", values);
+    const onFinish = (values) =>{
+        
+        const ratingValue = {
+            userId: cookies.id,
+            recipeId: recipe.id,
+            score: values
+        }
+
+        if(isEmpty){
+            axios.post(process.env.REACT_APP_API_URL + 'ratings/', ratingValue)
+            .then(function response(response) {
+                getRecipe()
+            })
+            .catch(function error(error) {
+                console.log(error);
+        })
+        }else{
+            
+            const ratingPut = {
+                id: rating.id,
+                score: values
+            }
+            
+            axios.put(process.env.REACT_APP_API_URL + 'ratings/', ratingPut)
+            .then(function response(response) {
+                getRecipe()
+            })
+            .catch(function error(error) {
+                console.log(error);
+        })
+        }
     }
 
     /* Funciones Imagenes */
@@ -383,9 +426,9 @@ const PostShowRecipes = () => {
         </div>
             <div className="bottom-page">
                 <Rate allowHalf 
-                defaultValue={2.5}  
+                defaultValue={rating.score}  
                 autoFocus={false} 
-                onChange={setValue}
+                onChange={onFinish}
                 />
                 <div className='buttom-div'>
                     <div>

@@ -3,7 +3,7 @@ import  db  from "../database/db.js";
 import { DataTypes } from "sequelize";
 
 const RatingsModel = db.define('ratings',{
-    score: {type: DataTypes.INTEGER},
+    score: {type: DataTypes.FLOAT},
 },{
     timestamps: false
 })

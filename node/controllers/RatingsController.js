@@ -8,7 +8,7 @@ const ratingsCTRL = {}
 ratingsCTRL.getAllRatings  = async (req, res) => {
     try {
        const Rating  =  await RatingsModel.findAll()
-       res.json(Rating )
+       res.json(Rating)
     } catch (error) {
        res.json({message: error.message}) 
     }
@@ -27,6 +27,18 @@ ratingsCTRL.getRating = async (req, res) => {
     }
 }
 
+ratingsCTRL.getRatingUserRecipe = async (req, res) => {
+    try {
+       const Rating  =  await RatingsModel.findAll({
+        where: { userId: req.params.userId, recipeId: req.params.recipeId }
+       })
+       res.json(Rating[0])
+    } catch (error) {
+       res.json({message: error.message}) 
+    }
+}
+
+
 //Crear un registro
 
 ratingsCTRL.createRating = async (req, res) => {
@@ -43,7 +55,7 @@ ratingsCTRL.createRating = async (req, res) => {
 ratingsCTRL.updateRating = async (req, res) => {
     try {
          await RatingsModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { id: req.body.id }
         })
         res.json({"message": "Registro Actualizado correctamente"})
     } catch (error) {

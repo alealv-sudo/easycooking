@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.get('/', ratingsCTRL.getAllRatings);
 router.get('/:id', ratingsCTRL.getRating);
+router.get('/:userId/recipes/:recipeId', ratingsCTRL.getRatingUserRecipe);
 router.post('/', ratingsCTRL.createRating);
 router.put('/', ratingsCTRL.updateRating);
 router.delete('/:id', ratingsCTRL.deleteRating);
