@@ -30,6 +30,20 @@ PostCTRL.getPost = async (req, res) => {
     }
 }
 
+//Mostrar un registros de un usuario
+
+PostCTRL.getPostUser = async (req, res) => {
+    try {
+       const post =  await PostModel.findAll({
+        where: {creatorId: req.params.id },
+        include: [{model: IngredientsModel ,attributes: {exclude: ['id','recipeId']}}]
+       })
+       res.json(post)
+    } catch (error) {
+       res.json({message: error.message}) 
+    }
+}
+
 //Crear un registro
 
 PostCTRL.createPost = async (req, res) => {
