@@ -20,7 +20,7 @@ import {
 
 import './recipePost.css';
 
-const IDRECIPE = "5"
+const IDRECIPE = "6"
 
 const PostShowRecipes = () => {
 

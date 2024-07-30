@@ -5,6 +5,9 @@ import fileUpload from "express-fileupload";
 //Importa Conexion a la base de datos
 import db from "./database/db.js";
 
+//Importa Asociasiones
+import {} from './models/associations.js'
+
 db.sync()
 //Importa Rutas
 import blogRoutes from './routes/routes.js'
@@ -17,6 +20,9 @@ import googleRoutes  from './routes/googleRoutes.js'
 import recipeReviewRoutes from './routes/recipeReviewRoutes.js'
 import IngredientsRutes from './routes/ingredientRoutes.js'
 import RatingsRoutes from './routes/ratingRoutes.js'
+import favoriteRoutes from './routes/favoriteRoutes.js'
+import marketListRoutes from './routes/marketListRoutes.js'
+import listItemRoutes from './routes/listItemRoutes.js'
 
 const app = express()
 
@@ -37,6 +43,9 @@ app.use('/generalPost', generalPostRoutes)
 app.use('/reviewPost', recipeReviewRoutes)
 app.use('/ingredients', IngredientsRutes)
 app.use('/ratings', RatingsRoutes)
+app.use('/favorites', favoriteRoutes)
+app.use('/marketList', marketListRoutes)
+app.use('/listItems', listItemRoutes)
 
 //GOOGLE
 app.use("/google", googleRoutes)

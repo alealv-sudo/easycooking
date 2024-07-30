@@ -87,7 +87,7 @@ const UpdateRecipes = () => {
         console.log("Ingredients data", ingredientValue);
         axios.post(process.env.REACT_APP_API_URL + 'ingredients/', ingredientsData)
         .then(function response(response) {
-           
+            console.log("respuesta", response);
         })
         .catch(function error(error) {
             console.log(error);

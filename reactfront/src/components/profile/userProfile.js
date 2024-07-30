@@ -4,7 +4,6 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-
 import countriesData from '../recipes/countries.json';
 
 import {
@@ -21,8 +20,6 @@ import {
     message,
     Spin
 } from 'antd';
-
-
 
 import ImgCrop from 'antd-img-crop';
 
@@ -83,6 +80,22 @@ export default function Profile() {
 
 
     /*Get User / Obtener datos de usuario y perfil*/
+
+    useEffect(() => {
+        getUser();
+        getRecipes();
+        setCountries(countriesData);
+    },[]);
+
+    function getRecipes() {
+        axios.get(process.env.REACT_APP_API_URL + 'post/user/'  + cookies.id)
+        .then((response) => {
+            console.log("Data Recipes", response.data);
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    }
     
     function getUser() {
         axios.get(process.env.REACT_APP_API_URL + 'user/'  + cookies.id)
@@ -99,16 +112,21 @@ export default function Profile() {
                     email: userData.email
                 }
 
-                if (profileData.idPictureProfile !== "1" || profileData.idPictureProfile !== null) {
-                    DownloadFile(profileData.idPictureProfile,typeImg)
-                }
-
-                if (profileData.idPictureBackground !== "1" || profileData.idPictureBackground !== null) {
-                    DownloadFile(profileData.idPictureBackground,typeImgBG)
-                }
-                
                 setUser(userTemp);
                 setProfile(profileData)
+
+                if (profileData.idPictureProfile === "1" && profileData.idPictureBackground === "1") {
+                    setLoading(false)
+                }else{
+
+                    if (profileData.idPictureProfile !== "1") {
+                        DownloadFile(profileData.idPictureProfile,typeImg) 
+                    }
+
+                    if (profileData.idPictureBackground !== "1") {
+                        DownloadFile(profileData.idPictureBackground,typeImgBG)
+                    }
+                }
             })
             .catch((error) => {
                 console.log(error)
@@ -455,11 +473,6 @@ export default function Profile() {
 
 
     ///Funciones extras
-
-    useEffect(() => {
-        getUser();
-        setCountries(countriesData);
-    }, []);
 
     ///Modal booleans
     const showModal = () => {

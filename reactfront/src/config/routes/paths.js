@@ -18,5 +18,6 @@ export const UPLOADTEST = '/private/uploadTest'
 export const GPOST = '/private/gpost'
 export const EDITGPOST = '/private/editGPost'
 export const REVIEWPOST = '/private/newreview'
-export const  EDITREVIEWPOST = '/private/editreview'
+export const EDITREVIEWPOST = '/private/editreview'
+export const NEWLIST = '/private/newList'
 

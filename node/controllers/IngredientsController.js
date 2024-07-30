@@ -1,3 +1,4 @@
+import { ForeignKeyConstraintError } from "sequelize";
 import IngredientsModel from "../models/IngredientsModel.js";
 
 const ingredientsCTRL = {}
@@ -18,6 +19,7 @@ ingredientsCTRL.getAllIngredients = async (req, res) => {
 
 ingredientsCTRL.getIngredient = async (req, res) => {
     try {
+       
        const Ingredient =  await IngredientsModel.findAll({
         where: { id: req.params.id }
        })
@@ -30,12 +32,12 @@ ingredientsCTRL.getIngredient = async (req, res) => {
 //Crear un registro
 
 ingredientsCTRL.createIngredient = async (req, res) => {
-    console.log("Ingredientes",req.body);
     try {
-        await IngredientsModel.bulkCreate(req.body)
+        await IngredientsModel.bulkCreate(req.body);
         res.json({"message": "Registro Creado correctamente"})
     } catch (error) {
-        res.json({message: error.message}) 
+        console.log("error", error);
+        res.json({message: error.message})
     }
 }
 
