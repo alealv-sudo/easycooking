@@ -1,0 +1,40 @@
+import spawn  from 'node:child_process';
+import { log } from 'node:console';
+const serverIACTRL = {}
+
+function runPythonScript(scriptPath, args, callback) {
+    const pythonProcess = spawn.spawn('python', [scriptPath].concat(args));
+ 
+    let data = '';
+    pythonProcess.stdout.on('data', (chunk) => {
+        data += chunk.toString(); // Collect data from Python script
+    });
+ 
+    pythonProcess.stderr.on('data', (error) => {
+        console.error(`stderr: ${error}`);
+    });
+ 
+    pythonProcess.on('close', (code) => {
+        if (code !== 0) {
+            console.log(`Python script exited with code ${code}`);
+            callback(`Error: Script exited with code ${code}`, null);
+        } else {
+            console.log('Python script executed successfully');
+            callback(null, data);
+        }
+    });
+}
+
+serverIACTRL.factorial = async (req, res) => {
+    const number = req.params.id;
+    console.log("Entro",req.params.id)
+    runPythonScript('C:/Users/Lenovo/Desktop/easyCooking/ServerIA/serverIAControler/scrip.py' , [number], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
+            res.send(`Factorial of ${number} is ${result}`);
+        }
+    });
+};
+
+export default serverIACTRL

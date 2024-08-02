@@ -1,4 +1,5 @@
 import MarketListsModel from "../models/MarketListModel.js"
+import ListItemModel from "../models/ListitemModel.js"
 
 const MarketListCTRL = {}
 
@@ -19,20 +20,39 @@ MarketListCTRL.getAllList = async (req, res) => {
 MarketListCTRL.getList= async (req, res) => {
     try {
        const list =  await MarketListsModel.findAll({
-        where: { id: req.params.id }
+        where: { id: req.params.id },
+        include: {
+            model: ListItemModel,
+            attributes: {exclude: ['id','mListId']}
+        }
        })
-       res.json(favorite[0])
+       res.json(list[0])
     } catch (error) {
        res.json({message: error.message}) 
     }
 }
 
+//Mostrar los registros de un usuario
+
+MarketListCTRL.getListsUser= async (req, res) => {
+    try {
+       const list =  await MarketListsModel.findAll({
+        where: { userId: req.params.id }
+       })
+       res.json(list)
+    } catch (error) {
+       res.json({message: error.message}) 
+    }
+}
+
+
 //Crear un registro
 
 MarketListCTRL.createList = async (req, res) => {
     try {
-        await MarketListsModel.create(req.body)
-        res.json({"message": "Registro Creado correctamente"})
+        const list = new MarketListsModel(req.body);
+        await list.save();
+        res.json(list)
     } catch (error) {
         res.json({message: error.message}) 
     }
@@ -43,7 +63,7 @@ MarketListCTRL.createList = async (req, res) => {
 MarketListCTRL.updateList = async (req, res) => {
     try {
          await MarketListsModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { id: req.body.id }
         })
         res.json({"message": "Registro Actualizado correctamente"})
     } catch (error) {

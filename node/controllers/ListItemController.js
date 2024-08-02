@@ -31,6 +31,7 @@ listItemCTRL.getItems= async (req, res) => {
 //Crear un registro
 
 listItemCTRL.createItems = async (req, res) => {
+    console.log("lo logro", req);
     try {
         await ListItemModel.bulkCreate(req.body);
         res.json({"message": "Registro Creado correctamente"})
@@ -58,7 +59,7 @@ listItemCTRL.updateItem = async (req, res) => {
 listItemCTRL.deleteItem = async (req , res) => {
     try {
         ListItemModel.destroy({
-            where:{recipeId: req.params.id}
+            where:{mListId: req.params.id}
         })
         res.json({"message": "Registro Eliminado correctamente"})
     } catch (error) {

@@ -5,7 +5,6 @@ export const PRIVATE  = '/private'
 
 export const LOGOUT  = '/private/logout'
 
-
 export const PROFILE = '/private/profile'
 export const BLOG  = '/private/blog'
 export const USER  = '/private/user'
@@ -19,5 +18,9 @@ export const GPOST = '/private/gpost'
 export const EDITGPOST = '/private/editGPost'
 export const REVIEWPOST = '/private/newreview'
 export const EDITREVIEWPOST = '/private/editreview'
-export const NEWLIST = '/private/newList'
+export const MARKETLIST = '/private/marketlist'
+export const NEWLIST = '/private/newlist'
+export const EDITLIST = '/private/editlist/:id'
+export const VIEWMARKETLIST = '/private/viewlist/:id'
+
 

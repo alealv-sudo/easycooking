@@ -1,16 +1,33 @@
 import axios from 'axios'
-import React ,{useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom'
 import { Table } from 'antd'
 
-const URI = 'http://localhost:8000/blogs/'
+const URI = 'http://localhost:5000/factorial/'
 
-const prueba2 = () => {
+export default function Prueba2() {
+
+    const [fact, setFact] = useState()
+
+    useEffect(() => {
+        getMarketList();
+    },[]);
+
+    function getMarketList() {
+        axios.get(URI  + 7)
+        .then((response) => {
+            setFact(response.data)
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    }
+
     return(
+        
         <div className='container'>
-           <p>Esto es la prueba 2</p>
+           <p>{fact}</p>
         </div>
     )
 }
 
-export default prueba2

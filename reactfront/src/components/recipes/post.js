@@ -401,9 +401,7 @@ const Publicar = () => {
                         />
                     </Form.Item>
 
-                    {/* Input Ingredientes */}
-                    <label className="label-ingedient">Ingredient</label>
-                    
+                    {/* Input Ingredientes */}                    
                     <div type="flex" justify="center" align="middle">
                     <Form.List 
                     name="ingredients"
@@ -423,13 +421,10 @@ const Publicar = () => {
                         {fields.map(({ key, name, ...restField } ) => (
                             <div
                             key={key}
-                            className='item-form-list'
+                            className='item-form-list-input'
                             >
                             <Form.Item
-                                style={{
-                                    width: '100%',
-                                    marginRight: 4,
-                                }}
+                                
                                 {...restField}
                                 name={[name, 'ingredientes']}
                                 rules={[
@@ -446,7 +441,7 @@ const Publicar = () => {
                         ))}
                         <Form.Item
                         style={{
-                            width: '60%'
+                            width: '100%'
                         }}
                         >
                             <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>

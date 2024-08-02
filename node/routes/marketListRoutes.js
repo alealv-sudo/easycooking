@@ -4,6 +4,7 @@ const router = express.Router()
 
 router.get('/', MarketListCTRL.getAllList);
 router.get('/:id', MarketListCTRL.getList);
+router.get('/lists/:id', MarketListCTRL.getListsUser)
 router.post('/', MarketListCTRL.createList);
 router.put('/', MarketListCTRL.updateList);
 router.delete('/:id', MarketListCTRL.deleteList);
