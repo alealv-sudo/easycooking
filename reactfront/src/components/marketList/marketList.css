@@ -1,0 +1,38 @@
+  
+.div-general-list{
+    margin-top: 3%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+  
+.div-form-general-recipe-post{
+    width: 70%;
+}
+  
+.btnBlueRP{
+    padding-right: 5px;
+}
+  
+.half-width-slot-profile-btnRP{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-table-list{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.item-form-list-input{
+    width: 99%;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    margin-left: 4px,
+}
+  

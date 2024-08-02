@@ -7,7 +7,7 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
-import {NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE} from './config/routes/paths';
+import {EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE} from './config/routes/paths';
 
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
@@ -32,7 +32,10 @@ import GeneralPost from './components/postExtra/generalPost'
 import EditGeneralPost from './components/postExtra/editGeneralPost'
 import RecipeReviewPost from './components/postExtra/recipeReviewPost'
 import EditRecipeReviewPost from './components/postExtra/editRecipeReviewPost'
+import MarketList from './components/marketList/marketList'
 import NewMarketList from './components/marketList/newMarketList'
+import ViewMarketList from './components/marketList/viewMarketList'
+import EditListMarket from './components/marketList/editListMarket';
 
 ///Layout
 import LayoutFront from './components/Layaout/Layout';
@@ -69,6 +72,9 @@ function App() {
                   <Route path={REVIEWPOST} element={<RecipeReviewPost/>} />
                   <Route path={EDITREVIEWPOST} element={<EditRecipeReviewPost/>} />
                   <Route path={NEWLIST} element={<NewMarketList/>} />
+                  <Route path={MARKETLIST} element={<MarketList/>} />
+                  <Route path={VIEWMARKETLIST} element={<ViewMarketList/>} />
+                  <Route path={EDITLIST} element={<EditListMarket/>} />
                 </Route>
               </Route>
 

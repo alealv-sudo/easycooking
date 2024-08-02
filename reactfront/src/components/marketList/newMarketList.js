@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import { CloseOutlined } from '@ant-design/icons';
+
+import { CloseOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 import {
-    Typography,
+    notification,
     Card,
     Input,
     Form,
@@ -14,7 +16,12 @@ import {
     Spin
 } from 'antd';
 
+import './marketList.css';
+
 export default function Profile() {
+
+    const navigate = useNavigate(); 
+
     const [cookies, setCookie] = useCookies(['userToken']);
     const [isLoading, setLoading] = useState(true);
 
@@ -26,25 +33,53 @@ export default function Profile() {
         setLoading(false)
     },[]);
 
-    function setMarketList() {
-        axios.put(process.env.REACT_APP_API_URL + 'post/user/'  + cookies.id)
+    function onFinish(values) {
+
+        const marketList = {
+            list_title: values.name,
+            userId: cookies.id 
+        }
+
+        axios.post(process.env.REACT_APP_API_URL + 'marketList/', marketList)
         .then((response) => {
-            console.log("Data Recipes", response.data);
+            const listId = response.data.id
+            setItemList(listId , values.items)
         })
         .catch((error) => {
             console.log(error)
         });
     }
+
     
-    function setItemList() {
-        axios.get(process.env.REACT_APP_API_URL + 'user/'  + cookies.id)
+    function setItemList(listId , items) {
+
+        var itemList = []
+        
+        for (let index = 0; index < items.length; index++) {
+
+            var newElement = {
+                mListId: listId,
+                ingredient: items[index].ingredientes
+            } 
+
+            itemList.push(newElement) 
+        }
+
+        axios.post(process.env.REACT_APP_API_URL + 'listItems/', itemList)
             .then((response) => {
-              console.log(response.data); 
-               
+                notification.success({
+                    message: 'Lista creada con exito'
+                });
+                navTo() 
             })
             .catch((error) => {
                 console.log(error)
             });
+
+    }
+
+    const navTo = () => {
+        navigate("/private/marketlist");
     }
 
     if (isLoading) {
@@ -53,96 +88,105 @@ export default function Profile() {
     }
 
     return (
-        <React.Fragment>
-        <Typography.Title level={2}>Nueva Lista</Typography.Title>
-        
-        <Form
-        labelCol={{
-            span: 6,
-        }}
-        wrapperCol={{
-            span: 18,
-        }}
-        form={form}
-        name="dynamic_form_complex"
-        style={{
-            maxWidth: 600,
-        }}
-        autoComplete="off"
-        initialValues={{
-            items: [{}],
-        }}
-        >
-        <Form.List name="items">
-            {(fields, { add, remove }) => (
-            <div
-                style={{
-                display: 'flex',
-                rowGap: 16,
-                flexDirection: 'column',
-                }}
+        <React.Fragment>       
+        <div className='div-general-list'>
+            <Form
+            onFinish={onFinish}
+            className='div-form-general-recipe-post'
+            layout="vertical"
+            form={form}
+            name="dynamic_form_complex"
+            autoComplete="off"
             >
-                {fields.map((field) => (
-                <Card
-                    size="small"
-                    title={`Item ${field.name + 1}`}
-                    key={field.key}
-                    extra={
-                    <CloseOutlined
-                        onClick={() => {
-                        remove(field.name);
-                        }}
-                    />
-                    }
-                >
-                    <Form.Item label="Name" name={[field.name, 'name']}>
-                    <Input />
-                    </Form.Item>
+            <Card
+                size='default'
+                title={'Nueva Lista'}>   
+            {/* Input Ingredientes */}
+                    <div type="flex" justify="center" align="middle">
+                    
+                    <Form.Item
 
-                    {/* Nest Form.List */}
-                    <Form.Item label="List">
-                    <Form.List name={[field.name, 'list']}>
-                        {(subFields, subOpt) => (
-                        <div
-                            style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            rowGap: 16,
-                            }}
-                        >
-                            {subFields.map((subField) => (
-                            <Space key={subField.key}>
-                                <Form.Item noStyle name={[subField.name, 'first']}>
-                                <Input placeholder="first" />
-                                </Form.Item>
-                                <Form.Item noStyle name={[subField.name, 'second']}>
-                                <Input placeholder="second" />
-                                </Form.Item>
-                                <CloseOutlined
-                                onClick={() => {
-                                    subOpt.remove(subField.name);
+                    style={{
+                        width: '85%',
+                    }}
+                    name={"name"}
+                    label="Nombre"
+                    rules={[{ required: true, message: 'Campo obligatorio' }]}
+                    >
+                        <Input/>
+                    </Form.Item>
+                    
+                    <Form.List 
+                    name="items"
+                    rules={[
+
+                        {
+                          validator: async (_, names) => {
+                            if (!names || names.length < 2) {
+                              return Promise.reject(new Error('Requerido Minimo 2 ingredientes'));
+                            }
+                          },
+                        },
+                    ]}
+                    >
+                    {(fields, { add, remove } , { errors }) => (
+                        <>
+                        {fields.map(({ key, name, ...restField } ) => (
+                            <div
+                            key={key}
+                            className='item-form-list-input'
+                            >
+                            <Form.Item
+                                style={{
+                                    width: '80%',
+                                    marginRight: 6,
                                 }}
-                                />
-                            </Space>
-                            ))}
-                            <Button type="dashed" onClick={() => subOpt.add()} block>
-                            + Add Sub Item
+                                {...restField}
+                                name={[name, 'ingredientes']}
+                                rules={[
+                                {
+                                    required: true,
+                                    message: 'Missing ingredient',
+                                },
+                                ]}
+                            >
+                                <Input  placeholder="ingredient" />
+                            </Form.Item>
+                            <CloseOutlined onClick={() => remove(name)} />
+                            </div>
+                        ))}
+                        <Form.Item
+                        style={{
+                            width: '85%',
+                        }}
+                        >
+                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                            Nuevo Ingrediente
                             </Button>
-                        </div>
-                        )}
+                            <Form.ErrorList errors={errors} />
+                        </Form.Item>
+                        
+                        </>  
+                    )}
                     </Form.List>
-                    </Form.Item>
-                </Card>
-                ))}
-
-                <Button type="dashed" onClick={() => add()} block>
-                + Add Item
-                </Button>
-            </div>
-            )}
-        </Form.List>
-
-        </Form>
+                    
+                    </div>
+                    
+            <Form.Item
+                className="my-form-container"
+                >
+                <div className='half-width-slot-profile-btnRP'>
+                    <div className='btnBlueRP'>
+                        <Button type="primary" shape="round" htmlType="submit"> Crear </Button>     
+                    </div>
+                    <div>
+                        <Button danger type="primary" shape="round" onClick={navTo}> Cancelar </Button>
+                    </div>
+                </div>
+            </Form.Item>
+            </Card>       
+            </Form>
+        </div>
         </React.Fragment>
     );
 }
