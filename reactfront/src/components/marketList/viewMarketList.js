@@ -8,13 +8,17 @@ import {
     Button,
     Form,
     Card,
-    Spin
+    Spin,
+    Checkbox,
+    List
 }  from 'antd';
 
 import './marketList.css';
 import Item from 'antd/es/list/Item';
 
 export default function Profile() {
+
+    const [form] = Form.useForm();
 
     const { id } = useParams();
     const navigate = useNavigate(); 
@@ -43,6 +47,19 @@ export default function Profile() {
         });
     }
 
+    function setCheckbox(values) {
+        const list = form.getFieldValue()
+        const value = list.items[values]
+        
+        axios.put(process.env.REACT_APP_API_URL + 'listItems/',  value)
+        .then((response) => {
+            console.log(response.data);
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    }
+
     if (isLoading) {
         return <div style={{textAlignLast:"center" }} ><br/><br/>
             <Spin color="#000106" tip="Loading..."/></div>;
@@ -56,13 +73,14 @@ export default function Profile() {
         <React.Fragment>       
         <div className='div-general-list'>
             <Form
+            form={form}
             className='div-form-general-recipe-post'
             layout="vertical"
             name="dynamic_form_complex"
             autoComplete="off"
             initialValues={{
                 name: listData.list_title,
-                items: listData.listitems
+                items: listData.listitems,
             }}
             >
             <Card
@@ -81,6 +99,16 @@ export default function Profile() {
                             className='item-form-list-input'
                             >
                             <Form.Item
+                            style={{
+                                marginRight: 5,
+                            }}
+                            {...restField}
+                            valuePropName={"checked"}
+                            name={[name, 'checked']}
+                            >
+                            <Checkbox  onChange={() => setCheckbox(key)}></Checkbox>
+                            </Form.Item>
+                            <Form.Item
                                 style={{
                                     width: '80%',
                                     marginRight: 6,
@@ -95,6 +123,13 @@ export default function Profile() {
                                 ]}
                             >
                                 <Input disabled={true} placeholder="ingredient" />
+                            </Form.Item>
+                            <Form.Item
+                                {...restField}
+                                name={[name, 'id']}
+                                hidden={true}
+                            >
+                                <Input disabled={true}/>
                             </Form.Item>
                             </div>
                         ))}

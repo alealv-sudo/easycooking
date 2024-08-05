@@ -23,8 +23,9 @@ MarketListCTRL.getList= async (req, res) => {
         where: { id: req.params.id },
         include: {
             model: ListItemModel,
-            attributes: {exclude: ['id','mListId']}
-        }
+            attributes: {exclude: ['mListId']}
+        },
+        order:[[{model: ListItemModel },'id', 'ASC']],
        })
        res.json(list[0])
     } catch (error) {

@@ -46,7 +46,7 @@ listItemCTRL.createItems = async (req, res) => {
 listItemCTRL.updateItem = async (req, res) => {
     try {
          await ListItemModel.update(req.body, {
-            where: { id: req.params.id }
+            where: { id: req.body.id }
         })
         res.json({"message": "Registro Actualizado correctamente"})
     } catch (error) {

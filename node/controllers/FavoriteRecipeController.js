@@ -1,4 +1,6 @@
 import FavoriteRecipeModel from "../models/FavoriteRecipeModel.js"
+import PostModel  from "../models/PostModel.js"
+import IngredientsModel from "../models/IngredientsModel.js"
 
 const FavoriteRecipeCTRL = {}
 
@@ -22,6 +24,20 @@ FavoriteRecipeCTRL.getFavorite = async (req, res) => {
         where: { id: req.params.id }
        })
        res.json(favorite[0])
+    } catch (error) {
+       res.json({message: error.message}) 
+    }
+}
+
+//Mostrar favoritos de un usuario
+
+FavoriteRecipeCTRL.getUserFavorites = async (req, res) => {
+    try {
+       const favorite =  await FavoriteRecipeModel.findAll({
+        where: { userId: req.params.id },
+        include: [{model: PostModel, include:{model: IngredientsModel}}]
+       })
+       res.json(favorite)
     } catch (error) {
        res.json({message: error.message}) 
     }

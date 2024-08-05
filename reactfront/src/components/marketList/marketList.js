@@ -6,15 +6,17 @@ import { Link } from 'react-router-dom';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import {
+    Form,
     Table,
     Button,
     Card,
     Spin,
-    Space,
+    Select,
     Popconfirm,
     message,
     notification,
     checkbox,
+    Modal,
 }  from 'antd';
 
 import './marketList.css';
@@ -28,11 +30,16 @@ export default function Profile() {
     const [isLoading, setLoading] = useState(true);
     const [user, setUser] = useState([]);
     const [listData, setListData] = useState([])
+    const [FavoritesData, setFavoritesData] = useState([])
+    const [selectData, setSelectData] = useState([])
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     /*Get User / Obtener datos de usuario y perfil*/
 
     useEffect(() => {
         getMarketList();
+        getFavorites()
     },[]);
 
     function getMarketList() {
@@ -47,6 +54,24 @@ export default function Profile() {
             })
             setListData(List)
             setLoading(false)
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    }
+
+    function getFavorites() {
+        axios.get(process.env.REACT_APP_API_URL + 'favorites/alluser/'  + cookies.id)
+        .then((response) => {
+            const FavoritesRes = response.data
+            const favData = FavoritesRes.map((e) => {
+                return{
+                    value: e.recipe.id,
+                    label: e.recipe.recipe_name
+                }
+            })
+            setSelectData(favData)
+            setFavoritesData(FavoritesRes)
         })
         .catch((error) => {
             console.log(error)
@@ -76,6 +101,53 @@ export default function Profile() {
             console.log(error)
         });
     }
+
+    function onFinish(values) {
+
+        const recipe = FavoritesData.find(({id}) => id === values.listFav).recipe;  
+
+        const marketList = {
+            list_title: recipe.recipe_name,
+            userId: cookies.id 
+        }
+
+        axios.post(process.env.REACT_APP_API_URL + 'marketList/', marketList)
+        .then((response) => {
+            const listId = response.data.id
+            setItemList(listId , recipe.Ingredients)
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    }
+
+    function setItemList(listId , items) {
+
+        var itemList = []
+        
+        for (let index = 0; index < items.length; index++) {
+
+            var newElement = {
+                mListId: listId,
+                ingredient: items[index].ingredient
+            } 
+
+            itemList.push(newElement) 
+        }
+
+        axios.post(process.env.REACT_APP_API_URL + 'listItems/', itemList)
+            .then((response) => {
+                notification.success({
+                    message: 'Lista añadida con exito'
+                });
+                handleCancel()
+                getMarketList()
+            })
+            .catch((error) => {
+                console.log(error)
+            });
+    }
+
 
     if (isLoading) {
         return <div style={{textAlignLast:"center" }} ><br/><br/>
@@ -129,6 +201,15 @@ export default function Profile() {
         }
       ];
 
+    ///Modal booleans
+    const showModal = () => {
+        setIsModalOpen(true);
+      };
+
+      const handleCancel = () => {
+        setIsModalOpen(false);
+      };
+
     return (
         <React.Fragment>
         <div className='div-general-list'>
@@ -144,9 +225,41 @@ export default function Profile() {
         <div className='half-width-slot-profile-btnRP'>
             <div className='btnBlueRP'>
                 <Button type="primary" onClick={navTo}><PlusOutlined/>Nueva Lista</Button>     
-            </div>       
+            </div> 
+            <div>
+                <Button type="primary" onClick={showModal}><PlusOutlined/>Favoritos</Button>
+            </div>      
         </div>
         </Card>
+        
+        <Modal title="Select" 
+        open={isModalOpen} footer={false} onCancel={handleCancel}
+        width={"50%"}
+        >
+            <Form
+            name='select'
+            onFinish={onFinish}
+            >
+                <Form.Item
+                name={'listFav'}
+                >
+                    <Select 
+                    showSearch 
+                    optionFilterProp="label"
+                    options={selectData} />
+                </Form.Item>
+                <Form.Item>
+                    <div className='half-width-slot-profile-btn'>
+                    <div className='btnBlue'>
+                        <Button  type="primary" htmlType="submit"> Crear </Button>
+                    </div>
+                    <div>
+                        <Button danger type="primary" onClick={handleCancel}> cancelar </Button>
+                    </div>
+                    </div>
+                </Form.Item>
+            </Form>
+        </Modal>
         </div>
         </React.Fragment>
     );
