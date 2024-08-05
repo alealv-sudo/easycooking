@@ -4,6 +4,7 @@ import { DataTypes } from "sequelize";
 
 const ListItemModel = db.define('listitems',{
     ingredient: {type: DataTypes.STRING},
+    checked: {type: DataTypes.BOOLEAN, defaultValue: false}
 },{
     timestamps: false,
 })
