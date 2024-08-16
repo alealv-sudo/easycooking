@@ -7,7 +7,7 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
-import {EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE} from './config/routes/paths';
+import {CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE} from './config/routes/paths';
 
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
@@ -36,6 +36,7 @@ import MarketList from './components/marketList/marketList'
 import NewMarketList from './components/marketList/newMarketList'
 import ViewMarketList from './components/marketList/viewMarketList'
 import EditListMarket from './components/marketList/editListMarket';
+import RecipeCalendar from './components/recipeCalendar/recipeCalendar'
 
 ///Layout
 import LayoutFront from './components/Layaout/Layout';
@@ -75,6 +76,7 @@ function App() {
                   <Route path={MARKETLIST} element={<MarketList/>} />
                   <Route path={VIEWMARKETLIST} element={<ViewMarketList/>} />
                   <Route path={EDITLIST} element={<EditListMarket/>} />
+                  <Route path={CALENDAR} element={<RecipeCalendar/>} />
                 </Route>
               </Route>
 

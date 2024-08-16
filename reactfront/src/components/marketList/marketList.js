@@ -206,9 +206,9 @@ export default function Profile() {
         setIsModalOpen(true);
       };
 
-      const handleCancel = () => {
+    const handleCancel = () => {
         setIsModalOpen(false);
-      };
+    };
 
     return (
         <React.Fragment>

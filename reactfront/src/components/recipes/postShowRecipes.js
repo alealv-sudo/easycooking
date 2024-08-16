@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { MinusCircleOutlined ,PlusOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router-dom';
 
 import {
     Typography,
@@ -20,9 +21,9 @@ import {
 
 import './recipePost.css';
 
-const IDRECIPE = "6"
-
 const PostShowRecipes = () => {
+
+    const { id } = useParams();
 
     const [cookies, setCookie] = useCookies(['userToken']);
     const [isLoading, setLoading] = useState(true);
@@ -42,9 +43,9 @@ const PostShowRecipes = () => {
     const navigate = useNavigate(); 
 
     function getRecipe() {
-        axios.get(process.env.REACT_APP_API_URL + 'post/' + IDRECIPE,
+        axios.get(process.env.REACT_APP_API_URL + 'post/' + id,
         ).then((response) => {
-            const recipeData = response.data;
+            const recipeData = response.data;            
             getScore(recipeData.id)
             setRecipe(recipeData)
             DownloadFile(recipeData.image_recipe)
