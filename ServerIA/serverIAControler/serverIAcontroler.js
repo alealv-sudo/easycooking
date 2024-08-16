@@ -25,14 +25,13 @@ function runPythonScript(scriptPath, args, callback) {
     });
 }
 
-serverIACTRL.factorial = async (req, res) => {
+serverIACTRL.executeIA = async (req, res) => {
     const number = req.params.id;
-    console.log("Entro",req.params.id)
-    runPythonScript('C:/Users/Lenovo/Desktop/easyCooking/ServerIA/serverIAControler/scrip.py' , [number], (err, result) => {
+    runPythonScript('C:/Users/franc/Desktop/Easy Cooking/easycooking/reactfront/ServerIA/serverIAControler/data_procesator.py' , [number], (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
-            res.send(`Factorial of ${number} is ${result}`);
+            res.send(`ExecuteIA of ${number} is ${result}`);
         }
     });
 };
