@@ -1,17 +1,19 @@
-
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Table, Form, Image } from 'antd'
+import { Table, Form, Image, Button } from 'antd'
+import { useCookies } from 'react-cookie'
 
 const URI = 'http://localhost:8000/blogs/'
 
 const Prueba = () => {
 
+    const [cookies, setCookie] = useCookies(['userToken']);
     const [recipe, setRecipe] = useState([]);
 
+    // const { exec } = require('child_process');
     useEffect(() => {
-        getRecipe()
+        // getRecipe()
     }, [])
 
     const getRecipe = async () => {
@@ -28,7 +30,44 @@ const Prueba = () => {
         setRecipe(res.data)
         console.log(res.data)
     }
-    
+
+    function runPythonScript(variable) {
+        fetch(`http://localhost:5000/executeIA?num_userid=${variable}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log("Run Python Script");
+                // document.getElementById('result').innerHTML = `executeIA: ${data.result}`;
+                })
+            .catch(error => console.error('Error:', error));
+            
+    }
+
+    const onFinish = () => {
+
+        const userId = cookies.id;
+        console.log(userId);
+        runPythonScript(userId)
+        
+
+
+
+
+        // fetch('http://localhost:5000/userId', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({ userId })
+        // })
+        //     .then(response => response.json())
+        //     .then(data => {
+        //         console.log('Success:', data);
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error:', error);
+        //     });
+    }
+
 
     return (
         // <div>
@@ -36,38 +75,13 @@ const Prueba = () => {
         // </div>
 
 
-        <Form
-            layout="vertical"
-            requiredMark={true}
-            name="recipe"
-            initialValues={{
 
-                // id:                  recipe.id,
-                // recipe_name:         recipe.name,
-                // preparation_time:    recipe.preparation_time,
-                // temperature:         recipe.temperature,
-                // calories:            recipe.calories,
-                // description:         recipe.description,
-                // ingredients:         recipe.ingredients,
-                // preparation:         recipe.preparation,
-                // type_recipe:         recipe.type_recipe,
-                // originary:           recipe.originary,
-                // tips:                recipe.tips,
-                // image_recipe:        recipe.image_recipe,
+        <div className='btnBlueRP'>
+            <Button type="primary" shape="round" onClick={onFinish}> Recomendar </Button>
+            <script src="../../../../../ServerIA/data_procesator.py"></script>
+            
+        </div>
 
-                // creator_code:        user.code,
-                // CreatedAt:
-                // updatedAt:
-
-            }}
-            
-            
-        >
-            <Form.Item>
-                <img src={recipe.image_recipe} />
-            </Form.Item>
-        </Form>
-            
     )
 }
 

@@ -3,7 +3,7 @@ import serverIACTRL from './serverIAcontroler.js'
 
 const routes = express.Router()
 
-routes.get('/:id', serverIACTRL.factorial)
+routes.get('/:id', serverIACTRL.executeIA)
 /* followerRoutes.post('/', followsCTRL.createBlog)
 followerRoutes.put('/:id', followsCTRL.updateBlog)
 followerRoutes.delete('/:id', followsCTRL.deleteBlog) */
