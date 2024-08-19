@@ -27,7 +27,7 @@ function runPythonScript(scriptPath, args, callback) {
 
 serverIACTRL.executeIA = async (req, res) => {
     const number = req.params.id;
-    runPythonScript('C:/Users/franc/Desktop/Easy Cooking/easycooking/reactfront/ServerIA/serverIAControler/data_procesator.py' , [number], (err, result) => {
+    runPythonScript('C:/Users/Lenovo/Desktop/easyCooking/ServerIA/serverIAControler/data_procesator.py' , [number], (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
