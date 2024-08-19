@@ -62,12 +62,12 @@ def executeIA(num_userid):
 
     userGroup = userGroup.drop(columns=['id']) # 'id', 'userId'
     inputRecipes = userGroup
-    # print(inputRecipes)
+    # print("InputRecipes", inputRecipes)
     
     ##########################################################################################################
     ######################################## PREPARE OTHER USERS #############################################
 
-    # print(OtherUsersGroupes)
+    # print("OtherUsersGroupes", OtherUsersGroupes)
     # Tratar los datos de los demas usuarios para recomendar
     recipesPerId = pd.DataFrame()
 
@@ -75,17 +75,19 @@ def executeIA(num_userid):
         recipesPerId = pd.concat([recipesPerId, group], ignore_index=True)
 
     recipesPerId_sorted = recipesPerId.sort_values(by='recipeId')
-    # print(recipesPerId_sorted)
+    # print("RecipePerIdSorted", recipesPerId_sorted)
 
-    inputId = recipesPerId_sorted[recipesPerId_sorted['recipeId'].isin(inputRecipes['recipeId'].tolist())]
-    # print(inputId)
+    ################ Guarda la lista de similitudes para operar los usuarios
+    # recipesPerId_sorted = recipesPerId_sorted[recipesPerId_sorted['recipeId'].isin(inputRecipes['recipeId'].tolist())]
+    # print("RecipePerIdSorted isin", recipesPerId_sorted)
+    
     
 
     ##########################################################################################################
     ##################################### PROCESSING SIMILARITIES ############################################
 
     #Filtrar a los usuarios que han visto recetas que la entrada ha visto y almacenarlas 
-    userSubset = inputId[inputId['recipeId'].isin(inputRecipes['recipeId'].tolist())]
+    userSubset = recipesPerId_sorted[recipesPerId_sorted['recipeId'].isin(inputRecipes['recipeId'].tolist())]
     userSubset.head()
     
     # Groupby crea varios sub dataframes de datos donde todos tienen el mismo valor en la columna especificada 
@@ -127,31 +129,54 @@ def executeIA(num_userid):
     pearsonDF['userId'] = pearsonDF.index
     pearsonDF.index = range(len(pearsonDF))
     pearsonDF.head()
-    print(pearsonDF)
+    # print(pearsonDF)
 
     #Ahora veamos los 50 usuarios principales que son más similares a la entrada
     topUsers=pearsonDF.sort_values(by='similarityIndex', ascending=False)[0:50]
     topUsers.head()
 
     #Clasificación de usuarios seleccionados para todas las recetas tomando el promedio ponderado de las calificaciones 
-    user_avg_rating = ratings_df['score'].mean()
-    print(user_avg_rating)
+    # user_avg_rating = ratings_df['score'].mean()
+    # print(user_avg_rating)
 
+    # ratings_df_pd = pd.concat([recipesPerId_sorted, inputRecipes], ignore_index=True)
+    # print(ratings_df_pd)
 
-    topUsersRating=topUsers.merge(user_avg_rating, left_on='userId', right_on='userId', how='inner')
+    topUsers['userId'] = topUsers['userId'].apply(lambda x: x[0])
+
+    topUsersRating=topUsers.merge(recipesPerId_sorted, left_on='userId', right_on='userId', how='inner')
     topUsersRating.head()
-    print(topUsersRating)
+    # print(topUsersRating)
 
-    # topUsersRating['weightedRating'] = topUsersRating['similarityIndex']*topUsersRating['rating']
-    # topUsersRating.head()
+    topUsersRating['weightedRating'] = topUsersRating['similarityIndex']*topUsersRating['score']
+    topUsersRating.head()
+
+    # print(topUsersRating)
+    tempTopUsersRating = topUsersRating.groupby('recipeId').sum()[['similarityIndex','weightedRating']]
+    tempTopUsersRating.columns = ['sum_similarityIndex','sum_weightedRating']
+    tempTopUsersRating.head()
+
+    #Crea un nuevo dataframe
+    recommendation_df = pd.DataFrame()
+    #Ahora tomamos el promedio ponderado 
+    recommendation_df['weighted average recommendation score'] = tempTopUsersRating['sum_weightedRating']/tempTopUsersRating['sum_similarityIndex']
+    recommendation_df['recipeId'] = tempTopUsersRating.index
+    recommendation_df.head()
+
+    recommendation_df = recommendation_df.sort_values(by='weighted average recommendation score', ascending=False)
+    #Separa las que no son similitudes para dejar una lista libre de las repetidas
+    recommendation_df = recommendation_df[~recommendation_df['recipeId'].isin(inputRecipes['recipeId'].tolist())]
+    recommendation_df.head(30)
+    final_recomendation = recipesPerId_sorted.loc[recipesPerId_sorted['recipeId'].isin(recommendation_df.head(30)['recipeId'].tolist())]
+    # print(final_recomendation)
     
 
-    return True
+    return final_recomendation
 
 
 
 if __name__ == '__main__':
-    # num = int(sys.argv[1])  # Takes number from command line argument
-    num = 2
-    executeIA(num)
+    num = int(sys.argv[1])  # Takes number from command line argument
+    # num = 2
+    print(executeIA(num))
     sys.stdout.flush()
