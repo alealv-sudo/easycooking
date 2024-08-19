@@ -7,6 +7,7 @@ import GeneralPostModel from "./GeneralPostModel.js"
 import UserModel from "./UserModel.js";
 import MarketListsModel from "./MarketListModel.js";
 import ListItemModel from './ListitemModel.js'
+import ListCalendarModel from "./ListCalendarModel.js";
 
 /* asociación uno a muchos (post(recetas)-Ingredientes) */
 
@@ -126,6 +127,32 @@ ListItemModel.belongsTo(MarketListsModel, {
     foreignKey: 'mListId',
     targetKey: 'id'
 })
+
+/* asociación uno a muchos (usuario-ListCalendar) */
+
+UserModel.hasMany(ListCalendarModel, {
+    foreignKey: 'userId',
+    sourceKey: 'id'
+})
+
+ListCalendarModel.belongsTo(UserModel, {
+    foreignKey: 'userId',
+    targetKey: 'id'
+})
+
+/* asociación uno a uno  (listCalendar-receta)  */
+
+PostModel.hasOne(ListCalendarModel, {
+    foreignKey: 'recipeId',
+    sourceKey: 'id'
+})
+
+ListCalendarModel.belongsTo(PostModel,{
+foreignKey: 'recipeId',
+sourceKey: 'id'
+})
+
+
 
 
 

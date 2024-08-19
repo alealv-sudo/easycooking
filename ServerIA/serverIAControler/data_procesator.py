@@ -4,8 +4,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-from flask import Flask, jsonify, request
-
 
 # URL del endpoint de tu servidor Node.js
 url = 'http://localhost:8000/ratings'
