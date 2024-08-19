@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { UnorderedListOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import { List, Space, Card, Button, Modal, Form, Select, Popconfirm } from 'antd';
+import { List, Space, notification, Button, Modal, Form, Select, Popconfirm } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const IconText = ({ icon, text }) => (
@@ -25,7 +25,6 @@ export default function ListDay({favSelect, favorites, userId, day}) {
     axios.get(process.env.REACT_APP_API_URL + 'calendar/list/'  + userId + '/daylist/' + day)
     .then((response) => {
         const dataList = response.data
-        console.log(dataList);
         setListData(dataList)
     })
     .catch((error) => {
@@ -36,7 +35,6 @@ export default function ListDay({favSelect, favorites, userId, day}) {
   function onFinish(values) {
 
     const recipe = favorites.find(({id}) => id === values.listFav).recipe;  
-    console.log(recipe)
 
     const newCalendar = {
         day: day,
@@ -46,9 +44,7 @@ export default function ListDay({favSelect, favorites, userId, day}) {
 
     axios.post(process.env.REACT_APP_API_URL + 'calendar/', newCalendar)
     .then((response) => {
-        const listId = response.data
-        console.log(listId);
-        
+        const listId = response.data        
         getListCalendar()
         handleCancel()
     })
@@ -67,11 +63,69 @@ export default function ListDay({favSelect, favorites, userId, day}) {
     setIsModalOpen(false);
   };
 
-  const arrayRecipe = Array.from(listData).map((e) => (e.recipe)) 
-  console.log(arrayRecipe);
+  function onDelete(paramsId) {
+
+    axios.delete(process.env.REACT_APP_API_URL + 'calendar/' + paramsId)
+    .then((response) => {
+      getListCalendar()
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  }
+
+  function onCreateList(params) {
+
+    const recipe = favorites.find(({id}) => id === params).recipe;  
+
+        const marketList = {
+            list_title: recipe.recipe_name,
+            userId: userId 
+        }
+
+        axios.post(process.env.REACT_APP_API_URL + 'marketList/', marketList)
+        .then((response) => {
+            const listId = response.data.id
+            setItemList(listId , recipe.Ingredients)
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+
+  }
+
+  function setItemList(listId , items) {
+
+    var itemList = []
     
+    for (let index = 0; index < items.length; index++) {
+
+        var newElement = {
+            mListId: listId,
+            ingredient: items[index].ingredient
+        } 
+
+        itemList.push(newElement) 
+    }
+
+    axios.post(process.env.REACT_APP_API_URL + 'listItems/', itemList)
+        .then((response) => {
+            notification.success({
+                message: 'Lista añadida con exito'
+            });
+            handleCancel()
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+}
+
+
+  const arrayRecipe = Array.from(listData).map((e) => (e.recipe)) 
+
   const data = Array.from(arrayRecipe).map((e , i) => (     
     {
+      idRecipe: e.id,
       idList: listData[i].id,
       title: <Link to={'/private/postShowRecipe/' + e.id} relative='route'>{e.recipe_name}</Link>,
       description: <br></br>,
@@ -110,7 +164,6 @@ export default function ListDay({favSelect, favorites, userId, day}) {
         </Form>
     </Modal>
 
-    <Card>
     <List
         itemLayout="vertical"
         size="small"
@@ -124,15 +177,23 @@ export default function ListDay({favSelect, favorites, userId, day}) {
             actions={[
               <div className='button-table-list'>
               <div>
-                  <Button type="default" ><UnorderedListOutlined/></Button>     
+              <Popconfirm
+                  title="Lista De Compras"
+                  description="Desa crear una lista de compras?"
+                  okText="Yes"
+                  cancelText="No"   
+                  onConfirm={() => onCreateList(item.idRecipe)}     
+                  >
+                  <Button type="default" ><UnorderedListOutlined/></Button>   
+                  </Popconfirm>   
               </div>
               <div>
                   <Popconfirm
                   title="Delete the task"
                   description="Are you sure to delete this task?"
                   okText="Yes"
-                  cancelText="No"
-                  
+                  cancelText="No"   
+                  onConfirm={() => onDelete(item.idList)}     
                   >
                   <Button style={{marginLeft: 5}} type="dashed" danger><DeleteOutlined/></Button> 
                   </Popconfirm>    
@@ -156,12 +217,10 @@ export default function ListDay({favSelect, favorites, userId, day}) {
         )}
     />
     <div className='half-width-slot-profile-btnRP'>
-            <div>
-                <Button type="primary" onClick={showModal}><PlusOutlined/>Favoritos</Button>
-            </div>      
-        </div>
-    </Card>
-
+        <div>
+            <Button type="primary" onClick={showModal}><PlusOutlined/>Favoritos</Button>
+        </div>      
+    </div>
     </React.Fragment>
   )  
 };

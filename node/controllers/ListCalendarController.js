@@ -71,7 +71,7 @@ ListCalendarCTRL.updateItem = async (req, res) => {
 ListCalendarCTRL.deleteItem = async (req , res) => {
     try {
         ListCalendarModel.destroy({
-            where:{mListId: req.params.id}
+            where:{id: req.params.id}
         })
         res.json({"message": "Registro Eliminado correctamente"})
     } catch (error) {

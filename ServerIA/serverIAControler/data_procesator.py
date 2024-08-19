@@ -4,12 +4,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import math
-from flask import Flask, jsonify, request
-
 
 # URL del endpoint de tu servidor Node.js
 url = 'http://localhost:8000/ratings'
-
 
 def executeIA(num_userid):
     
@@ -62,7 +59,7 @@ def executeIA(num_userid):
 
     userGroup = userGroup.drop(columns=['id']) # 'id', 'userId'
     inputRecipes = userGroup
-    # print(inputRecipes)
+    print(inputRecipes)
     
     ##########################################################################################################
     ######################################## PREPARE OTHER USERS #############################################
@@ -78,7 +75,7 @@ def executeIA(num_userid):
     # print(recipesPerId_sorted)
 
     inputId = recipesPerId_sorted[recipesPerId_sorted['recipeId'].isin(inputRecipes['recipeId'].tolist())]
-    # print(inputId)
+    print("otros", inputId)
     
 
     ##########################################################################################################
@@ -87,6 +84,8 @@ def executeIA(num_userid):
     #Filtrar a los usuarios que han visto recetas que la entrada ha visto y almacenarlas 
     userSubset = inputId[inputId['recipeId'].isin(inputRecipes['recipeId'].tolist())]
     userSubset.head()
+
+    print("filtradas", userSubset)
     
     # Groupby crea varios sub dataframes de datos donde todos tienen el mismo valor en la columna especificada 
     userSubsetGroup = userSubset.groupby(['userId'])
@@ -113,6 +112,7 @@ def executeIA(num_userid):
         # print(tempGroupList)
 
         data_corr = {'tempGroupList': tempGroupList, 'tempRatingList': tempRatingList}
+        print("data_corr", data_corr)
         pd_corr = pd.DataFrame(data_corr)
         r = pd_corr.corr(method="pearson")["tempRatingList"]["tempGroupList"]
         # #ahora eliminamos los nan de nuestro coef de pearson
@@ -127,7 +127,7 @@ def executeIA(num_userid):
     pearsonDF['userId'] = pearsonDF.index
     pearsonDF.index = range(len(pearsonDF))
     pearsonDF.head()
-    print(pearsonDF)
+    print("person", pearsonDF)
 
     #Ahora veamos los 50 usuarios principales que son más similares a la entrada
     topUsers=pearsonDF.sort_values(by='similarityIndex', ascending=False)[0:50]
@@ -135,7 +135,9 @@ def executeIA(num_userid):
 
     #Clasificación de usuarios seleccionados para todas las recetas tomando el promedio ponderado de las calificaciones 
     user_avg_rating = ratings_df['score'].mean()
-    print(user_avg_rating)
+
+    print("prom",user_avg_rating[1])
+
 
 
     topUsersRating=topUsers.merge(user_avg_rating, left_on='userId', right_on='userId', how='inner')

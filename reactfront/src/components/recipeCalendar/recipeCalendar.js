@@ -1,33 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 
 import ListDay from './listDay.js'
 
 import {
     Tabs,
-    Form,
-    Table,
-    Button,
-    Card,
     Spin,
-    Select,
-    Popconfirm,
-    message,
-    notification,
-    checkbox,
-    Modal,
+    Card,
 }  from 'antd';
 
 import './marketList.css';
-import TabPane from 'antd/es/tabs/TabPane';
 
 export default function RecipeCalendar() {
-
-    const navigate = useNavigate(); 
 
     const [cookies, setCookie] = useCookies(['userToken']);
 
@@ -46,8 +31,7 @@ export default function RecipeCalendar() {
         axios.get(process.env.REACT_APP_API_URL + 'favorites/alluser/'  + cookies.id)
         .then((response) => {
             const FavoritesRes = response.data
-            console.log(FavoritesRes);
-            
+
             const favData = FavoritesRes.map((e) => {
                 return{
                     value: e.recipe.id,
@@ -64,31 +48,10 @@ export default function RecipeCalendar() {
       
     }
 
-/* 
-    function deleteList(id) {
-        
-        axios.delete(process.env.REACT_APP_API_URL + 'listItems/' + id)
-            .then((response) => {
-            
-            })
-            .catch((error) => {
-                console.log(error)
-            });
-    }
- */
-
     if (isLoading) {
         return <div style={{textAlignLast:"center" }} ><br/><br/>
             <Spin color="#000106" tip="Loading..."/></div>;
     }
-
-/*     const navTo = () => {
-        navigate("/private/newlist");
-    }
-
-    function navToEdit(id){
-        navigate("/private/editlist/" + id);
-    } */
 
     const data = [
         {
@@ -130,15 +93,18 @@ export default function RecipeCalendar() {
 
     return (
         <React.Fragment>
+            
             <div className='div-general-calendar'>
+            <Card className='div-tab-calendar'>
             <Tabs
-                className='div-tab-calendar'
                 size='large'
                 type="card"
                 centered
                 items={data}
             />
+            </Card>
             </div>
+            
         </React.Fragment>
     );
 }
