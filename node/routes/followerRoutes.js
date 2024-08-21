@@ -1,12 +1,12 @@
 import express from "express"
-import followsCTRL from "../controllers/FollowController.js"
+import FollowerCTRL from "../controllers/FollowerController.js"
 
 const followerRoutes = express.Router()
 
-followerRoutes.get('/', followsCTRL.getAllBlogs)
-followerRoutes.get('/:id', followsCTRL.getBlog)
-followerRoutes.post('/', followsCTRL.createBlog)
-followerRoutes.put('/:id', followsCTRL.updateBlog)
-followerRoutes.delete('/:id', followsCTRL.deleteBlog)
+followerRoutes.get('/', FollowerCTRL.getAllFollowers)
+followerRoutes.get('/:id', FollowerCTRL.getFollower)
+followerRoutes.post('/', FollowerCTRL.createFollower)
+followerRoutes.put('/:id', FollowerCTRL.updateFollower)
+followerRoutes.delete('/:id', FollowerCTRL.deleteFollower)
 
 export default followerRoutes

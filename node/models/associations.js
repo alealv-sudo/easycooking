@@ -8,6 +8,9 @@ import UserModel from "./UserModel.js";
 import MarketListsModel from "./MarketListModel.js";
 import ListItemModel from './ListitemModel.js'
 import ListCalendarModel from "./ListCalendarModel.js";
+import FollowerModels from "./FollowerModel.js";
+import FollowedModels from "./FollowedModel.js";
+
 
 /* asociación uno a muchos (post(recetas)-Ingredientes) */
 
@@ -151,6 +154,58 @@ ListCalendarModel.belongsTo(PostModel,{
 foreignKey: 'recipeId',
 sourceKey: 'id'
 })
+
+/* asociación uno a muchos (usuario-follower) */
+
+UserModel.hasMany(FollowerModels, {
+    foreignKey: 'userId',
+    sourceKey: 'id'
+})
+
+FollowerModels.belongsTo(UserModel, {
+    foreignKey: 'userId',
+    targetKey: 'id'
+})
+
+/* asociación uno a uno  (follower-perfil)  */
+
+ProfileModel.hasOne(FollowerModels, {
+    foreignKey: 'followerId',
+    sourceKey: 'id'
+})
+
+FollowerModels.belongsTo(ProfileModel,{
+foreignKey: 'followerId',
+sourceKey: 'id'
+})
+
+/* asociación uno a muchos (usuario-followed) */
+
+UserModel.hasMany(FollowedModels, {
+    foreignKey: 'userId',
+    sourceKey: 'id'
+})
+
+FollowedModels.belongsTo(UserModel, {
+    foreignKey: 'userId',
+    targetKey: 'id'
+})
+
+/* asociación uno a uno  (followed-perfil)  */
+
+ProfileModel.hasOne(FollowedModels, {
+    foreignKey: 'followedId',
+    sourceKey: 'id'
+})
+
+FollowedModels.belongsTo(ProfileModel,{
+foreignKey: 'followedId',
+sourceKey: 'id'
+})
+
+
+
+
 
 
 

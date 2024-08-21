@@ -16,6 +16,7 @@ import postRoutes from './routes/postRoutes.js'
 import generalPostRoutes from './routes/generalPostRoutes.js'
 import profileRoutes from './routes/profileRoutes.js'
 import followerRoutes from "./routes/followerRoutes.js";
+import followedRoutes from "./routes/followedRoutes.js";
 import googleRoutes  from './routes/googleRoutes.js'
 import recipeReviewRoutes from './routes/recipeReviewRoutes.js'
 import IngredientsRutes from './routes/ingredientRoutes.js'
@@ -39,6 +40,7 @@ app.use('/blogs', blogRoutes)
 app.use('/user', userRoutes)
 app.use('/post', postRoutes)
 app.use('/followers', followerRoutes)
+app.use('/followeds', followedRoutes)
 app.use('/profile', profileRoutes)
 app.use('/generalPost', generalPostRoutes)
 app.use('/reviewPost', recipeReviewRoutes)

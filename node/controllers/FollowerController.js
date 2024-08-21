@@ -1,14 +1,14 @@
-import FollowsModels from "../models/FollowTemp.js"
+import FollowerModels from "../models/FollowerModel.js"
 
-const followsCTRL = {}
+const FollowerCTRL = {}
 
 //* Metodos para el CRUD*//
 
 //Mostrar todos los Registros
-followsCTRL.getAllBlogs = async (req, res) => {
+FollowerCTRL.getAllFollowers = async (req, res) => {
     try {
-       const blogs =  await FollowsModels.findAll()
-       res.json(blogs)
+       const follower =  await FollowerModels.findAll()
+       res.json(follower)
     } catch (error) {
        res.json({message: error.message}) 
     }
@@ -16,12 +16,12 @@ followsCTRL.getAllBlogs = async (req, res) => {
 
 //Mostrart un registro
 
-followsCTRL.getBlog = async (req, res) => {
+FollowerCTRL.getFollower = async (req, res) => {
     try {
-       const blog =  await FollowsModels.findAll({
+       const follower =  await FollowerModels.findAll({
         where: { id: req.params.id }
        })
-       res.json(blog[0])
+       res.json(follower[0])
     } catch (error) {
        res.json({message: error.message}) 
     }
@@ -29,9 +29,9 @@ followsCTRL.getBlog = async (req, res) => {
 
 //Crear un registro
 
-followsCTRL.createBlog = async (req, res) => {
+FollowerCTRL.createFollower = async (req, res) => {
     try {
-        await FollowsModels.create(req.body)
+        await FollowerModels.create(req.body)
         res.json({"message": "Registro Creado correctamente"})
     } catch (error) {
         res.json({message: error.message}) 
@@ -40,10 +40,9 @@ followsCTRL.createBlog = async (req, res) => {
 
 //Actualizar un registro
 
-followsCTRL.updateBlog = async (req, res) => {
-    console.log("ENTRO", req.params.id)
+FollowerCTRL.updateFollower = async (req, res) => {
     try {
-         await FollowsModels.update(req.body, {
+         await FollowerModels.update(req.body, {
             where: { id: req.params.id }
         })
         res.json({"message": "Registro Actualizado correctamente"})
@@ -54,9 +53,9 @@ followsCTRL.updateBlog = async (req, res) => {
 
 //Eliminar un registro
 
-followsCTRL.deleteBlog = async (req , res) => {
+FollowerCTRL.deleteFollower = async (req , res) => {
     try {
-        FollowsModels.destroy({
+        FollowerModels.destroy({
             where:{id: req.params.id}
         })
         res.json({"message": "Registro Eliminado correctamente"})
@@ -65,4 +64,4 @@ followsCTRL.deleteBlog = async (req , res) => {
     }
 }
 
-export default followsCTRL
+export default FollowerCTRL
