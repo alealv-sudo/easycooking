@@ -9,5 +9,6 @@ router.get('/user/:id',PostCTRL.getPostUser);
 router.post('/', PostCTRL.createPost);
 router.put('/', PostCTRL.updatePost);
 router.delete('/:id', PostCTRL.deletePost);
+router.get('/:recipe_name/:value', PostCTRL.getPostSimilar);
 
 export default router

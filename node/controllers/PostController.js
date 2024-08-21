@@ -1,6 +1,7 @@
 import { request } from "express";
 import PostModel from "../models/PostModel.js";
 import IngredientsModel from "../models/IngredientsModel.js";
+import { Op } from "sequelize";
 
 const PostCTRL = {}
 
@@ -81,5 +82,20 @@ PostCTRL.deletePost = async (req , res) => {
         res.json({message: error.message}) 
     }
 }
+
+// Mostrar lista de recetas por similitud
+PostCTRL.getPostSimilar = async (req, res) => {
+    const valueStyle = `%${req.params.value}%`
+    try {
+      const post = await PostModel.findAll({
+        where: {recipe_name: {[Op.iLike]: valueStyle}},
+        limit: 5 // Limita a 5 resultados
+      });
+      
+      res.json(post);
+    } catch (error) {
+      res.status(500).json({ message: 'Error al obtener las recetas', error: error.message });
+    }
+};
 
 export default PostCTRL

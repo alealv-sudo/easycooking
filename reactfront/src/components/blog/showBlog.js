@@ -5,6 +5,8 @@ import { useCookies } from 'react-cookie';
 import PostComponent from './postComponent';
 import { Grid } from '@mui/material';
 
+import { Input } from 'antd'
+
 const URI = 'http://localhost:8000/blogs/'
 
 const CompShowBlog = () => {
@@ -79,17 +81,57 @@ const CompShowBlog = () => {
     },
   ];
 
-  return (
 
-    <Grid container gap={1} justifyContent={{ xs: "center", md: "space-evenly" }}>
-      {columns.map((record, index) => {
-        return (
-          <Grid item container xs={10} md={3} lg={3}>
-            <PostComponent key={index} avatar={record.avatar} title={record.title} postPhoto={record.postPhoto} userName={record.userName} isLiked={record.isLiked} description={"asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd"} publishDate={record.publishDate} postId={"postId"} likesCounter={record.likesCounter} />
-          </Grid>
-        )
-      })}
-    </Grid>
+  //////////// SARCH DECLARATIONS
+  const [valueSearch, setValueSearch] = useState('');
+  const [recipes, setRecipes] = useState('');
+
+
+  const onChange = (event) => {
+    setValueSearch(event.target.value);
+  };
+
+  const onSearch = (value) => {
+
+    axios.get(process.env.REACT_APP_API_URL + 'post/recipe_name/' + value,
+    ).then((response) => {
+      const recipeData = response.data;
+      setRecipes(recipeData)
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+    
+    // console.log(recipes);
+  };
+
+
+  return (
+    <div>
+      <div>
+        <Input.Search
+          placeholder="Buscar..."
+          value={valueSearch}
+          onChange={onChange}
+          onSearch={onSearch}
+          enterButton
+          style={{ width: '400px' }}
+        />
+        {/* Resto del código */}
+      </div>
+
+      <div>
+        <Grid container gap={1} justifyContent={{ xs: "center", md: "space-evenly" }}>
+          {columns.map((record, index) => {
+            return (
+              <Grid item container xs={10} md={3} lg={3}>
+                <PostComponent key={index} avatar={record.avatar} title={record.title} postPhoto={record.postPhoto} userName={record.userName} isLiked={record.isLiked} description={"asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd"} publishDate={record.publishDate} postId={"postId"} likesCounter={record.likesCounter} />
+              </Grid>
+            )
+          })}
+        </Grid>
+      </div>
+    </div>
   )
 }
 

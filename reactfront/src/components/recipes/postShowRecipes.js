@@ -166,6 +166,12 @@ const PostShowRecipes = () => {
             });
     };
 
+    const { TextArea } = Input;
+    const onChangeText = () => {
+        console.log("");
+        
+    };
+
     if (isLoading) {
         return <div style={{textAlignLast:"center" }} ><br/><br/>
             <Spin color="#000106" tip="Loading..."/></div>;
@@ -424,6 +430,9 @@ const PostShowRecipes = () => {
                 </Form.Item>
 
             </Form>
+            <div>
+                <TextArea placeholder="textarea with clear icon" allowClear onChange={onChangeText} />
+            </div>
         </div>
             <div className="bottom-page">
                 <Rate allowHalf 
