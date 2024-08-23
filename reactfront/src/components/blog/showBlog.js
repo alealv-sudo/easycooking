@@ -1,138 +1,100 @@
-import axios from 'axios'
-import React, { useState, useEffect } from 'react'
-import './blog.css'
-import { useCookies } from 'react-cookie';
+import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
 import PostComponent from './postComponent';
-import { Grid } from '@mui/material';
-
-import { Input } from 'antd'
-
-const URI = 'http://localhost:8000/blogs/'
+import { CircularProgress, Grid, Skeleton } from '@mui/material';
+import PostDetails from './showBlogI';
+import { useCookies } from 'react-cookie';
 
 const CompShowBlog = () => {
-
-  const [cookies, setCookie] = useCookies(['userToken']);
-  const [blogs, setBlogs] = useState([])
+  const [recipes, setRecipes] = useState([]);
+  const [page, setPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const observerRef = useRef(null);
+  useEffect(() => {
+    loadMore();  // Initial load
+  }, []);
 
   useEffect(() => {
-    getBlogs()
-  }, [])
-
-  //Procedimiento Mostrar blogs
-
-  const getBlogs = async () => {
-    /*  const res  = await axios.get(process.env.REACT_APP_API_URL + 'blogs/')
-     setBlogs(res.data)//simon */
-  }
-
-  //Eliminar Blog
-
-  const deleteBlog = async (id) => {
-    axios.delete(`${URI}${id}`)
-    getBlogs()
-  }
-
-  ///Datos Tabla
-
-  const columns = [
-    {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
-      publishDate: "9/10/2024",
-      userName: "alejandro",
-      likesCounter: 20,
-      isLiked: false,
-      avatar: "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
-      postPhoto: "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"
-    },
-    {
-      title: 'Content',
-      dataIndex: 'content',
-      key: 'content',
-      publishDate: "10/10/2024",
-      userName: "francisco",
-      likesCounter: 10,
-      isLiked: true,
-      avatar: "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
-      postPhoto: "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"
-    },
-    {
-      title: 'Content',
-      dataIndex: 'content',
-      key: 'content',
-      publishDate: "11/10/2024",
-      userName: "mario",
-      likesCounter: 0,
-      isLiked: false,
-      avatar: "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
-      postPhoto: "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"
-    },
-    {
-      title: 'Actions',
-      dataIndex: 'Actions',
-      key: 'Actions',
-      publishDate: "12/10/2024",
-      userName: "mario",
-      likesCounter: 2,
-      isLiked: true,
-      avatar: "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=",
-      postPhoto: "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"
-    },
-  ];
-
-
-  //////////// SARCH DECLARATIONS
-  const [valueSearch, setValueSearch] = useState('');
-  const [recipes, setRecipes] = useState('');
-
-
-  const onChange = (event) => {
-    setValueSearch(event.target.value);
-  };
-
-  const onSearch = (value) => {
-
-    axios.get(process.env.REACT_APP_API_URL + 'post/recipe_name/' + value,
-    ).then((response) => {
-      const recipeData = response.data;
-      setRecipes(recipeData)
-    })
-    .catch((error) => {
-      console.error(error);
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !loading) {
+        loadMore();
+      }
+    }, {
+      root: null,
+      rootMargin: '20px',
+      threshold: 0.5
     });
-    
-    // console.log(recipes);
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
+      }
+    };
+  }, [loading]);  // Adding loading to the dependency array
+
+  const [cookies] = useCookies(['userToken']);
+  const userId = cookies.id;
+  // Load more posts function
+  const loadMore = () => {
+    if ((maxPage == null || maxPage >= page) && !loading) {
+      setLoading(true);
+      axios.get(process.env.REACT_APP_API_URL + 'post/paginated?page=' + page + "&userId=" + userId)
+        .then((response) => {
+          const recipeData = response.data;
+
+          console.log(page, [...recipes, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]); setPage((prevPage) => prevPage + 1);
+          setRecipes((prevRecipes) => [...prevRecipes, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]);
+          setPage((prevPage) => prevPage + 1);
+          setMaxPage(recipeData?.totalPages ? recipeData.totalPages : page)
+          setLoading(false);  // Stop loading after data is fetched
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);  // Stop loading even if there's an error
+        });
+    }
   };
-
-
+  const [openRecipe, setOpenRecipe] = useState(false)
   return (
-    <div>
-      <div>
-        <Input.Search
-          placeholder="Buscar..."
-          value={valueSearch}
-          onChange={onChange}
-          onSearch={onSearch}
-          enterButton
-          style={{ width: '400px' }}
-        />
-        {/* Resto del código */}
-      </div>
-
-      <div>
-        <Grid container gap={1} justifyContent={{ xs: "center", md: "space-evenly" }}>
-          {columns.map((record, index) => {
-            return (
-              <Grid item container xs={10} md={3} lg={3}>
-                <PostComponent key={index} avatar={record.avatar} title={record.title} postPhoto={record.postPhoto} userName={record.userName} isLiked={record.isLiked} description={"asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd"} publishDate={record.publishDate} postId={"postId"} likesCounter={record.likesCounter} />
+    <>
+      <Grid container minHeight={"100%"} py={2} px={2}>
+        {openRecipe && (
+          <PostDetails
+            postId={openRecipe}
+            onClose={setOpenRecipe}
+          />
+        )}
+        <Grid item container spacing={2} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'}>
+          {recipes.length > 0 ? (
+            recipes.map((record, index) => (
+              <Grid item key={index} xs={12} md={6} lg={4} style={{ width: '100%' }}>
+                <PostComponent
+                  onClick={setOpenRecipe}
+                  avatar={record.avatar}
+                  title={record.recipe_name}
+                  postPhoto={record.postPhoto}
+                  userName={record.userName}
+                  isLiked={record.isLiked}
+                  description={record.description}
+                  publishDate={record.publishDate}
+                  postId={record.id}
+                  likesCounter={record.likes}
+                />
               </Grid>
-            )
-          })}
+            ))
+          ) : (
+            <CircularProgress />
+          )}
+          <div ref={observerRef} style={{ height: '1px' }} />
         </Grid>
-      </div>
-    </div>
-  )
-}
+      </Grid>
+    </>
+  );
+};
 
-export default CompShowBlog
+export default CompShowBlog;
