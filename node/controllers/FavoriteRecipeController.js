@@ -80,4 +80,55 @@ FavoriteRecipeCTRL.deleteFavorite = async (req , res) => {
     }
 }
 
+FavoriteRecipeCTRL.handleLikeClicked = async (req, res) => {
+    try {
+        const { userId, postId } = req.body;
+
+        const existingFavorite = await FavoriteRecipeModel.findOne({
+            where: {
+                userId: userId,
+                recipeId: postId,
+            },
+        });
+
+        if (existingFavorite) {
+            // If the favorite exists, remove it and decrement the likes count
+            await FavoriteRecipeModel.destroy({
+                where: {
+                    userId: userId,
+                    recipeId: postId,
+                },
+            });
+
+            await PostModel.decrement('likes', {
+                by: 1,
+                where: { id: postId },
+            });
+
+            return res.json({
+                message: "Favorito eliminado y like decrementado",
+                isLiked: false,
+            });
+        } else {
+            // If the favorite doesn't exist, create it and increment the likes count
+            await FavoriteRecipeModel.create({ userId, recipeId: postId });
+
+            await PostModel.increment('likes', {
+                by: 1,
+                where: { id: postId },
+            });
+
+            return res.json({
+                message: "Favorito creado y like incrementado",
+                isLiked: true,
+            });
+        }
+    } catch (error) {
+        // Log the full error details to help diagnose the issue
+        console.error("Validation error details:", error);
+        res.status(400).json({ message: error.message });
+    }
+};
+
+
 export default FavoriteRecipeCTRL
