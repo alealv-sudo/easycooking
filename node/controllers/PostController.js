@@ -20,7 +20,7 @@ PostCTRL.getAllPost = async (req, res) => {
 PostCTRL.getPostsPaginated = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 10;
+        const limit = parseInt(req.query.limit) || 12;
         const userId = req.query.userId; // Get the userId from query parameters
 
         // Calculate the offset

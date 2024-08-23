@@ -19,6 +19,7 @@ import axios from 'axios';
 import { useState } from 'react';
 const PostComponent = ({ title, userName, postPhoto, description, likesCounter, publishDate, postId, isLiked, avatar, onClick }) => {
     const [tempLiked, setTempLiked] = useState(isLiked)
+    const [countLikes, setCountLikes] = useState(likesCounter || 0);
     const [cookies] = useCookies(['userToken']);
     const handleLikeClick = () => {
         const userId = cookies.id;
@@ -28,6 +29,7 @@ const PostComponent = ({ title, userName, postPhoto, description, likesCounter, 
         })
             .then(response => {
                 const isLiked1 = response.data.isLiked;
+                setCountLikes(prevCount => isLiked1 ? prevCount + 1 : Math.max(prevCount - 1, 0));
                 setTempLiked(isLiked1)
             })
             .catch(error => {
@@ -69,7 +71,7 @@ const PostComponent = ({ title, userName, postPhoto, description, likesCounter, 
                         </IconButton>
                         <IconButton aria-label="add to favorites" onClick={() => handleLikeClick()}>
                             {tempLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-                            {likesCounter}
+                            {countLikes}
                         </IconButton>
                     </Grid>
                 </CardActions>
