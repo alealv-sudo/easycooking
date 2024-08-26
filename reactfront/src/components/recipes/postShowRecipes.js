@@ -17,6 +17,10 @@ import {
     List,
 } from 'antd';
 
+import {
+    BlogCommentSection,
+} from "replyke";
+
 import './recipePost.css';
 
 const PostShowRecipes = () => {
@@ -36,6 +40,13 @@ const PostShowRecipes = () => {
         fileList: [],
         uploading: false,
     });
+
+    const idUserToComment = cookies.id
+    const nameUserToComment = cookies.user
+    const user = {
+        _id: idUserToComment,
+        name: nameUserToComment
+    }
 
     const { fileList } = state;
 
@@ -421,12 +432,20 @@ const PostShowRecipes = () => {
                         autoFocus={false}
                         onChange={onFinish}
                     />
+
                     <div className='buttom-div'>
                         <div>
                             <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
                         </div>
                     </div>
                 </div>
+
+                <BlogCommentSection
+                    apiBaseUrl="http://localhost:443"
+                    articleId={id}
+                    callbacks={{ loginClickCallback: () => null }}
+                    currentUser={user}
+                />
 
             </div>
 
