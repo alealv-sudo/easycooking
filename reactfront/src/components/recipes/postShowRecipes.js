@@ -28,10 +28,6 @@ const PostShowRecipes = () => {
     
     const [cookies, setCookie] = useCookies(['userToken']);
     const [isLoading, setLoading] = useState(true);
-    const [UserData, setUserData] = useState({
-        _id: cookies.id,
-        name: cookies.user
-    })
 
     const [idRecipeComments, setIdRecipeComments] = useState(0)
 
@@ -445,14 +441,14 @@ const PostShowRecipes = () => {
                     </div>
                 </div>
 
-            <div className="div-comments-page">
-                <BlogCommentSection
-                    apiBaseUrl="http://localhost:443"
-                    articleId={idRecipeComments}
-                    callbacks={{ loginClickCallback: () => null }}
-                    currentUser={user}
-                />
-            </div>
+                <div className="div-comments-page">
+                    <BlogCommentSection
+                        apiBaseUrl="http://localhost:443"
+                        articleId={idRecipeComments}
+                        callbacks={{ loginClickCallback: () => null }}
+                        currentUser={user}
+                    />
+                </div>
             </div>
 
         </React.Fragment>
