@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import {CaretLeftOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-
 import { useParams } from 'react-router-dom';
 
 import {
@@ -20,14 +18,8 @@ import {
 } from 'antd';
 
 import {
-    ReplykeSocialProvider,
-    CommentsFeed,
-    NewCommentForm,
-    SocialActionsBar,
-    SortByButton,
     BlogCommentSection,
 } from "replyke";
-import { MantineProvider, ScrollArea } from '@mantine/core';
 
 import './recipePost.css';
 
@@ -39,16 +31,22 @@ const PostShowRecipes = () => {
     const [isLoading, setLoading] = useState(true);
 
     const [recipe, setRecipe] = useState('');
-
-    const [ingredientList,setIngredientList] = useState([]);
-    const [rating, setRating] = useState({score: 2.5});
-    const [isEmpty, setIsEmpty] = useState(true); 
+    const [ingredientList, setIngredientList] = useState([]);
+    const [rating, setRating] = useState({ score: 2.5 });
+    const [isEmpty, setIsEmpty] = useState(true);
 
     const [imgFileList, setFileList] = useState([]);
     const [state, setState] = useState({
         fileList: [],
         uploading: false,
     });
+
+    const idUserToComment = cookies.id
+    const nameUserToComment = cookies.user
+    const user = {
+        _id: idUserToComment,
+        name: nameUserToComment
+    }
 
     const { fileList } = state;
 
@@ -185,11 +183,6 @@ const PostShowRecipes = () => {
         console.log("");
 
     };
-    const authorId = cookies.id
-    const loginClickCallback=() => { /* open authentication modal */ }
-    const commentAuthorClickCallback=(authorId) => { /* navigate to author's profile */ }
-    const currentUserClickCallback=() => { /* navigate to user's profile */ }
-
 
     if (isLoading) {
         return <div style={{ textAlignLast: "center" }} ><br /><br />
@@ -203,7 +196,7 @@ const PostShowRecipes = () => {
 
             <div className="all-page">
                 <div className='div-general-recipe-post'>
-                  
+
                     <Form
                         layout="vertical"
                         className='div-form-general-recipe-post'
@@ -235,12 +228,11 @@ const PostShowRecipes = () => {
                                     listType="picture-card"
                                     disabled={true}
                                     fileList={imgFileList}
-
-                                    showUploadList={{showRemoveIcon:false}}
+                                    showUploadList={{ showRemoveIcon: false }}
                                     onPreview={onPreview}
-                                    //beforeUpload={() => false} // Evita la carga automática de la imagen
+                                //beforeUpload={() => false} // Evita la carga automática de la imagen
                                 >
-                                {fileList.length < 1 && '+ Upload'}
+                                    {fileList.length < 1 && '+ Upload'}
 
                                 </Upload>
 
@@ -304,7 +296,6 @@ const PostShowRecipes = () => {
                                         disabled={true}
                                     />
                                     {/* <Checkbox type="checkbox" label="N/A" name="N_A_Temp" onChange={handleCheckboxChange}
-
                                     >
                                         N/A
                                     </Checkbox> */}
@@ -329,7 +320,6 @@ const PostShowRecipes = () => {
                                         disabled={true}
                                     />
                                     {/* <Checkbox type="checkbox" label="N/A" name="N_A_Calories" onChange={handleCheckboxChange}
-
                                     >
                                         N/A
                                     </Checkbox> */}
@@ -356,67 +346,16 @@ const PostShowRecipes = () => {
                         <label className="label-ingedient">Ingredientes</label>
 
                         <div type="flex" justify="center" align="middle">
-                        <Form.Item
-                            name="ingredients"
-                        >
-                            <List
-                            bordered
-                            size="small"
-                            dataSource={ingredientList}
-                            renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
-                            />
-                        </Form.Item>
-                        </div>    
-
-                        {/* Input Metodo de Preparacion */}
-                        <Form.Item
-                            className="half-width-slot"
-                            label="Preparacion"
-                            name="preparation"
-                            normalize={value => (value || '')}
-                            rules={[{ required: true, message: 'Por favor introduce la preparacion de la receta.' }]}
-                        >
-                            <Input.TextArea
-                                className="colors-bg"
-                                autoSize={{ minRows: 1, maxRows: 6 }}
-                                disabled={true}
-                            />
-                        </Form.Item>
-
-                        {/* Input Ingredientes */}
-                        <label className="label-ingedient">Ingredientes</label>
-
-                        <div type="flex" justify="center" align="middle">
-                            <Form.List
+                            <Form.Item
                                 name="ingredients"
                             >
-                                {(fields) => (
-                                    <>
-                                        {fields.map(({ key, name, ...restField }) => (
-                                            <div
-                                                key={key}
-                                                className='item-form-list'
-                                            >
-                                                <Form.Item
-                                                    style={{
-                                                        width: '100%',
-                                                    }}
-                                                    {...restField}
-                                                    name={[name, 'ingredient']}
-                                                    rules={[
-                                                        {
-                                                            required: true,
-                                                            message: 'Missing ingredient',
-                                                        },
-                                                    ]}
-                                                >
-                                                    <Input disabled={true} placeholder="ingredient" />
-                                                </Form.Item>
-                                            </div>
-                                        ))}
-                                    </>
-                                )}
-                            </Form.List>
+                                <List
+                                    bordered
+                                    size="small"
+                                    dataSource={ingredientList}
+                                    renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
+                                />
+                            </Form.Item>
                         </div>
 
                         {/* Input Metodo de Preparacion */}
@@ -484,7 +423,9 @@ const PostShowRecipes = () => {
                         </Form.Item>
 
                     </Form>
+
                 </div>
+
                 <div className="bottom-page">
                     <Rate allowHalf
                         defaultValue={rating.score}
@@ -493,82 +434,18 @@ const PostShowRecipes = () => {
                     />
 
                     <div className='buttom-div'>
-                    {/* <MantineProvider>
-                        <ReplykeSocialProvider
-                            apiBaseUrl="http://localhost:3000"
-                            articleId= {id}
-                        >
-                            <div className="flex p-6 items-center gap-1">
-                                <h4 className="font-semibold text-base flex-1">Comments</h4>
-                                <SortByButton
-                                    priority="popular"
-                                    activeView={
-                                        <div className="bg-black py-1 px-2 rounded-md text-white text-xs">
-                                            Popular
-                                        </div>
-                                    }
-                                    nonActiveView={
-                                        <div className="bg-gray-200 py-1 px-2 rounded-md text-xs">Popular</div>
-                                    }
-                                />
-                                <SortByButton
-                                    priority="newest"
-                                    activeView={
-                                        <div className="bg-black py-1 px-2 rounded-md text-white text-xs">
-                                            Newest
-                                        </div>
-                                    }
-                                    nonActiveView={
-                                        <div className="bg-gray-200 py-1 px-2 rounded-md text-xs">Newest</div>
-                                    }
-                                />
-                            </div>
-                            <div className="flex-1 flex flex-col overflow-hidden">
-                                <ScrollArea className="flex-1 px-4">
-                                    <CommentsFeed />
-                                    <div className="w-full h-4" />
-                                </ScrollArea>
-                                <div className="border-y p-4">
-                                    <SocialActionsBar />
-                                </div>
-                                <div>
-                                    <NewCommentForm />
-                                </div>
-                            </div>
-                        </ReplykeSocialProvider>
-                    </MantineProvider> */}
-                    {/* <BlogCommentSection 
-                        apiBaseUrl="http://localhost:3000" 
-                        articleId={id}
-                        callbacks={loginClickCallback(), commentAuthorClickCallback(authorId), currentUserClickCallback() }
-                        currentUser={
-                            user
-                              ? { _id: cookies.id }
-                              : undefined
-                          }
-                    /> */}
-                    </div>
-
-                    <div className='buttom-div'>
                         <div>
                             <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
                         </div>
                     </div>
-
                 </div>
 
-                <div className="bottom-page">
-                        <Rate allowHalf 
-                        defaultValue={rating.score}  
-                        autoFocus={false} 
-                        onChange={onFinish}
-                        />
-                        <div className='buttom-div'>
-                            <div>
-                                    <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
-                            </div>
-                        </div>
-                </div>
+                <BlogCommentSection
+                    apiBaseUrl="http://localhost:443"
+                    articleId={id}
+                    callbacks={{ loginClickCallback: () => null }}
+                    currentUser={user}
+                />
 
             </div>
 
