@@ -25,10 +25,11 @@ const customizeRequiredMark = (label, { required }) => (
 const PublicarReview = () => {
 
     const [cookies, setCookie] = useCookies(['userToken']);
+    const [selectData ,setSelectData] = useState([])
  
     const navigate = useNavigate();
 
-/*     function getFavorites() {
+    function getFavorites() {
         axios.get(process.env.REACT_APP_API_URL + 'favorites/alluser/'  + cookies.id)
         .then((response) => {
             const FavoritesRes = response.data
@@ -39,20 +40,20 @@ const PublicarReview = () => {
                 }
             })
             setSelectData(favData)
-            setFavoritesData(FavoritesRes)
+            //setFavoritesData(FavoritesRes)
         })
         .catch((error) => {
             console.log(error)
         });
-    } */
+    }
 
     const onFinish = (values) => {
             const reviewPost = {
                 title_post: values.title_post,
                 review_post: values.review_post,
-                id_recipe_review: 0,
+                id_recipe_review: values.favorito,
             }
-    
+        
             axios.post(process.env.REACT_APP_API_URL + 'reviewPost/', reviewPost)
                 .then(function response(response) {
                     notification.success({
@@ -67,7 +68,7 @@ const PublicarReview = () => {
     }
 
     useEffect(() => {
-        
+        getFavorites()
     }, []);
 
     const Salir = () => {
@@ -128,17 +129,14 @@ const PublicarReview = () => {
                             type="flex" justify="center" align="middle"
 
                             label="Rellenar con lista de recetas agregadas a favoritos"
-                            name="type_recipe"
-                            normalize={value => (value || '').toUpperCase()}
-                            rules={[{ required: false, message: 'Por favor introduce un tipo de receta.' }]}
+                            name="favorito"
+                            rules={[{ required: true, message: 'Campo requerido'}]}
                         >
                             <Select
-                                disabled={true}
+                                disabled={false}
                                 showSearch
+                                options={selectData}
                             >
-                                <Select.Option value="Comida">Comida</Select.Option>
-                                <Select.Option value="Bebida">Bebida</Select.Option>
-                                <Select.Option value="Postre">Postre</Select.Option>
                             </Select>
                         </Form.Item>
                     </div>
