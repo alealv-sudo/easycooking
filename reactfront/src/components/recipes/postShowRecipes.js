@@ -17,22 +17,15 @@ import {
 } from 'antd';
 
 import {
-    ReplykeSocialProvider,
-    CommentsFeed,
-    NewCommentForm,
-    SocialActionsBar,
-    SortByButton,
-  } from "replyke";
-
-
-import { BlogCommentSection } from "replyke";
+    BlogCommentSection,
+} from "replyke";
 
 import './recipePost.css';
 
 const PostShowRecipes = () => {
 
     const { id } = useParams();
-
+    
     const [cookies, setCookie] = useCookies(['userToken']);
     const [isLoading, setLoading] = useState(true);
     const [UserData, setUserData] = useState({
@@ -40,16 +33,25 @@ const PostShowRecipes = () => {
         name: cookies.user
     })
 
+    const [idRecipeComments, setIdRecipeComments] = useState(0)
+
     const [recipe, setRecipe] = useState('');
-    const [ingredientList,setIngredientList] = useState([]);
-    const [rating, setRating] = useState({score: 2.5});
-    const [isEmpty, setIsEmpty] = useState(true); 
+    const [ingredientList, setIngredientList] = useState([]);
+    const [rating, setRating] = useState({ score: 2.5 });
+    const [isEmpty, setIsEmpty] = useState(true);
 
     const [imgFileList, setFileList] = useState([]);
     const [state, setState] = useState({
         fileList: [],
         uploading: false,
     });
+
+    const idUserToComment = cookies.id
+    const nameUserToComment = cookies.user
+    const user = {
+        _id: idUserToComment,
+        name: nameUserToComment
+    }
 
     const { fileList } = state;
 
@@ -58,10 +60,11 @@ const PostShowRecipes = () => {
     function getRecipe() {
         axios.get(process.env.REACT_APP_API_URL + 'post/' + id,
         ).then((response) => {
-            const recipeData = response.data;            
+            const recipeData = response.data;   
+            const idRecipe = "" + recipeData.id + ""         
             getScore(recipeData.id)
-            setRecipe(recipeData)
-            console.log("data", recipeData);
+            setRecipe(recipeData) 
+            setIdRecipeComments(idRecipe)
             setIngredientList(recipeData.Ingredients)
             DownloadFile(recipeData.image_recipe)
         })
@@ -199,7 +202,6 @@ const PostShowRecipes = () => {
 
             <div className="all-page">
                 <div className='div-general-recipe-post'>
-                    
                     <Form
                         layout="vertical"
                         className='div-form-general-recipe-post'
@@ -231,11 +233,11 @@ const PostShowRecipes = () => {
                                     listType="picture-card"
                                     disabled={true}
                                     fileList={imgFileList}
-                                    showUploadList={{showRemoveIcon:false}}
+                                    showUploadList={{ showRemoveIcon: false }}
                                     onPreview={onPreview}
-                                    //beforeUpload={() => false} // Evita la carga automática de la imagen
+                                //beforeUpload={() => false} // Evita la carga automática de la imagen
                                 >
-                                {fileList.length < 1 && '+ Upload'}
+                                    {fileList.length < 1 && '+ Upload'}
 
                                 </Upload>
 
@@ -349,17 +351,17 @@ const PostShowRecipes = () => {
                         <label className="label-ingedient">Ingredientes</label>
 
                         <div type="flex" justify="center" align="middle">
-                        <Form.Item
-                            name="ingredients"
-                        >
-                            <List
-                            bordered
-                            size="small"
-                            dataSource={ingredientList}
-                            renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
-                            />
-                        </Form.Item>
-                        </div>    
+                            <Form.Item
+                                name="ingredients"
+                            >
+                                <List
+                                    bordered
+                                    size="small"
+                                    dataSource={ingredientList}
+                                    renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
+                                />
+                            </Form.Item>
+                        </div>
 
                         {/* Input Metodo de Preparacion */}
                         <Form.Item
@@ -429,29 +431,28 @@ const PostShowRecipes = () => {
 
                 </div>
 
-                <BlogCommentSection 
-                apiBaseUrl="http://localhost:4000" 
-                articleId="r" 
-                callbacks={ {loginClickCallback: () => null}}
-                currentUser={UserData}
-
-                />
-
                 <div className="bottom-page">
-                        <Rate allowHalf 
-                        defaultValue={rating.score}  
-                        autoFocus={false} 
+                    <Rate allowHalf
+                        defaultValue={rating.score}
+                        autoFocus={false}
                         onChange={onFinish}
-                        />
-                        <div className='buttom-div'>
-                            <div>
-                                    <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
-                            </div>
+                    />
+
+                    <div className='buttom-div'>
+                        <div>
+                            <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
                         </div>
+                    </div>
                 </div>
 
-
-
+            <div className="div-comments-page">
+                <BlogCommentSection
+                    apiBaseUrl="http://localhost:443"
+                    articleId={idRecipeComments}
+                    callbacks={{ loginClickCallback: () => null }}
+                    currentUser={user}
+                />
+            </div>
             </div>
 
         </React.Fragment>

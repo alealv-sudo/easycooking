@@ -25,6 +25,12 @@
   padding-top: 10px;
 }
 
+.div-comments-page {
+  width: 70%;
+  background-color: #fff;
+  padding: 10px;
+}
+
 .post-card-recipe.ant-card-bordered{
   width: 100%;
 }
