@@ -28,6 +28,24 @@ const PublicarReview = () => {
  
     const navigate = useNavigate();
 
+/*     function getFavorites() {
+        axios.get(process.env.REACT_APP_API_URL + 'favorites/alluser/'  + cookies.id)
+        .then((response) => {
+            const FavoritesRes = response.data
+            const favData = FavoritesRes.map((e) => {
+                return{
+                    value: e.recipe.id,
+                    label: e.recipe.recipe_name
+                }
+            })
+            setSelectData(favData)
+            setFavoritesData(FavoritesRes)
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    } */
+
     const onFinish = (values) => {
             const reviewPost = {
                 title_post: values.title_post,
