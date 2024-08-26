@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import {CaretLeftOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+
 import { useParams } from 'react-router-dom';
 
 import {
@@ -12,11 +13,10 @@ import {
     Input,
     Space,
     Spin,
-    Select,
     Button,
-    notification,
-    message,
+    Card,
     Rate,
+    List,
 } from 'antd';
 
 import {
@@ -39,8 +39,10 @@ const PostShowRecipes = () => {
     const [isLoading, setLoading] = useState(true);
 
     const [recipe, setRecipe] = useState('');
-    const [rating, setRating] = useState({ score: 2.5 });
-    const [isEmpty, setIsEmpty] = useState(true);
+
+    const [ingredientList,setIngredientList] = useState([]);
+    const [rating, setRating] = useState({score: 2.5});
+    const [isEmpty, setIsEmpty] = useState(true); 
 
     const [imgFileList, setFileList] = useState([]);
     const [state, setState] = useState({
@@ -58,6 +60,8 @@ const PostShowRecipes = () => {
             const recipeData = response.data;
             getScore(recipeData.id)
             setRecipe(recipeData)
+            console.log("data", recipeData);
+            setIngredientList(recipeData.Ingredients)
             DownloadFile(recipeData.image_recipe)
         })
             .catch((error) => {
@@ -199,6 +203,7 @@ const PostShowRecipes = () => {
 
             <div className="all-page">
                 <div className='div-general-recipe-post'>
+                  
                     <Form
                         layout="vertical"
                         className='div-form-general-recipe-post'
@@ -230,11 +235,12 @@ const PostShowRecipes = () => {
                                     listType="picture-card"
                                     disabled={true}
                                     fileList={imgFileList}
-                                    showUploadList={{ showRemoveIcon: false }}
+
+                                    showUploadList={{showRemoveIcon:false}}
                                     onPreview={onPreview}
-                                //beforeUpload={() => false} // Evita la carga automática de la imagen
+                                    //beforeUpload={() => false} // Evita la carga automática de la imagen
                                 >
-                                    {fileList.length < 1 && '+ Upload'}
+                                {fileList.length < 1 && '+ Upload'}
 
                                 </Upload>
 
@@ -298,9 +304,10 @@ const PostShowRecipes = () => {
                                         disabled={true}
                                     />
                                     {/* <Checkbox type="checkbox" label="N/A" name="N_A_Temp" onChange={handleCheckboxChange}
-                            >
-                                N/A
-                            </Checkbox> */}
+
+                                    >
+                                        N/A
+                                    </Checkbox> */}
 
 
                                 </Form.Item>
@@ -322,9 +329,10 @@ const PostShowRecipes = () => {
                                         disabled={true}
                                     />
                                     {/* <Checkbox type="checkbox" label="N/A" name="N_A_Calories" onChange={handleCheckboxChange}
-                            >
-                                N/A
-                            </Checkbox> */}
+
+                                    >
+                                        N/A
+                                    </Checkbox> */}
 
                                 </Form.Item>
                             </Space>
@@ -336,6 +344,37 @@ const PostShowRecipes = () => {
                             label="Descripcion"
                             name="description"
                             normalize={value => (value || '')}
+                        >
+                            <Input.TextArea
+                                className="colors-bg"
+                                autoSize={{ minRows: 1, maxRows: 6 }}
+                                disabled={true}
+                            />
+                        </Form.Item>
+
+                        {/* Input Ingredientes */}
+                        <label className="label-ingedient">Ingredientes</label>
+
+                        <div type="flex" justify="center" align="middle">
+                        <Form.Item
+                            name="ingredients"
+                        >
+                            <List
+                            bordered
+                            size="small"
+                            dataSource={ingredientList}
+                            renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
+                            />
+                        </Form.Item>
+                        </div>    
+
+                        {/* Input Metodo de Preparacion */}
+                        <Form.Item
+                            className="half-width-slot"
+                            label="Preparacion"
+                            name="preparation"
+                            normalize={value => (value || '')}
+                            rules={[{ required: true, message: 'Por favor introduce la preparacion de la receta.' }]}
                         >
                             <Input.TextArea
                                 className="colors-bg"
@@ -515,8 +554,24 @@ const PostShowRecipes = () => {
                             <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
                         </div>
                     </div>
+
                 </div>
+
+                <div className="bottom-page">
+                        <Rate allowHalf 
+                        defaultValue={rating.score}  
+                        autoFocus={false} 
+                        onChange={onFinish}
+                        />
+                        <div className='buttom-div'>
+                            <div>
+                                    <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
+                            </div>
+                        </div>
+                </div>
+
             </div>
+
         </React.Fragment>
     );
 
