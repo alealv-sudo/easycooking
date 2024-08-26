@@ -25,6 +25,7 @@ import favoriteRoutes from './routes/favoriteRoutes.js'
 import marketListRoutes from './routes/marketListRoutes.js'
 import listItemRoutes from './routes/listItemRoutes.js'
 import listCalendarRoutes from './routes/listCalendarRoutes.js'
+import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
 const app = express()
 
@@ -50,6 +51,7 @@ app.use('/favorites', favoriteRoutes)
 app.use('/marketList', marketListRoutes)
 app.use('/listItems', listItemRoutes)
 app.use('/calendar', listCalendarRoutes)
+app.use('/recipeComments', recipeCommentsRoutes)
 
 //GOOGLE
 app.use("/google", googleRoutes)

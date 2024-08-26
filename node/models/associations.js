@@ -2,7 +2,7 @@ import PostModel from "./PostModel.js"
 import FavoriteRecipeModel from "./FavoriteRecipeModel.js"
 import IngredientsModel from "./IngredientsModel.js";
 import RatingsModel from "./RatingsModel.js";
-import ProfileModel  from "./ProfileModel.js";
+import ProfileModel from "./ProfileModel.js";
 import GeneralPostModel from "./GeneralPostModel.js"
 import UserModel from "./UserModel.js";
 import MarketListsModel from "./MarketListModel.js";
@@ -10,6 +10,8 @@ import ListItemModel from './ListitemModel.js'
 import ListCalendarModel from "./ListCalendarModel.js";
 import FollowerModels from "./FollowerModel.js";
 import FollowedModels from "./FollowedModel.js";
+import RecipeComments from "./RecipeCommentsModel.js"
+import RecipeSubComments from "./RecipeSubCommentsModel.js"
 
 
 /* asociación uno a muchos (post(recetas)-Ingredientes) */
@@ -42,7 +44,7 @@ UserModel.hasOne(ProfileModel, {
     sourceKey: 'id'
 })
 
-ProfileModel.belongsTo(UserModel ,{
+ProfileModel.belongsTo(UserModel, {
     foreignKey: 'UserModelId',
     targetKey: 'id'
 })
@@ -102,9 +104,9 @@ PostModel.hasOne(FavoriteRecipeModel, {
     sourceKey: 'id'
 })
 
-FavoriteRecipeModel.belongsTo(PostModel,{
-foreignKey: 'recipeId',
-sourceKey: 'id'
+FavoriteRecipeModel.belongsTo(PostModel, {
+    foreignKey: 'recipeId',
+    sourceKey: 'id'
 })
 
 /* asociación uno a muchos (usuario-marketlist) */
@@ -150,9 +152,9 @@ PostModel.hasOne(ListCalendarModel, {
     sourceKey: 'id'
 })
 
-ListCalendarModel.belongsTo(PostModel,{
-foreignKey: 'recipeId',
-sourceKey: 'id'
+ListCalendarModel.belongsTo(PostModel, {
+    foreignKey: 'recipeId',
+    sourceKey: 'id'
 })
 
 /* asociación uno a muchos (usuario-follower) */
@@ -174,9 +176,9 @@ ProfileModel.hasOne(FollowerModels, {
     sourceKey: 'id'
 })
 
-FollowerModels.belongsTo(ProfileModel,{
-foreignKey: 'followerId',
-sourceKey: 'id'
+FollowerModels.belongsTo(ProfileModel, {
+    foreignKey: 'followerId',
+    sourceKey: 'id'
 })
 
 /* asociación uno a muchos (usuario-followed) */
@@ -198,12 +200,21 @@ ProfileModel.hasOne(FollowedModels, {
     sourceKey: 'id'
 })
 
-FollowedModels.belongsTo(ProfileModel,{
-foreignKey: 'followedId',
-sourceKey: 'id'
+FollowedModels.belongsTo(ProfileModel, {
+    foreignKey: 'followedId',
+    sourceKey: 'id'
 })
 
+/* asociacion uno a muchos (Comments-SubComments) */
+RecipeComments.hasMany(RecipeSubComments, {
+    foreignKey: 'recipeCommentId',
+    sourceKey: 'id',
+})
 
+RecipeSubComments.belongsTo(RecipeComments, {
+    foreignKey: 'recipeCommentId',
+    sourceKey: 'id'
+})
 
 
 
