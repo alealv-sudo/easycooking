@@ -202,6 +202,7 @@ const PublicarPost = () => {
             <Typography.Title level={2}>Nueva Publicacion</Typography.Title>
 
             {/* Form Receta */}
+        <div className='all-page'>
             <div className='div-general-post'>
                 <Form
                     className='div-form-general-post'
@@ -283,6 +284,7 @@ const PublicarPost = () => {
 
                 </Form>
             </div>
+        </div>
         </React.Fragment>
     );
 

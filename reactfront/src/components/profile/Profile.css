@@ -3,8 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 1024px;
-    width: 100%;
+    width: 70%;
 }
 
 img.profile-img {
@@ -75,20 +74,30 @@ img.profile-img {
 
 /* Estilo Tabs */
 
+.general-page{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .profile-div {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 70%;
   margin-bottom: 5px;
   padding: 10px;
+}
+
+.profile-tabs{
+  width: 100%;
 }
 
 /*background image*/
 .profile-background {
     width: 100%;
-    height: 350px;
+    height: 300px;
 }
 
 .profile-img {
@@ -99,7 +108,7 @@ img.profile-img {
   justify-content: center;
 }
 
-img.profile-img-br {
+.profile-img-br {
   width: 130px;
   height: 130px;
   border-radius: 50%;

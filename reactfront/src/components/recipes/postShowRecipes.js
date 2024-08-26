@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { MinusCircleOutlined ,PlusOutlined } from '@ant-design/icons';
+import { CaretLeftOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -12,11 +12,10 @@ import {
     Input,
     Space,
     Spin,
-    Select,
     Button,
-    notification,
-    message,
+    Card,
     Rate,
+    List,
 } from 'antd';
 
 import './recipePost.css';
@@ -29,6 +28,7 @@ const PostShowRecipes = () => {
     const [isLoading, setLoading] = useState(true);
 
     const [recipe, setRecipe] = useState('');
+    const [ingredientList,setIngredientList] = useState([]);
     const [rating, setRating] = useState({score: 2.5});
     const [isEmpty, setIsEmpty] = useState(true); 
 
@@ -48,6 +48,8 @@ const PostShowRecipes = () => {
             const recipeData = response.data;            
             getScore(recipeData.id)
             setRecipe(recipeData)
+            console.log("data", recipeData);
+            setIngredientList(recipeData.Ingredients)
             DownloadFile(recipeData.image_recipe)
         })
             .catch((error) => {
@@ -183,270 +185,252 @@ const PostShowRecipes = () => {
             {/* Form Receta */}
 
             <div className="all-page">
-            <div className='div-general-recipe-post'>
-            <Form
-                layout="vertical"
-                className='div-form-general-recipe-post'
-                requiredMark={false}
-                name="recipes"
-                initialValues={{
-                    id: recipe.id,
-                    ingredients: recipe.Ingredients,
-                    recipe_name: recipe.recipe_name,
-                    preparation_time: recipe.preparation_time,
-                    temperature: recipe.temperature,
-                    calories: recipe.calories,
-                    description: recipe.description,
-                    preparation: recipe.preparation,
-                    type_recipe: recipe.type_recipe,
-                    originary: recipe.originary,
-                    tips: recipe.tips,
-                }}
-            >
-                {/* Input imagen */}
-                <div type="flex" justify="center" align="middle">
-                    <Form.Item
-                        className="customSizedUploadRP"
-                        justify="center" align="middle"
-                        label="Imagen"
-                        name="image_recipe"
+                <div className='div-general-recipe-post'>
+                    
+                    <Form
+                        layout="vertical"
+                        className='div-form-general-recipe-post'
+                        requiredMark={false}
+                        name="recipes"
+                        initialValues={{
+                            id: recipe.id,
+                            ingredients: recipe.Ingredients,
+                            recipe_name: recipe.recipe_name,
+                            preparation_time: recipe.preparation_time,
+                            temperature: recipe.temperature,
+                            calories: recipe.calories,
+                            description: recipe.description,
+                            preparation: recipe.preparation,
+                            type_recipe: recipe.type_recipe,
+                            originary: recipe.originary,
+                            tips: recipe.tips,
+                        }}
                     >
-                        <Upload
-                            listType="picture-card"
-                            disabled={true}
-                            fileList={imgFileList}
-                            showUploadList={{showRemoveIcon:false}}
-                            onPreview={onPreview}
-                            //beforeUpload={() => false} // Evita la carga automática de la imagen
-                        >
-                        {fileList.length < 1 && '+ Upload'}
-
-                        </Upload>
-
-                    </Form.Item>
-                </div>
-                
-                {/* Input Titulo */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Titulo"
-                    name="recipe_name"
-                    normalize={value => (value || '').toUpperCase()}
-                    rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
-                >
-                    <Input
-                        disabled={true}
-                    />
-                </Form.Item>
-
-
-                <div type="flex" justify="center" align="middle">
-                    {/* Input Tiempo de Preparacion */}
-                    <Space className='btnBlueRP'>
-                        <Form.Item
-                            className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-
-
-                            label="Tiempo de preparacion"
-                            name="preparation_time"
-                            normalize={value => (value || '')}
-                            rules={[{ required: true, message: 'Por favor introduce el tiempo de preparacion de la receta.' }]}
-                        >
-                            <Input
-                                placeholder="Tinempo en Minutos"
-                                type="number"
-                                min="0" step="15"
-                                disabled={true}
-                            />
-
-                        </Form.Item>
-                    </Space>
-                    {/* Input Temperatura de Coccion */}
-                    <Space className='btnBlueRP'>
-                        <Form.Item
-                            className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-
-                            label="Temp Preparacion"
-                            name="temperature"
-                            normalize={value => (value || '')}
-                            rules={[{ required: false, message: 'Por favor introduce el tiempo de preparacion de la receta.' }]}
-                        >
-
-                            <Input
-                                placeholder="Temperatura en °C"
-                                type="number"
-                                min="" step="10"
-
-                                // disabled={isDisabledTemp}
-                                disabled={true}
-                            />
-                            {/* <Checkbox type="checkbox" label="N/A" name="N_A_Temp" onChange={handleCheckboxChange}
+                        {/* Input imagen */}
+                        <div type="flex" justify="center" align="middle">
+                            <Form.Item
+                                className="customSizedUploadRP"
+                                justify="center" align="middle"
+                                label="Imagen"
+                                name="image_recipe"
                             >
-                                N/A
-                            </Checkbox> */}
+                                <Upload
+                                    listType="picture-card"
+                                    disabled={true}
+                                    fileList={imgFileList}
+                                    showUploadList={{showRemoveIcon:false}}
+                                    onPreview={onPreview}
+                                    //beforeUpload={() => false} // Evita la carga automática de la imagen
+                                >
+                                {fileList.length < 1 && '+ Upload'}
 
+                                </Upload>
 
-                        </Form.Item>
-                    </Space>
-                    {/* Input Calorias */}
-                    <Space>
-                        <Form.Item
-                            className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-                            label="Calorias"
-                            name="calories"
-                            normalize={value => (value || '')}
-                        >
-                            <Input
-                                placeholder="Cantidad de Calorias"
-                                type="number"
-                                min="0"
-                                // disabled={isDisabledCalories}
-                                disabled={true}
-                            />
-                            {/* <Checkbox type="checkbox" label="N/A" name="N_A_Calories" onChange={handleCheckboxChange}
-                            >
-                                N/A
-                            </Checkbox> */}
-
-                        </Form.Item>
-                    </Space>
-                </div>
-
-                {/* Input Descripcion */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Descripcion"
-                    name="description"
-                    normalize={value => (value || '')}
-                >
-                    <Input.TextArea
-                        className="colors-bg"
-                        autoSize={{ minRows: 1, maxRows: 6 }}
-                        disabled={true}
-                    />
-                </Form.Item>
-
-                 {/* Input Ingredientes */}
-                 <label className="label-ingedient">Ingredientes</label>
-                    
-                <div type="flex" justify="center" align="middle">
-                <Form.List 
-                name="ingredients"
-                >
-                {(fields) => (
-                    <>
-                    {fields.map(({ key, name, ...restField } ) => (
-                        <div
-                        key={key}
-                        className='item-form-list'
-                        >
-                        <Form.Item
-                            style={{
-                                width: '100%',
-                            }}
-                            {...restField}
-                            name={[name, 'ingredient']}
-                            rules={[
-                            {
-                                required: true,
-                                message: 'Missing ingredient',
-                            },
-                            ]}
-                        >
-                            <Input disabled={true}  placeholder="ingredient" />
-                        </Form.Item>
+                            </Form.Item>
                         </div>
-                    ))}               
-                    </>       
-                )}
-                </Form.List>
-                </div>
-
-                {/* Input Metodo de Preparacion */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Preparacion"
-                    name="preparation"
-                    normalize={value => (value || '')}
-                    rules={[{ required: true, message: 'Por favor introduce la preparacion de la receta.' }]}
-                >
-                    <Input.TextArea
-                        className="colors-bg"
-                        autoSize={{ minRows: 1, maxRows: 6 }}
-                        disabled={true}
-                    />
-                </Form.Item>
-
-                <div type="flex" justify="center" align="middle">
-                    <Space className='btnBlueRP'>
-                        {/* Input Tipo */}
+                        
+                        {/* Input Titulo */}
                         <Form.Item
                             className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-                            label="Tipo de receta"
-                            name="type_recipe"
+                            label="Titulo"
+                            name="recipe_name"
                             normalize={value => (value || '').toUpperCase()}
+                            rules={[{ required: true, message: 'Por favor introduce el numbre de la receta.' }]}
                         >
-                            <Input disabled={true} ></Input>
+                            <Input
+                                disabled={true}
+                            />
                         </Form.Item>
-                    </Space>
 
-                    <Space>
-                        {/* Input Origen */}
+
+                        <div type="flex" justify="center" align="middle">
+                            {/* Input Tiempo de Preparacion */}
+                            <Space className='btnBlueRP'>
+                                <Form.Item
+                                    className="half-width-slot"
+                                    type="flex" justify="center" align="middle"
+
+
+                                    label="Tiempo de preparacion"
+                                    name="preparation_time"
+                                    normalize={value => (value || '')}
+                                    rules={[{ required: true, message: 'Por favor introduce el tiempo de preparacion de la receta.' }]}
+                                >
+                                    <Input
+                                        placeholder="Tinempo en Minutos"
+                                        type="number"
+                                        min="0" step="15"
+                                        disabled={true}
+                                    />
+
+                                </Form.Item>
+                            </Space>
+                            {/* Input Temperatura de Coccion */}
+                            <Space className='btnBlueRP'>
+                                <Form.Item
+                                    className="half-width-slot"
+                                    type="flex" justify="center" align="middle"
+
+                                    label="Temp Preparacion"
+                                    name="temperature"
+                                    normalize={value => (value || '')}
+                                    rules={[{ required: false, message: 'Por favor introduce el tiempo de preparacion de la receta.' }]}
+                                >
+
+                                    <Input
+                                        placeholder="Temperatura en °C"
+                                        type="number"
+                                        min="" step="10"
+
+                                        // disabled={isDisabledTemp}
+                                        disabled={true}
+                                    />
+                                    {/* <Checkbox type="checkbox" label="N/A" name="N_A_Temp" onChange={handleCheckboxChange}
+                                    >
+                                        N/A
+                                    </Checkbox> */}
+
+
+                                </Form.Item>
+                            </Space>
+                            {/* Input Calorias */}
+                            <Space>
+                                <Form.Item
+                                    className="half-width-slot"
+                                    type="flex" justify="center" align="middle"
+                                    label="Calorias"
+                                    name="calories"
+                                    normalize={value => (value || '')}
+                                >
+                                    <Input
+                                        placeholder="Cantidad de Calorias"
+                                        type="number"
+                                        min="0"
+                                        // disabled={isDisabledCalories}
+                                        disabled={true}
+                                    />
+                                    {/* <Checkbox type="checkbox" label="N/A" name="N_A_Calories" onChange={handleCheckboxChange}
+                                    >
+                                        N/A
+                                    </Checkbox> */}
+
+                                </Form.Item>
+                            </Space>
+                        </div>
+
+                        {/* Input Descripcion */}
                         <Form.Item
                             className="half-width-slot"
-                            type="flex" justify="center" align="middle"
-                            label="País"
-                            name="originary"
-                            normalize={value => (value || '').toUpperCase()}
+                            label="Descripcion"
+                            name="description"
+                            normalize={value => (value || '')}
                         >
-                            <Input disabled={true} ></Input>
+                            <Input.TextArea
+                                className="colors-bg"
+                                autoSize={{ minRows: 1, maxRows: 6 }}
+                                disabled={true}
+                            />
                         </Form.Item>
-                    </Space>
+
+                        {/* Input Ingredientes */}
+                        <label className="label-ingedient">Ingredientes</label>
+
+                        <div type="flex" justify="center" align="middle">
+                        <Form.Item
+                            name="ingredients"
+                        >
+                            <List
+                            bordered
+                            size="small"
+                            dataSource={ingredientList}
+                            renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
+                            />
+                        </Form.Item>
+                        </div>    
+
+                        {/* Input Metodo de Preparacion */}
+                        <Form.Item
+                            className="half-width-slot"
+                            label="Preparacion"
+                            name="preparation"
+                            normalize={value => (value || '')}
+                            rules={[{ required: true, message: 'Por favor introduce la preparacion de la receta.' }]}
+                        >
+                            <Input.TextArea
+                                className="colors-bg"
+                                autoSize={{ minRows: 1, maxRows: 6 }}
+                                disabled={true}
+                            />
+                        </Form.Item>
+
+                        <div type="flex" justify="center" align="middle">
+                            <Space className='btnBlueRP'>
+                                {/* Input Tipo */}
+                                <Form.Item
+                                    className="half-width-slot"
+                                    type="flex" justify="center" align="middle"
+                                    label="Tipo de receta"
+                                    name="type_recipe"
+                                    normalize={value => (value || '').toUpperCase()}
+                                >
+                                    <Input disabled={true} ></Input>
+                                </Form.Item>
+                            </Space>
+
+                            <Space>
+                                {/* Input Origen */}
+                                <Form.Item
+                                    className="half-width-slot"
+                                    type="flex" justify="center" align="middle"
+                                    label="País"
+                                    name="originary"
+                                    normalize={value => (value || '').toUpperCase()}
+                                >
+                                    <Input disabled={true} ></Input>
+                                </Form.Item>
+                            </Space>
+                        </div>
+
+                        {/* Input Tips y Notas */}
+                        <Form.Item
+                            className="half-width-slot"
+                            label="Tips & Notes"
+                            name="tips"
+                            normalize={value => (value || '')}
+                        >
+                            <Input.TextArea
+                                className="colors-bg"
+                                autoSize={{ minRows: 1, maxRows: 6 }}
+                                disabled={true}
+                            />
+                        </Form.Item>
+
+                        {/* Boton Submit */}
+                        <Form.Item
+                            className="my-form-container"
+                        >
+                            
+                        </Form.Item>
+
+                    </Form>
+
                 </div>
 
-                {/* Input Tips y Notas */}
-                <Form.Item
-                    className="half-width-slot"
-                    label="Tips & Notes"
-                    name="tips"
-                    normalize={value => (value || '')}
-                >
-                    <Input.TextArea
-                        className="colors-bg"
-                        autoSize={{ minRows: 1, maxRows: 6 }}
-                        disabled={true}
-                    />
-                </Form.Item>
-
-                {/* Boton Submit */}
-                <Form.Item
-                    className="my-form-container"
-                >
-                    
-                </Form.Item>
-
-            </Form>
-            <div>
-                <TextArea placeholder="textarea with clear icon" allowClear onChange={onChangeText} />
-            </div>
-        </div>
-            <div className="bottom-page">
-                <Rate allowHalf 
-                defaultValue={rating.score}  
-                autoFocus={false} 
-                onChange={onFinish}
-                />
-                <div className='buttom-div'>
-                    <div>
-                            <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
-                    </div>
+                <div className="bottom-page">
+                        <Rate allowHalf 
+                        defaultValue={rating.score}  
+                        autoFocus={false} 
+                        onChange={onFinish}
+                        />
+                        <div className='buttom-div'>
+                            <div>
+                                    <Button danger type="primary" onClick={Salir} shape="round" > Salir </Button>
+                            </div>
+                        </div>
                 </div>
+
             </div>
-        </div>
+
         </React.Fragment>
     );
 

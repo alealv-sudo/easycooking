@@ -83,6 +83,7 @@ const EditarReview = () => {
         <React.Fragment>
             <Typography.Title level={2}>Editar Reseña</Typography.Title>
 
+        <div className='all-page'>
             {/* Form Receta */}
             <div className='div-general-post'>
                 <Form
@@ -167,6 +168,7 @@ const EditarReview = () => {
 
                 </Form>
             </div>
+        </div>
         </React.Fragment>
     );
 

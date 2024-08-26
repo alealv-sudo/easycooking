@@ -338,6 +338,7 @@ const UpdateRecipes = () => {
             <Typography.Title level={2}>Publicar</Typography.Title>
             {/* Form Receta */}
 
+        <div className="all-page">
             <div className='div-general-recipe-post'>
             <Form
                 layout="vertical"
@@ -640,6 +641,7 @@ const UpdateRecipes = () => {
                 </Form.Item>
 
             </Form>
+        </div>
         </div>
         </React.Fragment>
     );

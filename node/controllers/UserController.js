@@ -1,5 +1,7 @@
 import UserModel from "../models/UserModel.js";
 import Profile from "../models/ProfileModel.js";
+import Follower from "../models/FollowerModel.js";
+import Followed from "../models/FollowedModel.js";
 
 const UserCTRL = {}
 
@@ -24,6 +26,14 @@ UserCTRL.getUser = async (req, res) => {
         include: [{
             model: Profile,
             as: 'profile'
+            },
+            {
+            model: Follower,
+            include: [{model: Profile}]
+            },
+            {
+            model: Followed, 
+            include: [{model: Profile}]
             }
         ]
        })
