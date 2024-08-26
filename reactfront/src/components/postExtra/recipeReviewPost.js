@@ -60,6 +60,7 @@ const PublicarReview = () => {
         <React.Fragment>
             <Typography.Title level={2}>Nueva Reseña</Typography.Title>
 
+        <div className='all-page'>
             {/* Form Receta */}
             <div className='div-general-post'>
                 <Form
@@ -140,6 +141,7 @@ const PublicarReview = () => {
 
                 </Form>
             </div>
+        </div>
         </React.Fragment>
     );
 

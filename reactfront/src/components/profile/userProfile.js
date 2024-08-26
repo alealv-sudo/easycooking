@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import countriesData from '../recipes/countries.json';
+import FollowersList from './followersList.js'
 
 import {
     Typography,
@@ -18,7 +19,8 @@ import {
     notification,
     Upload,
     message,
-    Spin
+    Spin,
+    Card
 } from 'antd';
 
 import ImgCrop from 'antd-img-crop';
@@ -500,6 +502,31 @@ export default function Profile() {
     const changeImgBackgroundFalse = () => {
         setIsUpBackground(false)
     }
+    
+    /* data tabs */
+
+    const data = [
+        {
+            label: 'Publicaciones',
+            key: 'Publicaciones',
+            children: 'hola',  
+        },
+        {
+            label: 'Favoritos',
+            key: 'Favoritos',
+            children:'hola',  
+        },
+        {
+            label: 'Seguidos',
+            key: 'Seguidos',
+            children: <FollowersList/>,  
+        },
+        {
+            label: 'Seguidores',
+            key: 'Seguidores',
+            children: <FollowersList/>,  
+        },
+    ]
 
     /// Funciones extras
 
@@ -511,7 +538,10 @@ export default function Profile() {
     return (
         <React.Fragment>
             {/*Form Imagen */}
+            <div className='general-page'>
                 <div className="profile-div" >
+                <Card style={{width: '100%'}} >
+
                     <div className="profile-background">
                         <Image
                             width={'100%'}
@@ -521,233 +551,233 @@ export default function Profile() {
                                 //alt={user.name}
                                 fallback={placeholderBackground}
                         />
-                </div>
+                    </div>
 
-                <div className='profile-btn'>
-                    <div className="profile-img">
-                        <Image
-                        width={180}
-                        height={180}
+                    <div className='profile-btn'>
+                        <div className="profile-img">
+                            <Image
+                            width={180}
+                            height={180}
                             className="profile-img-br"
-                            //src={"https://drive.google.com/uc?export=view&id=" + user.profile_picture}
-                            //alt={user.name}
+                                //src={"https://drive.google.com/uc?export=view&id=" + user.profile_picture}
+                                //alt={user.name}
                             fallback={placeholderProfile}
-                        />
-                        {/* <div>
-                             <ImgCrop >
-                                <Upload showUploadList={false} {...props}> {/*onChange={handleUpload}> shape='round' grid={true} rotate={true}*//*}
-                                    <Button icon={<UploadOutlined />}>Cambiar foto de perfil</Button>
-                                </Upload>
-                            </ImgCrop> 
-                        </div> */}
-                        <Typography.Title level={5} strong>{profile.name} {profile.lastName}</Typography.Title>
-                    </div>
-
-                    {/*Modal y Formulario*/ }
-                    <div>
-                        <Button type="primary" onClick={showModal}>
-                            Editar perfil
-                        </Button>
-
-                        <Modal title="Editar perfil" 
-                        open={isModalOpen} footer={false} onCancel={handleCancel}
-                        width={"75%"}
-                        >
-                            <div type="flex" justify="center" align="middle" className='picture-profile-modal'>
-                                
-                                <div>
-                                    <Text strong>Imagen de Perfil</Text>
-                                    <Upload
-                                    
-                                        //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                                        className="customSizedUpload"
-                                        listType="picture-circle"
-                                        {...props}
-                                        showUploadList={{showPreviewIcon:false}}
-                                        fileList={imgFileList}
-                                        onChange={handleFileSubmit}
-                                        onPreview={false}
-                                        //beforeUpload={() => false} // Evita la carga automática de la imagen
-                                    >
-                                    {fileList.length < 1 && '+ Upload'}
+                            />
+                            {/* <div>
+                                <ImgCrop >
+                                    <Upload showUploadList={false} {...props}> {/*onChange={handleUpload}> shape='round' grid={true} rotate={true}*//*}
+                                        <Button icon={<UploadOutlined />}>Cambiar foto de perfil</Button>
                                     </Upload>
+                                </ImgCrop> 
+                            </div> */}
+                            <Typography.Title level={5} strong>{profile.name} {profile.lastName}</Typography.Title>
+                        </div>
 
-                                </div>
+                        {/*Modal y Formulario*/ }
+                        <div>
+                            <Button type="primary" onClick={showModal}>
+                                Editar perfil
+                            </Button>
 
-                                <div>
-                                    <Text strong>Fondo de Perfil</Text>
-                                    <Upload
-                                        //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                                        className="customSizedUploadBG"
-                                        listType="picture-card"
-                                        {...propsBG}
-                                        showUploadList={{showPreviewIcon:false}}
-                                        fileList={imgFileListBG}
-                                        onChange={handleFileSubmitBG}
-                                        onPreview={false}
-                                        //beforeUpload={() => false} // Evita la carga automática de la imagen
-                                    >
-                                    {fileListBG.length < 1 && '+ Upload'}
-                                    </Upload>
-                                </div>
-                                
-                            </div>
-
-                            {/*Componente Form*/}
-                            <Form
-                            className='full-width-slot-profile'
-                            layout="vertical"
-                            form={form}
-                            requiredMark={false}
-                            name="recipes"
-                            onFinish={onFinish}
-                            initialValues={{
-                                name: profile.name,
-                                lastName: profile.lastName,
-                                biografia: profile.biografia,
-                                ubicacion: profile.ubicacion,
-                                contacto: profile.contacto,
-                                sitioWeb: profile.sitioWeb,
-                                fechaDeNacimiento: profile.fechaDeNacimiento
-                            }}
-                        >
-                            
-                            {/* Input Nonmbre de usuario */}
-                            <Form.Item
-                                className="half-width-slot-profile"
-                                label="Nombre"
-                                name="name"
-                                normalize={value => (value || '').toUpperCase()}
-                                rules={[{ required: true, message: 'Por favor introduce el nombre del usuario.'}]}
+                            <Modal title="Editar perfil" 
+                            open={isModalOpen} footer={false} onCancel={handleCancel}
+                            width={"75%"}
                             >
-                                <Input
-                                    disabled={false}
-                                />
-                            </Form.Item>
-
-                            {/* Input Apelido */}
-                            <Form.Item
-                                className="half-width-slot-profile"
-                                label="Apellido"
-                                name="lastName"
-                                normalize={value => (value || '')}
-                                rules={[{ required: false, message: 'Campo obligatorio'}]}
-                            >
-                               <Input
-                                    disabled={false}
-                                />
-                            </Form.Item>
-
-                            {/* Biografia*/}
-                            <Form.Item
-                                className="half-width-slot-profile"
-                                style={{height: '10%'}}
-                                label="Biografia"
-                                name="biografia"
-                                normalize={value => (value || '')}
-                                rules={[{ required: false, message: 'Por favor introduce los ingredientes de la receta.' }]}
-                            >
-                                <Input.TextArea
-                                    showCount
-                                    maxLength={300}
-                                    placeholder="Biografia"
-                                    style={{height: '100%', resize: 'none'}}
-                                    disabled={false}
-                                />
-                            </Form.Item>
-
-                            {/* Input Metodo de Contacto/Email secundario */}
-                            <Form.Item
-                                className="half-width-slot-profile"
-                                label="Contacto"
-                                name="contacto"
-                                normalize={value => (value || '')}
-                                rules={[{ required: false, message: 'Por favor introduce la preparacion de la receta.' }]}
-                            >
-                                <Input
-                                    disabled={false}
-                                />
-                            </Form.Item>
-
-                            {/*  Sitio web */}
-                            <Form.Item
-                                className="half-width-slot-profile"
-                                label="Sitio Web"
-                                name="sitioWeb"
-                                normalize={value => (value || '')}
-                                rules={[{ required: false, message: 'Por favor introduce la preparacion de la receta.' }]}
-                            >
-                                <Input
-                                    disabled={false}
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                className="half-width-slot-profile"
-
-                                label="País de origen"
-                                name="ubicacion"
-                                normalize={value => (value || '').toUpperCase()}
-                                rules={[{ required: false, message: 'Por favor introduce un Lugar de origen de la receta.' }]}
-                                 >
-                                    <Select
-                                        disabled={false}
-                                        showSearch
-                                    >
-                                        {countries.map((country) => (
-                                            <Select.Option
-                                                key={country.code}
-                                                value={country.name}
-                                            >
-                                                {country.name}
-                                            </Select.Option>
-                                        ))}
-                                    </Select>
-                            </Form.Item>
-                            
-                            {/* Fecha de nacimineto */}
-                            <Form.Item
-                                className="half-width-slot-profile"
-                                label="fecha De Nacimiento"
-                                name="fechaDeNacimiento"
-                                
-                            >
-                                <DatePicker 
-                                    format={'DD/MM/YYYY'}
-                                    showToday={false}
+                                <div type="flex" justify="center" align="middle" className='picture-profile-modal'>
                                     
-                                //disabled={editDisabled}
-                                />
-                            </Form.Item>
-
-                            <Form.Item
-                                className="half-width-slot-profile"
-                            >
-                            </Form.Item>
-                            <Form.Item
-                                className="half-width-slot-profile"
-                            >
-                            </Form.Item>
-
-                            {/* Boton Submit */}
-                            <Form.Item
-                                className="half-width-slot-profile"
-                            >
-                                <div className='half-width-slot-profile-btn'>
-                                    <div className='btnBlue'>
-                                        <Button  type="primary" htmlType="submit"> Actualizar </Button>
-                                    </div>
                                     <div>
-                                        <Button danger type="primary" onClick={handleCancel}> cancelar </Button>
-                                    </div>
-                                </div>
-                            </Form.Item>
+                                        <Text strong>Imagen de Perfil</Text>
+                                        <Upload
+                                        
+                                            //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                                            className="customSizedUpload"
+                                            listType="picture-circle"
+                                            {...props}
+                                            showUploadList={{showPreviewIcon:false}}
+                                            fileList={imgFileList}
+                                            onChange={handleFileSubmit}
+                                            onPreview={false}
+                                            //beforeUpload={() => false} // Evita la carga automática de la imagen
+                                        >
+                                        {fileList.length < 1 && '+ Upload'}
+                                        </Upload>
 
-                        </Form>
-                        </Modal>
-                    </div>
+                                    </div>
+
+                                    <div>
+                                        <Text strong>Fondo de Perfil</Text>
+                                        <Upload
+                                            //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                                            className="customSizedUploadBG"
+                                            listType="picture-card"
+                                            {...propsBG}
+                                            showUploadList={{showPreviewIcon:false}}
+                                            fileList={imgFileListBG}
+                                            onChange={handleFileSubmitBG}
+                                            onPreview={false}
+                                            //beforeUpload={() => false} // Evita la carga automática de la imagen
+                                        >
+                                        {fileListBG.length < 1 && '+ Upload'}
+                                        </Upload>
+                                    </div>
+                                    
+                                </div>
+
+                                {/*Componente Form*/}
+                                <Form
+                                className='full-width-slot-profile'
+                                layout="vertical"
+                                form={form}
+                                requiredMark={false}
+                                name="recipes"
+                                onFinish={onFinish}
+                                initialValues={{
+                                    name: profile.name,
+                                    lastName: profile.lastName,
+                                    biografia: profile.biografia,
+                                    ubicacion: profile.ubicacion,
+                                    contacto: profile.contacto,
+                                    sitioWeb: profile.sitioWeb,
+                                    fechaDeNacimiento: profile.fechaDeNacimiento
+                                }}
+                            >
+                                
+                                {/* Input Nonmbre de usuario */}
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                    label="Nombre"
+                                    name="name"
+                                    normalize={value => (value || '').toUpperCase()}
+                                    rules={[{ required: true, message: 'Por favor introduce el nombre del usuario.'}]}
+                                >
+                                    <Input
+                                        disabled={false}
+                                    />
+                                </Form.Item>
+
+                                {/* Input Apelido */}
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                    label="Apellido"
+                                    name="lastName"
+                                    normalize={value => (value || '')}
+                                    rules={[{ required: false, message: 'Campo obligatorio'}]}
+                                >
+                                <Input
+                                        disabled={false}
+                                    />
+                                </Form.Item>
+
+                                {/* Biografia*/}
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                    style={{height: '10%'}}
+                                    label="Biografia"
+                                    name="biografia"
+                                    normalize={value => (value || '')}
+                                    rules={[{ required: false, message: 'Por favor introduce los ingredientes de la receta.' }]}
+                                >
+                                    <Input.TextArea
+                                        showCount
+                                        maxLength={300}
+                                        placeholder="Biografia"
+                                        style={{height: '100%', resize: 'none'}}
+                                        disabled={false}
+                                    />
+                                </Form.Item>
+
+                                {/* Input Metodo de Contacto/Email secundario */}
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                    label="Contacto"
+                                    name="contacto"
+                                    normalize={value => (value || '')}
+                                    rules={[{ required: false, message: 'Por favor introduce la preparacion de la receta.' }]}
+                                >
+                                    <Input
+                                        disabled={false}
+                                    />
+                                </Form.Item>
+
+                                {/*  Sitio web */}
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                    label="Sitio Web"
+                                    name="sitioWeb"
+                                    normalize={value => (value || '')}
+                                    rules={[{ required: false, message: 'Por favor introduce la preparacion de la receta.' }]}
+                                >
+                                    <Input
+                                        disabled={false}
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    className="half-width-slot-profile"
+
+                                    label="País de origen"
+                                    name="ubicacion"
+                                    normalize={value => (value || '').toUpperCase()}
+                                    rules={[{ required: false, message: 'Por favor introduce un Lugar de origen de la receta.' }]}
+                                    >
+                                        <Select
+                                            disabled={false}
+                                            showSearch
+                                        >
+                                            {countries.map((country) => (
+                                                <Select.Option
+                                                    key={country.code}
+                                                    value={country.name}
+                                                >
+                                                    {country.name}
+                                                </Select.Option>
+                                            ))}
+                                        </Select>
+                                </Form.Item>
+                                
+                                {/* Fecha de nacimineto */}
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                    label="fecha De Nacimiento"
+                                    name="fechaDeNacimiento"
+                                    
+                                >
+                                    <DatePicker 
+                                        format={'DD/MM/YYYY'}
+                                        showToday={false}
+                                        
+                                    //disabled={editDisabled}
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                >
+                                </Form.Item>
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                >
+                                </Form.Item>
+
+                                {/* Boton Submit */}
+                                <Form.Item
+                                    className="half-width-slot-profile"
+                                >
+                                    <div className='half-width-slot-profile-btn'>
+                                        <div className='btnBlue'>
+                                            <Button  type="primary" htmlType="submit"> Actualizar </Button>
+                                        </div>
+                                        <div>
+                                            <Button danger type="primary" onClick={handleCancel}> cancelar </Button>
+                                        </div>
+                                    </div>
+                                </Form.Item>
+
+                            </Form>
+                            </Modal>
+                        </div>
                 </div>
-                </div>
+           
 
             {/* Container Info Sec */}
                     
@@ -776,25 +806,23 @@ export default function Profile() {
                                 </div>
                             </div>
             </div>
-            
 
             {/*Tabs*/}
-            <div className="card-container">
-            <Tabs defaultActiveKey="1" type="card">
-                
-            <TabPane tab="Recetas" key="1" forceRender>
-            </TabPane>
 
-            <TabPane tab="Favoritos" key="2" forceRender>
-            </TabPane>
-
-            <TabPane tab="Seguidores" key="3" forceRender>
-            </TabPane>
-
-            <TabPane tab="Siguiendo" key="4" forceRender>
-            </TabPane>
-        </Tabs>
+            <Card className='profile-tabs'>
+            <Tabs
+                size='large'
+                type="card"
+                centered
+                items={data}
+            />
+            </Card>
+        </Card>
         </div>
+        </div>
+            
+
+            
 
         </React.Fragment>
     );
