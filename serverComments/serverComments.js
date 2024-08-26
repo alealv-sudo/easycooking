@@ -3,7 +3,6 @@ const db_password = "SiG5GcQoyhwdkwc8"
 
 const uri = "mongodb+srv://easycookingm1:SiG5GcQoyhwdkwc8@commentsbd.k71pq.mongodb.net/?retryWrites=true&w=majority&appName=CommentsBD";
 
-
 const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose');

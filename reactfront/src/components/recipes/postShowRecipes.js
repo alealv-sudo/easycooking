@@ -12,7 +12,6 @@ import {
     Space,
     Spin,
     Button,
-    Card,
     Rate,
     List,
 } from 'antd';
@@ -26,9 +25,15 @@ import './recipePost.css';
 const PostShowRecipes = () => {
 
     const { id } = useParams();
-
+    
     const [cookies, setCookie] = useCookies(['userToken']);
     const [isLoading, setLoading] = useState(true);
+    const [UserData, setUserData] = useState({
+        _id: cookies.id,
+        name: cookies.user
+    })
+
+    const [idRecipeComments, setIdRecipeComments] = useState(0)
 
     const [recipe, setRecipe] = useState('');
     const [ingredientList, setIngredientList] = useState([]);
@@ -50,15 +55,16 @@ const PostShowRecipes = () => {
 
     const { fileList } = state;
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
 
     function getRecipe() {
         axios.get(process.env.REACT_APP_API_URL + 'post/' + id,
         ).then((response) => {
-            const recipeData = response.data;
+            const recipeData = response.data;   
+            const idRecipe = "" + recipeData.id + ""         
             getScore(recipeData.id)
-            setRecipe(recipeData)
-            console.log("data", recipeData);
+            setRecipe(recipeData) 
+            setIdRecipeComments(idRecipe)
             setIngredientList(recipeData.Ingredients)
             DownloadFile(recipeData.image_recipe)
         })
@@ -70,8 +76,8 @@ const PostShowRecipes = () => {
     function getScore(recipeId) {
         axios.get(process.env.REACT_APP_API_URL + 'ratings/' + cookies.id + '/recipes/' + recipeId
         ).then((response) => {
-            const ratingData = response.data
-            if (ratingData.length !== 0 && ratingData !== undefined && ratingData !== null) {
+            const ratingData = response.data    
+            if(ratingData.length !== 0 && ratingData !== undefined && ratingData !== null){
                 setRating(ratingData)
                 setIsEmpty(false)
             }
@@ -89,36 +95,36 @@ const PostShowRecipes = () => {
         navigate("/private/blog");
     }
 
-    const onFinish = (values) => {
-
+    const onFinish = (values) =>{
+        
         const ratingValue = {
             userId: cookies.id,
             recipeId: recipe.id,
             score: values
         }
 
-        if (isEmpty) {
+        if(isEmpty){
             axios.post(process.env.REACT_APP_API_URL + 'ratings/', ratingValue)
-                .then(function response(response) {
-                    getRecipe()
-                })
-                .catch(function error(error) {
-                    console.log(error);
-                })
-        } else {
-
+            .then(function response(response) {
+                getRecipe()
+            })
+            .catch(function error(error) {
+                console.log(error);
+        })
+        }else{
+            
             const ratingPut = {
                 id: rating.id,
                 score: values
             }
-
+            
             axios.put(process.env.REACT_APP_API_URL + 'ratings/', ratingPut)
-                .then(function response(response) {
-                    getRecipe()
-                })
-                .catch(function error(error) {
-                    console.log(error);
-                })
+            .then(function response(response) {
+                getRecipe()
+            })
+            .catch(function error(error) {
+                console.log(error);
+        })
         }
     }
 
@@ -148,16 +154,16 @@ const PostShowRecipes = () => {
 
                 const imageUpload = [
                     {
-                        uid: '-1',
-                        name: 'image.png',
-                        status: 'done',
-                        url: url,
+                    uid: '-1',
+                    name: 'image.png',
+                    status: 'done',
+                    url: url,
                     },
                 ]
-
+  
                 setState({
                     fileList: [],
-                });
+                });    
                 setFileList(imageUpload);
                 setState({
                     fileList: imageUpload,
@@ -181,12 +187,12 @@ const PostShowRecipes = () => {
     const { TextArea } = Input;
     const onChangeText = () => {
         console.log("");
-
+        
     };
 
     if (isLoading) {
-        return <div style={{ textAlignLast: "center" }} ><br /><br />
-            <Spin color="#000106" tip="Loading..." /></div>;
+        return <div style={{textAlignLast:"center" }} ><br/><br/>
+            <Spin color="#000106" tip="Loading..."/></div>;
     }
 
     return (
@@ -196,7 +202,6 @@ const PostShowRecipes = () => {
 
             <div className="all-page">
                 <div className='div-general-recipe-post'>
-
                     <Form
                         layout="vertical"
                         className='div-form-general-recipe-post'
@@ -238,7 +243,7 @@ const PostShowRecipes = () => {
 
                             </Form.Item>
                         </div>
-
+                        
                         {/* Input Titulo */}
                         <Form.Item
                             className="half-width-slot"
@@ -419,7 +424,7 @@ const PostShowRecipes = () => {
                         <Form.Item
                             className="my-form-container"
                         >
-
+                            
                         </Form.Item>
 
                     </Form>
@@ -440,13 +445,14 @@ const PostShowRecipes = () => {
                     </div>
                 </div>
 
+            <div className="div-comments-page">
                 <BlogCommentSection
                     apiBaseUrl="http://localhost:443"
-                    articleId={id}
+                    articleId={idRecipeComments}
                     callbacks={{ loginClickCallback: () => null }}
                     currentUser={user}
                 />
-
+            </div>
             </div>
 
         </React.Fragment>
