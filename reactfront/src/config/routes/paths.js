@@ -23,5 +23,6 @@ export const NEWLIST = '/private/newlist'
 export const EDITLIST = '/private/editlist/:id'
 export const VIEWMARKETLIST = '/private/viewlist/:id'
 export const CALENDAR = '/private/calendar'
+export const RECIPESFILTERED = '/private/recipesFiltered'
 
 
