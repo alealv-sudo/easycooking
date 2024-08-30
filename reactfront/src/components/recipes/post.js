@@ -261,7 +261,6 @@ const Publicar = () => {
         <React.Fragment>
             <Typography.Title level={2}>Nueva Receta</Typography.Title>
 
-        <div className="all-page">
             <div className='div-general-recipe-post'>
                 {/* Form Receta */}
                 <Form
