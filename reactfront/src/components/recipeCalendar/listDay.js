@@ -34,7 +34,7 @@ export default function ListDay({favSelect, favorites, userId, day}) {
 
   function onFinish(values) {
 
-    const recipe = favorites.find(({id}) => id === values.listFav).recipe;  
+    const recipe = favorites.find(({recipeId}) => recipeId === values.listFav).recipe;  
 
     const newCalendar = {
         day: day,
@@ -76,7 +76,7 @@ export default function ListDay({favSelect, favorites, userId, day}) {
 
   function onCreateList(params) {
 
-    const recipe = favorites.find(({id}) => id === params).recipe;  
+    const recipe = favorites.find(({recipeId}) => recipeId === params).recipe;  
 
         const marketList = {
             list_title: recipe.recipe_name,

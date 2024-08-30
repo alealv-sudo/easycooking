@@ -69,7 +69,7 @@ export default function Profile() {
                     value: e.recipe.id,
                     label: e.recipe.recipe_name
                 }
-            })
+            })            
             setSelectData(favData)
             setFavoritesData(FavoritesRes)
         })
@@ -104,8 +104,8 @@ export default function Profile() {
 
     function onFinish(values) {
 
-        const recipe = FavoritesData.find(({id}) => id === values.listFav).recipe;  
-
+        const recipe = FavoritesData.find(({recipeId}) => recipeId === values.listFav).recipe;  
+   
         const marketList = {
             list_title: recipe.recipe_name,
             userId: cookies.id 
@@ -147,7 +147,6 @@ export default function Profile() {
                 console.log(error)
             });
     }
-
 
     if (isLoading) {
         return <div style={{textAlignLast:"center" }} ><br/><br/>
