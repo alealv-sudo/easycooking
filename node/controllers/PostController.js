@@ -70,12 +70,33 @@ PostCTRL.getPostsPaginated = async (req, res) => {
 //Mostrar un registro
 
 PostCTRL.getPost = async (req, res) => {
+    const userId = req.query.userId; // Get the userId from query parameters
+
     try {
-       const post =  await PostModel.findAll({
+       const posts =  await PostModel.findAll({
         where: { id: req.params.id },
         include: [{model: IngredientsModel ,attributes: {exclude: ['id','recipeId']}}]
        })
-       res.json(post[0])
+       
+       // Add isLiked field to each post
+       const postsWithLikes = await Promise.all([posts[0]].map(async post => {
+        const isLiked = await FavoriteRecipeModel.findOne({
+            where: {
+                userId: userId,
+                recipeId: post.id
+            }
+        });
+
+        return {
+            ...post.toJSON(), // Convert the post instance to a plain object
+            isLiked: !!isLiked // Convert to boolean
+        };
+    }));
+
+    res.json({
+        post: postsWithLikes[0]
+    });
+
     } catch (error) {
        res.json({message: error.message}) 
     }

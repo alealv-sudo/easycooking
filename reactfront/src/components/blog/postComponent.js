@@ -38,7 +38,7 @@ const PostComponent = ({ title, userName, postPhoto, description, likesCounter, 
     };
     return (
         <>
-            <Card sx={{ maxHeight: "400px", minWidth: "100%" }}>
+            <Card sx={{ maxHeight: "800px", minWidth: "100%" }}>
                 <CardHeader
                     avatar={
                         <Avatar sx={{ bgcolor: red[500] }} aria-label="avatar">
@@ -52,9 +52,8 @@ const PostComponent = ({ title, userName, postPhoto, description, likesCounter, 
                     title={title}
                     subheader={publishDate}
                 />
-                <CardMedia onClick={() => onClick(postId)}
+                <CardMedia sx={{maxHeight: "350px"}} onClick={() => onClick(postId)}
                     component="img"
-                    height={{ xs: "150px", md: "1000px" }}
                     image={postPhoto}
                     alt={title}
                 />
