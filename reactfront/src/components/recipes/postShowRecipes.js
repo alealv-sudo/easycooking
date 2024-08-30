@@ -67,6 +67,7 @@ const PostShowRecipes = ({ id, onClose }) => {
             setIdRecipeComments(idRecipe)
             setIngredientList(recipeData.Ingredients)
             DownloadFile(recipeData.image_recipe)
+            
         })
             .catch((error) => {
                 console.error(error);
@@ -136,7 +137,14 @@ const PostShowRecipes = ({ id, onClose }) => {
     const DownloadFile = (image_recipe) => {
         axios.get(`${process.env.REACT_APP_API_URL}google/download/${image_recipe}`, { responseType: "blob" })
             .then((res) => {
-                const url = URL.createObjectURL(new Blob([res.data], { type: 'image/png' }));
+
+                let url
+                
+                if (image_recipe === '1') {
+                    url = "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"
+                }else{
+                    url = URL.createObjectURL(new Blob([res.data], { type: 'image/png' }));
+                }
 
                 const imageUpload = [
                     {
@@ -154,6 +162,7 @@ const PostShowRecipes = ({ id, onClose }) => {
                 setState({
                     fileList: imageUpload,
                 });
+        
                 setLoading(false);
 
                 return () => {
