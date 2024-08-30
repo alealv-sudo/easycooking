@@ -16,6 +16,7 @@ import {
     Rate,
     Row,
     Col,
+    List,
 } from 'antd';
 
 import {
@@ -37,6 +38,9 @@ const PostShowRecipes = ({ id, onClose }) => {
         uploading: false,
     });
 
+    const [ingredientList, setIngredientList] = useState([]);
+
+    const [idRecipeComments, setIdRecipeComments] = useState(0)
     const idUserToComment = cookies.id
     const nameUserToComment = cookies.user
     const user = {
@@ -52,13 +56,18 @@ const PostShowRecipes = ({ id, onClose }) => {
     }, []);
 
     function getRecipe() {
-        axios.get(`${process.env.REACT_APP_API_URL}post/${id}`)
-            .then((response) => {
-                const recipeData = response.data;
-                getScore(recipeData.id);
-                setRecipe(recipeData);
-                DownloadFile(recipeData.image_recipe);
-            })
+        axios.get(process.env.REACT_APP_API_URL + 'post/' + id + "?userId=" + idUserToComment,
+        ).then((response) => {
+            console.log(response);
+
+            const recipeData = response.data.post;
+            const idRecipe = "" + recipeData.id + ""
+            getScore(recipeData.id)
+            setRecipe(recipeData)
+            setIdRecipeComments(idRecipe)
+            setIngredientList(recipeData.Ingredients)
+            DownloadFile(recipeData.image_recipe)
+        })
             .catch((error) => {
                 console.error(error);
             });
@@ -282,31 +291,18 @@ const PostShowRecipes = ({ id, onClose }) => {
 
                                     <label className="label-ingedient">Ingredientes</label>
 
-                                    <Row justify="center" align="middle">
-                                        <Form.List
-                                            name="ingredients"
-                                        >
-                                            {(fields) => (
-                                                <>
-                                                    {fields.map(({ key, name, ...restField }) => (
-                                                        <div
-                                                            key={key}
-                                                            className='item-form-list'
-                                                        >
-                                                            <Form.Item
-                                                                style={{ width: '100%' }}
-                                                                {...restField}
-                                                                name={[name, 'ingredient']}
-                                                                rules={[{ required: true, message: 'Missing ingredient' }]}
-                                                            >
-                                                                <Input disabled={true} placeholder="ingredient" />
-                                                            </Form.Item>
-                                                        </div>
-                                                    ))}
-                                                </>
-                                            )}
-                                        </Form.List>
-                                    </Row>
+                                    <div type="flex" justify="center" align="middle">
+                            <Form.Item
+                                name="ingredients"
+                            >
+                                <List
+                                    bordered
+                                    size="small"
+                                    dataSource={ingredientList}
+                                    renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
+                                />
+                            </Form.Item>
+                        </div>
 
                                     <Form.Item
                                         className="half-width-slot"
@@ -377,6 +373,15 @@ const PostShowRecipes = ({ id, onClose }) => {
                                         Salir
                                     </Button>
                                 </div>
+                            </div>
+
+                            <div className="div-comments-page">
+                                <BlogCommentSection
+                                    apiBaseUrl="http://localhost:443"
+                                    articleId={idRecipeComments}
+                                    callbacks={{ loginClickCallback: () => null }}
+                                    currentUser={user}
+                                />
                             </div>
                         </div>
                     </>
