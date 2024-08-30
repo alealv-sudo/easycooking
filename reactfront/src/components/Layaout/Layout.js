@@ -1,21 +1,63 @@
 import React, { useState } from 'react';
 //layout Component  
-import { Divider, Layout, Menu, theme } from 'antd';
-import MenuNav from '../MenuNav/MenuNav';
-import './Layout.css'
-
-import { Grid, IconButton, Input, InputBase, Paper, TextField } from '@mui/material';
-import { Home as HomeIcon, ExitToApp as LogoutIcon, AddCircleOutline as CreatePostIcon, } from '@mui/icons-material';
+import { Layout, theme } from 'antd';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Home as HomeIcon, ExitToApp as LogoutIcon, AddCircleOutline as CreatePostIcon, AccountCircle as AccountCircleIcon } from '@mui/icons-material';
+import './Layout.css';
+import TodayIcon from '@mui/icons-material/Today';
+import ChecklistIcon from '@mui/icons-material/Checklist';
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import { alpha, Button, Grid, Icon, IconButton, Input, InputBase, Menu, MenuItem, Paper, styled, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from '@ant-design/icons';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Footer } from 'antd/es/layout/layout';
 import { useAuthContext } from '../contexts/authContext';
-const { Header, Sider, Content } = Layout;
+const { Header, Content } = Layout;
 
+
+
+const StyledMenu = styled((props) => (
+  <Menu
+    elevation={0}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'right',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'right',
+    }}
+    {...props}
+  />
+))(({ theme }) => ({
+  '& .MuiPaper-root': {
+    borderRadius: 6,
+    marginTop: theme.spacing(1),
+    minWidth: 180,
+    color: 'rgb(55, 65, 81)',
+    boxShadow:
+      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+    '& .MuiMenu-list': {
+      padding: '4px 0',
+    },
+    '& .MuiMenuItem-root': {
+      '& .MuiSvgIcon-root': {
+        fontSize: 18,
+        color: theme.palette.text.secondary,
+        marginRight: theme.spacing(1.5),
+      },
+      '&:active': {
+        backgroundColor: alpha(
+          theme.palette.primary.main,
+          theme.palette.action.selectedOpacity,
+        ),
+      },
+    },
+    ...theme.applyStyles('dark', {
+      color: theme.palette.grey[300],
+    }),
+  },
+}));
 
 const LayoutFront = (props) => {
 
@@ -28,57 +70,113 @@ const LayoutFront = (props) => {
   };
 
   const handleHome = () => {
-    // Navigate to home
-    console.log('Home clicked');
+    navigate("/private/blog");
   };
-  // const onSearch = (value) => {
 
-  //   axios.get(process.env.REACT_APP_API_URL + 'post/recipe_name/' + value,
-  //   ).then((response) => {
-  //     const recipeData = response.data;
-  //     setRecipes(recipeData)
-  //   })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
+  const navigate = useNavigate();
 
-  //   console.log(recipes);
-  // };
   const handleCreatePost = () => {
-    // Navigate to create post
-    console.log('Create Post clicked');
+    navigate("/private/post");
   };
+
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl == null ? event.currentTarget : null);
+  };
+
+  const navigateAncloseMenu = (data) => {
+    setAnchorEl(null);
+    if (data !== "") navigate(data);
+  };
+
+  const open = Boolean(anchorEl);
   return (
     <Layout>
 
       <Layout>
         <Header className='siteHeader' color={colorBgContainer}>
           <Grid container justifyContent={'space-evenly'} height={"100%"} alignContent={"center"}>
-            <Paper
-              component="form"
-              sx={{
-                p: '2px 4px',
-                display: 'flex',
-                alignItems: 'center',
-                width: 400,
-                bgcolor: 'transparent', // Background transparent
-                border: '1px solid white', // White outline
-                boxShadow: 'none', // Remove default shadow
-                color: "white"
-              }}
-            >
-              <InputBase
-                sx={{ ml: 1, flex: 1, color: 'white' }} // Text color white
-                placeholder="Buscar..."
-                inputProps={{ 'aria-label': 'buscador' }}
-              />
-              <IconButton
-                sx={{ p: '10px', color: 'white' }} // Icon color white
-                aria-label="search"
+            <Grid item xs={1}>
+            </Grid>
+            <Grid item container xs={9} justifyContent={"center"}>
+              <Paper
+                component="form"
+                sx={{
+                  p: '2px 4px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  width: 400,
+                  bgcolor: 'transparent', // Background transparent
+                  border: '1px solid white', // White outline
+                  boxShadow: 'none', // Remove default shadow
+                  color: "white"
+                }}
               >
-                <SearchIcon />
-              </IconButton>
-            </Paper>
+                <InputBase
+                  sx={{ ml: 1, flex: 1, color: 'white' }} // Text color white
+                  placeholder="Buscar..."
+                  inputProps={{ 'aria-label': 'buscador' }}
+                />
+                <IconButton
+                  sx={{ p: '10px', color: 'white' }} // Icon color white
+                  aria-label="search"
+                >
+                  <SearchIcon />
+                </IconButton>
+
+              </Paper>
+            </Grid>
+            <Grid item container xs={1} justifyContent={"flex-end"}>
+              <div>
+                <IconButton
+                  id="demo-customized-button"
+                  aria-controls={open ? 'demo-customized-menu' : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? 'true' : undefined}
+                  onClick={handleClick}
+                  sx={{
+                    backgroundColor: 'white',
+                    borderRadius: '4px',
+                    padding: '8px',
+                    '&:hover': {
+                      backgroundColor: 'lightgray',
+                    },
+                  }}
+                >
+                  <MenuIcon style={{ color: 'black' }} />
+                </IconButton>
+                <StyledMenu
+                  disableRipple
+                  id="demo-customized-menu"
+                  MenuListProps={{
+                    'aria-labelledby': 'demo-customized-button',
+                  }}
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={() => navigateAncloseMenu("")}
+                >
+                  <MenuItem onClick={() => navigateAncloseMenu("/private/profile")} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <AccountCircleIcon />
+                    Mi perfil
+                  </MenuItem>
+                  <MenuItem onClick={() => navigateAncloseMenu('/private/marketlist')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <ChecklistIcon />
+                    Lista de compras
+                  </MenuItem>
+                  <MenuItem onClick={() => navigateAncloseMenu('/private/calendar')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <TodayIcon />
+                    Dieta
+                  </MenuItem>
+                  <MenuItem onClick={() => navigateAncloseMenu('/private/recomendations')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <LocalFireDepartmentIcon />
+                    Recomendaciones
+                  </MenuItem>
+
+                </StyledMenu>
+              </div>
+            </Grid>
+
           </Grid>
         </Header>
         <Content style={{

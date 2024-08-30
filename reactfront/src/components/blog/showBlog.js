@@ -4,6 +4,7 @@ import PostComponent from './postComponent';
 import { CircularProgress, Grid, Skeleton } from '@mui/material';
 import PostDetails from './showBlogI';
 import { useCookies } from 'react-cookie';
+import PostShowRecipes from '../recipes/postShowRecipes';
 
 const CompShowBlog = () => {
   const [recipes, setRecipes] = useState([]);
@@ -62,36 +63,42 @@ const CompShowBlog = () => {
   const [openRecipe, setOpenRecipe] = useState(false)
   return (
     <>
-      <Grid container minHeight={"100%"} py={2} px={2}>
+      <Grid item container xs={12} minHeight={"100%"} py={2} px={2}>
         {openRecipe && (
-          <PostDetails
-            postId={openRecipe}
-            onClose={setOpenRecipe}
-          />
+          <Grid item container spacing={2} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
+            <PostShowRecipes
+              id={openRecipe}
+              onClose={setOpenRecipe}
+            />
+          </Grid>
         )}
-        <Grid item container spacing={2} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'}>
-          {recipes.length > 0 ? (
-            recipes.map((record, index) => (
-              <Grid item key={index} xs={12} md={6} lg={4} style={{ width: '100%' }}>
-                <PostComponent
-                  onClick={setOpenRecipe}
-                  avatar={record.avatar}
-                  title={record.recipe_name}
-                  postPhoto={record.postPhoto}
-                  userName={record.userName}
-                  isLiked={record.isLiked}
-                  description={record.description}
-                  publishDate={record.publishDate}
-                  postId={record.id}
-                  likesCounter={record.likes}
-                />
-              </Grid>
-            ))
-          ) : (
-            <CircularProgress />
-          )}
-          <div ref={observerRef} style={{ height: '1px' }} />
-        </Grid>
+        {(
+          <Grid item container spacing={2} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} display={openRecipe ? "none" : "flex"}>
+            {recipes.length > 0 ? (
+              recipes.map((record, index) => (
+                <Grid item key={index} xs={12} md={7} style={{ width: '100%' }}>
+                  <PostComponent
+                    onClick={setOpenRecipe}
+                    avatar={record.avatar}
+                    title={record.recipe_name}
+                    postPhoto={record.postPhoto && record.postPhoto == "" ? record.postPhoto : "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"}
+                    userName={record.userName}
+                    isLiked={record.isLiked}
+                    description={record.description}
+                    publishDate={record.publishDate}
+                    postId={record.id}
+                    likesCounter={record.likes}
+                  />
+                </Grid>
+              ))
+            ) : (<Grid item container xs={12} justifyContent={"center"} alignContent={"center"}>
+              <CircularProgress />
+            </Grid>
+            )}
+            <div ref={observerRef} style={{ height: '1px' }} />
+          </Grid>
+        )}
+
       </Grid>
     </>
   );

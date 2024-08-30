@@ -54,7 +54,7 @@ const PostComponent = ({ title, userName, postPhoto, description, likesCounter, 
                 />
                 <CardMedia onClick={() => onClick(postId)}
                     component="img"
-                    height="150px"
+                    height={{ xs: "150px", md: "1000px" }}
                     image={postPhoto}
                     alt={title}
                 />

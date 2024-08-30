@@ -28,7 +28,7 @@ function runPythonScript(scriptPath, args, callback) {
 serverIACTRL.executeIA = async (req, res) => {
     const number = req.params.id;
     "C:/Users/Lenovo/Desktop/easyCooking/ServerIA/serverIAControler/data_procesator.py"
-    runPythonScript('C:/Users/franc/Desktop/Easy Cooking/easycooking/ServerIA/serverIAControler/data_procesator.py' , [number], (err, result) => {
+    runPythonScript('D:/Bibliotecas/Documentos/Codes/School/modular/easycooking/ServerIA/serverIAControler/data_procesator.py' , [number], (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
@@ -36,5 +36,4 @@ serverIACTRL.executeIA = async (req, res) => {
         }
     });
 };
-
 export default serverIACTRL

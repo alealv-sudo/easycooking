@@ -3,7 +3,7 @@ import React, { useState, useEffect, message } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
-import { MinusCircleOutlined ,PlusOutlined } from '@ant-design/icons';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 import {
     Typography,
@@ -24,8 +24,8 @@ const folderID = "1v-Q_3LzdTfinD3bq51YaWg0VA1vymj1b"
 
 const customizeRequiredMark = (label, { required }) => (
     <>
-      {required ? <Tag color="error">Req</Tag> : ""}
-      {label}
+        {required ? <Tag color="error">Req</Tag> : ""}
+        {label}
     </>
 );
 
@@ -39,7 +39,7 @@ const Publicar = () => {
 
     const [countries, setCountries] = useState([]);
     const [isImage, setIsimage] = useState(false);
-    
+
     const [state, setState] = useState({
         fileList: [],
         uploading: false,
@@ -59,7 +59,7 @@ const Publicar = () => {
                 return {
                     fileList: newFileList,
                 };
-                
+
             });
         },
 
@@ -104,40 +104,40 @@ const Publicar = () => {
         fileList
     };
 
-    const  changeboleantrue = () => {
+    const changeboleantrue = () => {
         setIsimage(true)
     }
 
-    const  changeboleanfalse = () => {
+    const changeboleanfalse = () => {
         setIsimage(false)
     }
 
-    const setIngredients = (id_recipe ,ingredientValue) => {
+    const setIngredients = (id_recipe, ingredientValue) => {
 
         var ingredientsData = []
-        
+
         for (let index = 0; index < ingredientValue.length; index++) {
 
             var newElement = {
                 recipeId: id_recipe,
                 ingredient: ingredientValue[index].ingredientes
-            } 
+            }
 
-            ingredientsData.push(newElement) 
+            ingredientsData.push(newElement)
         }
 
         axios.post(process.env.REACT_APP_API_URL + 'ingredients/', ingredientsData)
-        .then(function response(response) {
-           
-        })
-        .catch(function error(error) {
-            console.log(error);
-        })
+            .then(function response(response) {
+
+            })
+            .catch(function error(error) {
+                console.log(error);
+            })
 
     }
 
     const onFinish = (values) => {
-           
+
         if (isImage && fileList.length !== 0) {
             const recipes = {
                 recipe_name: values.recipe_name,
@@ -149,20 +149,20 @@ const Publicar = () => {
                 type_recipe: values.type_recipe,
                 originary: values.originary,
                 tips: values.tips,
-        
+
                 creatorId: cookies.id,
             }
-        
+
             axios.post(process.env.REACT_APP_API_URL + 'post/', recipes)
                 .then(function response(response) {
                     setIngredients(response.data.id, values.ingredients)
                     handleUpload(response.data.id);
-                    
-            })
-            .catch(function error(error) {
+
+                })
+                .catch(function error(error) {
                     console.log(error);
-            })
-        }else{
+                })
+        } else {
             notification.error({
                 message: 'Foto Obligatoria'
             });
@@ -266,7 +266,7 @@ const Publicar = () => {
                     className='div-form-general-recipe-post'
                     layout="vertical"
                     name="recipe"
-                    
+
                     requiredMark={customizeRequiredMark}
                     onFinish={onFinish}
                     autoComplete="off"
@@ -401,59 +401,59 @@ const Publicar = () => {
                         />
                     </Form.Item>
 
-                    {/* Input Ingredientes */}                    
+                    {/* Input Ingredientes */}
                     <div type="flex" justify="center" align="middle">
-                    <Form.List 
-                    name="ingredients"
-                    rules={[
+                        <Form.List
+                            name="ingredients"
+                            rules={[
 
-                        {
-                          validator: async (_, names) => {
-                            if (!names || names.length < 2) {
-                              return Promise.reject(new Error('Requerido Minimo 2 ingredientes'));
-                            }
-                          },
-                        },
-                    ]}
-                    >
-                    {(fields, { add, remove } , { errors }) => (
-                        <>
-                        {fields.map(({ key, name, ...restField } ) => (
-                            <div
-                            key={key}
-                            className='item-form-list-input'
-                            >
-                            <Form.Item
-                                
-                                {...restField}
-                                name={[name, 'ingredientes']}
-                                rules={[
                                 {
-                                    required: true,
-                                    message: 'Missing ingredient',
+                                    validator: async (_, names) => {
+                                        if (!names || names.length < 2) {
+                                            return Promise.reject(new Error('Requerido Minimo 2 ingredientes'));
+                                        }
+                                    },
                                 },
-                                ]}
-                            >
-                                <Input  placeholder="ingredient" />
-                            </Form.Item>
-                            <MinusCircleOutlined onClick={() => remove(name)} />
-                            </div>
-                        ))}
-                        <Form.Item
-                        style={{
-                            width: '100%'
-                        }}
+                            ]}
                         >
-                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
-                            Add field
-                            </Button>
-                            <Form.ErrorList errors={errors} />
-                        </Form.Item>
-                        
-                        </>
-                        
-                    )}
-                    </Form.List>
+                            {(fields, { add, remove }, { errors }) => (
+                                <>
+                                    {fields.map(({ key, name, ...restField }) => (
+                                        <div
+                                            key={key}
+                                            className='item-form-list-input'
+                                        >
+                                            <Form.Item
+
+                                                {...restField}
+                                                name={[name, 'ingredientes']}
+                                                rules={[
+                                                    {
+                                                        required: true,
+                                                        message: 'Missing ingredient',
+                                                    },
+                                                ]}
+                                            >
+                                                <Input placeholder="ingredient" />
+                                            </Form.Item>
+                                            <MinusCircleOutlined onClick={() => remove(name)} />
+                                        </div>
+                                    ))}
+                                    <Form.Item
+                                        style={{
+                                            width: '100%'
+                                        }}
+                                    >
+                                        <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                            Add field
+                                        </Button>
+                                        <Form.ErrorList errors={errors} />
+                                    </Form.Item>
+
+                                </>
+
+                            )}
+                        </Form.List>
                     </div>
 
                     {/* Input Metodo de Preparacion */}
@@ -472,7 +472,7 @@ const Publicar = () => {
                     </Form.Item>
 
                     <div type="flex" justify="center" align="middle">
-                        
+
                         <Space className='btnBlueRP'>
                             {/* Input Tipo */}
                             <Form.Item
@@ -543,17 +543,14 @@ const Publicar = () => {
                     >
                         <div className='half-width-slot-profile-btnRP'>
                             <div className='btnBlueRP'>
-                                <Button type="primary" shape="round" htmlType="submit"> Publicar </Button>     
-                            </div>
-                            <div>
-                                <Button danger type="primary" shape="round" onClick={Salir}> Cancelar </Button>
+                                <Button type="primary" shape="round" htmlType="submit"> Publicar </Button>
                             </div>
                         </div>
                     </Form.Item>
 
                 </Form>
-            </div>                       
-            
+            </div>
+
         </React.Fragment>
     );
 

@@ -168,8 +168,9 @@ def executeIA(num_userid):
     final_recomendation = recipesPerId_sorted.loc[recipesPerId_sorted['recipeId'].isin(recommendation_df.head(30)['recipeId'].tolist())]
     # print(final_recomendation)
     
+    idsToSend = final_recomendation['recipeId'].tolist()
 
-    return final_recomendation
+    return idsToSend
 
 
 
