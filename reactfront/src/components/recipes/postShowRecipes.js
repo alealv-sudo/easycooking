@@ -12,14 +12,15 @@ import {
     Input,
     Space,
     Spin,
-    Select,
     Button,
-    notification,
-    message,
     Rate,
     Row,
     Col,
 } from 'antd';
+
+import {
+    BlogCommentSection,
+} from "replyke";
 
 import './recipePost.css';
 import { Grid } from "@mui/material";
@@ -35,6 +36,13 @@ const PostShowRecipes = ({ id, onClose }) => {
         fileList: [],
         uploading: false,
     });
+
+    const idUserToComment = cookies.id
+    const nameUserToComment = cookies.user
+    const user = {
+        _id: idUserToComment,
+        name: nameUserToComment
+    }
 
     const { fileList } = state;
     const navigate = useNavigate();

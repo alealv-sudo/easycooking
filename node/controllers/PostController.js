@@ -133,19 +133,115 @@ PostCTRL.deletePost = async (req , res) => {
     }
 }
 
-// Mostrar lista de recetas por similitud
+// Mostrar lista de recetas por similitud de nombre
 PostCTRL.getPostSimilar = async (req, res) => {
     const valueStyle = `%${req.params.value}%`
+    
     try {
-      const post = await PostModel.findAll({
-        where: {recipe_name: {[Op.iLike]: valueStyle}},
-        limit: 5 // Limita a 5 resultados
-      });
-      
-      res.json(post);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        // const userId = req.query.userId; // Get the userId from query parameters
+
+        // Calculate the offset
+        const offset = (page - 1) * limit;
+
+        // Find posts with pagination
+        const posts = await PostModel.findAll({
+            where: {recipe_name: {[Op.iLike]: valueStyle}},
+            include: [
+                {
+                    model: IngredientsModel,
+                    attributes: { exclude: ['id', 'recipeId'] }
+                }
+            ],
+            offset: offset,
+            limit: limit
+        });
+
+        // Find the total number of posts
+        const totalPosts = await PostModel.count();
+
+        // Add isLiked field to each post
+        const postsWithLikes = await Promise.all(posts.map(async post => {
+            const isLiked = await FavoriteRecipeModel.findOne({
+                where: {
+                    recipeId: post.id
+                }
+            });
+
+            return {
+                ...post.toJSON(), // Convert the post instance to a plain object
+                isLiked: !!isLiked // Convert to boolean
+            };
+        }));
+
+        res.json({
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts: totalPosts,
+            posts: postsWithLikes
+        });
     } catch (error) {
-      res.status(500).json({ message: 'Error al obtener las recetas', error: error.message });
+        res.json({ message: error.message });
     }
+
+
+};
+
+// Mostrar lista de recetas por similitud de ingrediente
+PostCTRL.getPostIngredientSimilar = async (req, res) => {
+    const valueStyle = req.params.value.split(',').map(ingredient => `%${ingredient.trim()}%`);
+
+
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        // const userId = req.query.userId; // Get the userId from query parameters
+
+        // Calculate the offset
+        const offset = (page - 1) * limit;
+
+        // Find posts with pagination
+        const posts = await PostModel.findAll({
+            
+            include: [
+                {
+                    model: IngredientsModel,
+                    where: {ingredient: {[Op.or]: valueStyle.map(value => ({ [Op.iLike]: value }))}},
+                    attributes: { exclude: ['id', 'recipeId'] }
+                }
+            ],
+            offset: offset,
+            limit: limit
+        });
+
+        // Find the total number of posts
+        const totalPosts = await PostModel.count();
+
+        // Add isLiked field to each post
+        const postsWithLikes = await Promise.all(posts.map(async post => {
+            const isLiked = await FavoriteRecipeModel.findOne({
+                where: {
+                    recipeId: post.id
+                }
+            });
+
+            return {
+                ...post.toJSON(), // Convert the post instance to a plain object
+                isLiked: !!isLiked // Convert to boolean
+            };
+        }));
+
+        res.json({
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts: totalPosts,
+            posts: postsWithLikes
+        });
+    } catch (error) {
+        res.json({ message: error.message });
+    }
+    
 };
 
 export default PostCTRL

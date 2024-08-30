@@ -300,6 +300,8 @@ const EditarGeneralPost = () => {
         <React.Fragment>
             <Typography.Title level={2}>Editar Publicacion</Typography.Title>
 
+
+        <div className='all-page'>
             {/* Form Receta */}
             <div className='div-general-post'>
                 <Form
@@ -386,6 +388,7 @@ const EditarGeneralPost = () => {
 
                 </Form>
             </div>
+        </div>
         </React.Fragment>
     );
 
