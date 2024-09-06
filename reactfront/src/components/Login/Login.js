@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../contexts/authContext';
 import { Button, Col, Flex, Form, Input, Row } from 'antd';
+import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { Link, useBeforeUnload } from 'react-router-dom'
 
 
@@ -27,58 +28,61 @@ const Login = () => {
 
   return (
     <>
-      <Flex style={{ width: "100dvw", height: "100dvh" }} align="center" justify='center' vertical>
-        <Row justify="center" >
-          <Col span={{ xs: 24 }}>
+      <div className='login-page'>
+        <div className='login-background' >
 
-            <Row justify="center" textAlign="center">
-              <Col span={12}>
-                <h1>Login</h1>
-              </Col>
-            </Row>
-            <Row justify="center">
-              <Form
-                name='User'
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-              >
-                <Col span={{ xs: 24 }}>
-                  <Form.Item
-                    label="Correo"
-                    name="email"
-                    rules={[{ required: true, message: "Ingrese su Correo" }]}
-                  >
-                    <Input placeholder="Correo" />
-                  </Form.Item>
-                </Col>
-                <Col span={{ xs: 24 }}> <Form.Item
-                  label="Contraseña"
-                  name="password"
-                  rules={[{ required: true, message: "Ingrese su Contraseña" }]}
+          <Form
+            name='User'
+            initialValues={{ remember: true }}
+            onFinish={onFinish}
+          >
+            <h1>Login</h1>
+
+            <Form.Item
+              // label="Correo"
+              name="email"
+              rules={[{ required: true, message: "Ingrese su Correo" }]}
+            >
+              <Input placeholder="Correo"
+                prefix={<MailOutlined className='icon' />}
+                className='input-box'
+              />
+
+            </Form.Item>
+
+
+            <Form.Item
+              // label="Contraseña"
+              name="password"
+              rules={[{ required: true, message: "Ingrese su Contraseña" }]}
+            >
+              <Input.Password placeholder="Contraseña"
+                prefix={<LockOutlined className='icon' />}
+                className='input-box'
+
+              />
+
+            </Form.Item>
+
+            <Col span={24}>
+              <Row justify="center" textAlign="center">
+                <Form.Item
                 >
-                  <Input.Password placeholder="Contraseña" />
+                  <Button type="primary" htmlType="submit">Iniciar sesión</Button>
                 </Form.Item>
-                </Col>
-                <Col span={{ xs: 24 }}>
-                  <Row justify="space-evenly" gutter={[16, 16]}>
-                    <Form.Item
-                    >
-                      <Button type="primary" htmlType="submit">Iniciar sesión</Button>
-                    </Form.Item>
-                    <Form.Item
-                    >
-                      <Button type="primary">
-                        <Link to={"/register"}>Crear cuenta</Link>
-                      </Button>
-                    </Form.Item>
+              </Row>
+              <Row justify="center" textAlign="center">
+                <Form.Item
+                >
 
-                  </Row>
-                </Col>
-              </Form>
-            </Row>
-          </Col>
-        </Row>
-      </Flex>
+                  <p>No tienes cuenta? <Link to={"/register"} className='register-link'><br />Crear cuenta</Link></p>
+                </Form.Item>
+              </Row>
+            </Col>
+          </Form>
+
+        </div>
+      </div>
     </>
   )
 }
