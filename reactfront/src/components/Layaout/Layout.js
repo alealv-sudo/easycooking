@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 //layout Component  
 import { Layout, theme } from 'antd';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Home as HomeIcon, ExitToApp as LogoutIcon, AddCircleOutline as CreatePostIcon, AccountCircle as AccountCircleIcon } from '@mui/icons-material';
+import { Home as HomeIcon, ExitToApp as LogoutIcon, AddCircleOutline as CreatePostIcon, AccountCircle as AccountCircleIcon, ArrowBack as ArrowBackIcon} from '@mui/icons-material';
+// import {ArrowBackIcon} from '@mui/icons-material/ArrowBack';
 import './Layout.css';
 import TodayIcon from '@mui/icons-material/Today';
 import ChecklistIcon from '@mui/icons-material/Checklist';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
-import { alpha, Button, Grid, Icon, IconButton, Input, InputBase, Menu, MenuItem, Paper, styled, TextField } from '@mui/material';
+import { alpha, Button, Grid, Icon, IconButton, Input, InputBase, Menu, MenuItem, Paper, styled, TextField, Divider } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Footer } from 'antd/es/layout/layout';
@@ -78,6 +79,10 @@ const LayoutFront = (props) => {
   const handleCreatePost = () => {
     navigate("/private/post");
   };
+
+  const handlePrevieusPage = () => {
+    navigate(-1);
+  }
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -160,6 +165,8 @@ const LayoutFront = (props) => {
                     <AccountCircleIcon />
                     Mi perfil
                   </MenuItem>
+                  <Divider/>
+
                   <MenuItem onClick={() => navigateAncloseMenu('/private/marketlist')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <ChecklistIcon />
                     Lista de compras
@@ -171,6 +178,12 @@ const LayoutFront = (props) => {
                   <MenuItem onClick={() => navigateAncloseMenu('/private/recomendations')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <LocalFireDepartmentIcon />
                     Recomendaciones
+                  </MenuItem>
+
+                  <Divider/>
+                  <MenuItem onClick={() => navigateAncloseMenu('/private/logout')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <LogoutIcon />
+                    Logout
                   </MenuItem>
 
                 </StyledMenu>
@@ -194,8 +207,8 @@ const LayoutFront = (props) => {
         <Footer className='siteFooter' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '10px 0' }}>
           <Grid container justifyContent={'space-evenly'} height={"100%"} alignContent={"center"}>
             <Grid xs={3}>
-              <IconButton onClick={handleLogout} color="primary">
-                <LogoutIcon />
+              <IconButton onClick={handlePrevieusPage} color="primary">
+                <ArrowBackIcon />
               </IconButton>
             </Grid>
             <Grid xs={3}>
