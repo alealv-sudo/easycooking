@@ -24,7 +24,7 @@ const Register = () => {
       })
   }
 
-  const setProfile = (data, id) =>{
+  const setProfile = (data, id) => {
 
     const profile = {
       name: data.name,
@@ -42,89 +42,90 @@ const Register = () => {
   }
 
   return (<>
-    <Flex style={{ width: "100dvw", height: "100dvh" }} align="center" justify='center' vertical>
-      <Row justify="center" >
-        <Col span={{ xs: 24 }}>
+    <div className='login-page'>
+      <Flex style={{ width: "100dvw", height: "100dvh" }} align="center" justify='center' vertical>
+        <div className='login-background' >
+          <Row justify="center" >
+            <Col span={{ xs: 24 }}>
 
-          <Row justify="center" textAlign="center">
-            <Col span={12}>
-              <h1>Registrate</h1>
+              <Row justify="center" textAlign="center">
+                <Col span={12}>
+                  <h1>Registrate</h1>
+                </Col>
+              </Row>
+              <Row justify="center">
+                <Form
+                  name='newUser'
+                  initialValues={{
+                    remember: true,
+                  }}
+                  onFinish={onFinish}
+                  autoComplete="off"
+                >
+                  <Col span={{ xs: 24 }}>
+                    <Form.Item
+                      label="Username:"
+                      name="username"
+                      rules={[{ required: true, message: "Ingrese el nombre de Usuario" }]}
+                    >
+                      <Input placeholder='Nombre' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={{ xs: 24 }}>
+                    <Form.Item
+                      label="Nombre"
+                      name="name"
+                      rules={[{ required: true, message: "Ingrese su Nombre" }]}
+                    >
+                      <Input placeholder='Correo' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={{ xs: 24 }}>
+                    <Form.Item
+                      label="Apellido"
+                      name="lastName"
+                      rules={[{ required: true, message: "Ingrese su Apellido" }]}
+                    >
+                      <Input placeholder='Correo' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={{ xs: 24 }}>
+                    <Form.Item
+                      label="Correo"
+                      name="email"
+                      rules={[{ required: true, message: "Ingrese su Correo" }]}
+                    >
+                      <Input placeholder='Correo' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={{ xs: 24 }}>
+                    <Form.Item
+                      label="Contraseña"
+                      name="password"
+                      rules={[{ required: true, message: "Ingrese su Contraseña" }]}
+                    >
+                      <Input placeholder='Contraseña' />
+                    </Form.Item>
+                  </Col>
+                  <Col span={{ xs: 24 }}>
+                    <Row justify="space-evenly" gutter={[16, 16]}>
+
+                      <Form.Item>
+                        <p>Ya tienes cuenta? <Link to={"/login"} className='register-link'><br />Iniciar sesión</Link></p>
+                      </Form.Item>
+                      <Form.Item>
+                        <Button type="primary" htmlType="submit">Crear cuenta</Button>
+                      </Form.Item>
+
+                    </Row>
+                  </Col>
+                </Form>
+              </Row>
             </Col>
           </Row>
-          <Row justify="center">
-            <Form
-              name='newUser'
-              initialValues={{
-                remember: true,
-              }}
-              onFinish={onFinish}
-              autoComplete="off"
-            >
-              <Col span={{ xs: 24 }}>
-                <Form.Item
-                  label="Username:"
-                  name="username"
-                  rules={[{ required: true, message: "Ingrese el nombre de Usuario" }]}
-                >
-                  <Input placeholder='Nombre' />
-                </Form.Item>
-              </Col>
-              <Col span={{ xs: 24 }}>
-                <Form.Item
-                  label="Nombre"
-                  name="name"
-                  rules={[{ required: true, message: "Ingrese su Nombre" }]}
-                >
-                  <Input placeholder='Correo' />
-                </Form.Item>
-              </Col>
-              <Col span={{ xs: 24 }}>
-                <Form.Item
-                  label="Apellido"
-                  name="lastName"
-                  rules={[{ required: true, message: "Ingrese su Apellido" }]}
-                >
-                  <Input placeholder='Correo' />
-                </Form.Item>
-              </Col>
-              <Col span={{ xs: 24 }}>
-                <Form.Item
-                  label="Correo"
-                  name="email"
-                  rules={[{ required: true, message: "Ingrese su Correo" }]}
-                >
-                  <Input placeholder='Correo' />
-                </Form.Item>
-              </Col>
-              <Col span={{ xs: 24 }}>
-                <Form.Item
-                  label="Contraseña"
-                  name="password"
-                  rules={[{ required: true, message: "Ingrese su Contraseña" }]}
-                >
-                  <Input placeholder='Contraseña' />
-                </Form.Item>
-              </Col>
-              <Col span={{ xs: 24 }}>
-                <Row justify="space-evenly" gutter={[16, 16]}>
-
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">Crear cuenta</Button>
-                  </Form.Item>
-                  <Form.Item
-                  >
-                    <Button type="primary">
-                      <Link to={"/login"}>Ya tengo una cuenta</Link>
-                    </Button>
-                  </Form.Item>
-
-                </Row>
-              </Col>
-            </Form>
-          </Row>
-        </Col>
-      </Row>
-    </Flex>
+        </div>
+      </Flex>
+    </div>
   </>
 
   )
