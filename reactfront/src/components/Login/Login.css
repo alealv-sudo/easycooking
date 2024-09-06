@@ -28,6 +28,7 @@
     font-size: 36px;
     text-align: center;
     color: #fff;
+    margin: 10px;
 }
 
 .login-background button {
@@ -99,5 +100,5 @@
 }
 
 .input-box input::placeholder {
-    color: #fff;
+    color: #fff !important;
 }

@@ -1,9 +1,10 @@
 import axios from 'axios'
 import React, { useState, useEffect } from 'react';
 import { Button, Checkbox, Col, Flex, Form, Input, Row, message } from 'antd';
-import FormItem from 'antd/es/form/FormItem';
+import { MailOutlined, LockOutlined, UserSwitchOutlined, UserOutlined, SmileOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import Password from 'antd/es/input/Password';
+
+import './Login.css'
 
 const Register = () => {
 
@@ -43,88 +44,96 @@ const Register = () => {
 
   return (<>
     <div className='login-page'>
-      <Flex style={{ width: "100dvw", height: "100dvh" }} align="center" justify='center' vertical>
-        <div className='login-background' >
-          <Row justify="center" >
-            <Col span={{ xs: 24 }}>
+      <div className='login-background' >
 
-              <Row justify="center" textAlign="center">
-                <Col span={12}>
-                  <h1>Registrate</h1>
-                </Col>
-              </Row>
-              <Row justify="center">
-                <Form
-                  name='newUser'
-                  initialValues={{
-                    remember: true,
-                  }}
-                  onFinish={onFinish}
-                  autoComplete="off"
-                >
-                  <Col span={{ xs: 24 }}>
-                    <Form.Item
-                      label="Username:"
-                      name="username"
-                      rules={[{ required: true, message: "Ingrese el nombre de Usuario" }]}
-                    >
-                      <Input placeholder='Nombre' />
-                    </Form.Item>
-                  </Col>
-                  <Col span={{ xs: 24 }}>
-                    <Form.Item
-                      label="Nombre"
-                      name="name"
-                      rules={[{ required: true, message: "Ingrese su Nombre" }]}
-                    >
-                      <Input placeholder='Correo' />
-                    </Form.Item>
-                  </Col>
-                  <Col span={{ xs: 24 }}>
-                    <Form.Item
-                      label="Apellido"
-                      name="lastName"
-                      rules={[{ required: true, message: "Ingrese su Apellido" }]}
-                    >
-                      <Input placeholder='Correo' />
-                    </Form.Item>
-                  </Col>
-                  <Col span={{ xs: 24 }}>
-                    <Form.Item
-                      label="Correo"
-                      name="email"
-                      rules={[{ required: true, message: "Ingrese su Correo" }]}
-                    >
-                      <Input placeholder='Correo' />
-                    </Form.Item>
-                  </Col>
-                  <Col span={{ xs: 24 }}>
-                    <Form.Item
-                      label="Contraseña"
-                      name="password"
-                      rules={[{ required: true, message: "Ingrese su Contraseña" }]}
-                    >
-                      <Input placeholder='Contraseña' />
-                    </Form.Item>
-                  </Col>
-                  <Col span={{ xs: 24 }}>
-                    <Row justify="space-evenly" gutter={[16, 16]}>
 
-                      <Form.Item>
-                        <p>Ya tienes cuenta? <Link to={"/login"} className='register-link'><br />Iniciar sesión</Link></p>
-                      </Form.Item>
-                      <Form.Item>
-                        <Button type="primary" htmlType="submit">Crear cuenta</Button>
-                      </Form.Item>
+        <Form
+          name='newUser'
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          autoComplete="off"
+        >
 
-                    </Row>
-                  </Col>
-                </Form>
-              </Row>
-            </Col>
-          </Row>
-        </div>
-      </Flex>
+          <h1>Registrate</h1>
+
+          <Form.Item
+            // label={<span style={{ color: '#fff' }}>Username</span>}
+            name="username"
+            rules={[{ required: true, message: "Ingrese el nombre de Usuario" }]}
+          >
+            <Input placeholder="Username"
+              prefix={<SmileOutlined className='icon' />}
+              className='input-box'
+            />
+          </Form.Item>
+
+
+          <Form.Item
+            // label={<span style={{ color: '#fff' }}>Numbre</span>}
+            name="name"
+            rules={[{ required: true, message: "Ingrese su Nombre" }]}
+          >
+            <Input placeholder="Nombre"
+              prefix={<UserOutlined className='icon' />}
+              className='input-box'
+            />
+          </Form.Item>
+
+
+          <Form.Item
+            // label={<span style={{ color: '#fff' }}>Apellido</span>}
+            name="lastName"
+            rules={[{ required: true, message: "Ingrese su Apellido" }]}
+          >
+            <Input placeholder="Apellido"
+              prefix={<UserSwitchOutlined className='icon' />}
+              className='input-box'
+            />
+          </Form.Item>
+
+
+          <Form.Item
+            // label={<span style={{ color: '#fff' }}>Correo</span>}
+            name="email"
+            rules={[{ required: true, message: "Ingrese su Correo" }]}
+          >
+            <Input placeholder="Correo"
+              prefix={<MailOutlined className='icon' />}
+              className='input-box'
+            />
+          </Form.Item>
+
+
+          <Form.Item
+            // label={<span style={{ color: '#fff' }}>Contraseña</span>}
+            name="password"
+            rules={[{ required: true, message: "Ingrese su Contraseña" }]}
+          >
+            <Input placeholder="Contraseña"
+              prefix={<LockOutlined className='icon' />}
+              className='input-box'
+            />
+          </Form.Item>
+
+          <Col span={24}>
+            <Row justify="space-evenly" gutter={[16, 16]}>
+
+              <Form.Item>
+                <Button type="primary" htmlType="submit">Crear cuenta</Button>
+              </Form.Item>
+
+            </Row>
+
+            <Form.Item>
+              <p>Ya tienes cuenta? <Link to={"/login"} className='register-link'><br />Iniciar sesión</Link></p>
+            </Form.Item>
+
+          </Col>
+        </Form>
+
+      </div>
     </div>
   </>
 
