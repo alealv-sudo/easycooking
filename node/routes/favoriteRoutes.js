@@ -4,6 +4,7 @@ import FavoriteRecipeCTRL from "../controllers/FavoriteRecipeController.js";
 const router = express.Router()
 
 router.get('/', FavoriteRecipeCTRL.getAllFavorites);
+router.get('/paginated', FavoriteRecipeCTRL.getPostsPaginated);
 router.get('/:id', FavoriteRecipeCTRL.getFavorite);
 router.get('/alluser/:id', FavoriteRecipeCTRL.getUserFavorites);
 router.post('/', FavoriteRecipeCTRL.createFavorite);

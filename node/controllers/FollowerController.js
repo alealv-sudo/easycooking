@@ -1,4 +1,5 @@
 import FollowerModels from "../models/FollowerModel.js"
+import UserModel from "../models/UserModel.js"
 
 const FollowerCTRL = {}
 
@@ -13,6 +14,43 @@ FollowerCTRL.getAllFollowers = async (req, res) => {
        res.json({message: error.message}) 
     }
 }
+
+///followers Paginados
+FollowerCTRL.getFollowerPaginated = async (req, res) => {
+    try {
+        
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const userId = req.query.userId; // Get the userId from query parameters
+
+        // Calculate the offset
+        const offset = (page - 1) * limit;
+
+        // Find posts with pagination
+        const follower = await FollowerModels.findAll({
+            where: {
+                userId: userId
+            },
+            include: { model: UserModel},
+            offset: offset,
+            limit: limit
+        });
+    
+        // Find the total number of posts
+        const totalfollower = await FollowerModels.count();
+
+        res.json({
+            currentPage: page,
+            totalPages: Math.ceil(totalfollower / limit),
+            totalPosts: totalfollower,
+            posts: follower
+        });
+        
+    } catch (error) {
+        res.json({ message: error.message });
+    }
+}
+
 
 //Mostrart un registro
 
