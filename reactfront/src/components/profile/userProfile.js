@@ -6,6 +6,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 import countriesData from '../recipes/countries.json';
 import FollowersList from './followersList.js'
+import ProfilePost from './profilepost.js'
 
 import {
     Typography,
@@ -25,12 +26,7 @@ import {
 
 import ImgCrop from 'antd-img-crop';
 
-import { UploadOutlined } from "@ant-design/icons";
-
 import './Profile.css';
-
-import placeholder from '../../images/profile-i.jpg';
-import placeholderback from '../../images/background-2.jpeg'
 import { Tabs } from 'antd';
 
 dayjs.extend(customParseFormat);
@@ -41,6 +37,10 @@ const folderId = "1VTuf7vltW-AFEO2NkhYtdCgISH9zsezu"
 const folderIdBackground = "1RZyD5jjbzYnIuyW9N80x4kvZfrhczCZD"
 const typeImg = "profile"
 const typeImgBG = "back"
+const postRoute = "post"
+const favoriteRoute = "favorites"
+const followedRoute = "followeds"
+const followerRoute = "followers"
 
 export default function Profile() {
     const [cookies, setCookie] = useCookies(['userToken']);
@@ -85,20 +85,9 @@ export default function Profile() {
 
     useEffect(() => {
         getUser();
-        getRecipes();
         setCountries(countriesData);
     },[]);
 
-    function getRecipes() {
-        axios.get(process.env.REACT_APP_API_URL + 'post/user/'  + cookies.id)
-        .then((response) => {
-            console.log("Data Recipes", response.data);
-        })
-        .catch((error) => {
-            console.log(error)
-        });
-    }
-    
     function getUser() {
         axios.get(process.env.REACT_APP_API_URL + 'user/'  + cookies.id)
             .then((response) => {
@@ -509,22 +498,22 @@ export default function Profile() {
         {
             label: 'Publicaciones',
             key: 'Publicaciones',
-            children: 'hola',  
+            children: <ProfilePost route={postRoute}/>,  
         },
         {
             label: 'Favoritos',
             key: 'Favoritos',
-            children:'hola',  
+            children: <ProfilePost route={favoriteRoute}/>,  
         },
         {
             label: 'Seguidos',
             key: 'Seguidos',
-            children: <FollowersList/>,  
+            children: <FollowersList route={followedRoute}/>,  
         },
         {
             label: 'Seguidores',
             key: 'Seguidores',
-            children: <FollowersList/>,  
+            children: <FollowersList route={followerRoute}/>,  
         },
     ]
 

@@ -27,14 +27,8 @@ UserCTRL.getUser = async (req, res) => {
             model: Profile,
             as: 'profile'
             },
-            {
-            model: Follower,
-            include: [{model: Profile}]
-            },
-            {
-            model: Followed, 
-            include: [{model: Profile}]
-            }
+            {model: Followed},
+            {model: Follower}
         ]
        })
        res.json(blog[0])

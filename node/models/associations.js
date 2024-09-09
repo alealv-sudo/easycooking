@@ -171,12 +171,12 @@ FollowerModels.belongsTo(UserModel, {
 
 /* asociación uno a uno  (follower-perfil)  */
 
-ProfileModel.hasOne(FollowerModels, {
+UserModel.hasOne(FollowerModels, {
     foreignKey: 'followerId',
     sourceKey: 'id'
 })
 
-FollowerModels.belongsTo(ProfileModel, {
+FollowerModels.belongsTo(UserModel, {
     foreignKey: 'followerId',
     sourceKey: 'id'
 })
@@ -195,12 +195,12 @@ FollowedModels.belongsTo(UserModel, {
 
 /* asociación uno a uno  (followed-perfil)  */
 
-ProfileModel.hasOne(FollowedModels, {
+UserModel.hasOne(FollowedModels, {
     foreignKey: 'followedId',
     sourceKey: 'id'
 })
 
-FollowedModels.belongsTo(ProfileModel, {
+FollowedModels.belongsTo(UserModel, {
     foreignKey: 'followedId',
     sourceKey: 'id'
 })

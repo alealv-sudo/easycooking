@@ -7,7 +7,7 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
-import {CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE, RECIPESFILTERED} from './config/routes/paths';
+import {VIEWRECIPE ,CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE, RECIPESFILTERED} from './config/routes/paths';
 
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
@@ -26,6 +26,7 @@ import Usuario from './components/Pruebas/user';
 import Publicar from './components/recipes/post';
 import UpdateRecipes from './components/recipes/postUpdates';
 import ShowPostRecipes from './components/recipes/postShowRecipes';
+import ViewRecipe from './components/recipes/viewRecipe'
 import UploadTest from './components/Pruebas/UploadTest';
 import UserProfile from './components/profile/userProfile';
 import GeneralPost from './components/postExtra/generalPost'
@@ -64,6 +65,7 @@ function App() {
                   <Route path={POSTR} element={<Publicar />} />
                   <Route path={UPDATER} element={<UpdateRecipes />} />
                   <Route path={SHOWPOSTR} element={<ShowPostRecipes />} />
+                  <Route path={VIEWRECIPE} element={<ViewRecipe/>} />
                   <Route path={PRUEBA} element={<Prueba />} />
                   <Route path={PRUEBA2} element={<Prueba2 />} />
                   <Route path={LOGOUT} element={<Logout />} />

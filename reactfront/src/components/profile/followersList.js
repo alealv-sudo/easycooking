@@ -1,29 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { Avatar, Divider, List, Skeleton } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { useCookies } from 'react-cookie';
+import axios from 'axios';
 
-export default function FollowersList() {
+import FollowButton from './followButton';
 
-  const [loading, setLoading] = useState(false);
+export default function FollowersList({route}) {
+
   const [data, setData] = useState([]);
-  const loadMoreData = () => {
-    if (loading) {
-      return;
-    }
-    setLoading(true);
-    fetch('https://randomuser.me/api/?results=10&inc=name,gender,email,nat,picture&noinfo')
-      .then((res) => res.json())
-      .then((body) => {
-        setData([...data, ...body.results]);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-  };
+  const [page, setPage] = useState(0);
+  const [maxPage, setMaxPage] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    loadMoreData();
+    loadMore();  // Initial load
   }, []);
+
+  const [cookies] = useCookies(['userToken']);
+  const userId = cookies.id;
+  // Load more posts function
+  const loadMore = () => {
+    if ((maxPage == null || maxPage >= page) && !loading) {
+      setLoading(true);
+      axios.get(process.env.REACT_APP_API_URL + route + '/paginated?page=' + page + "&userId=" + userId)
+        .then((response) => {
+          const recipeData = response.data;
+          
+          console.log(page, [...data, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]); setPage((prevPage) => prevPage + 1);
+          setData((prevRecipes) => [...prevRecipes, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]);
+          setPage((prevPage) => prevPage + 1);
+          setMaxPage(recipeData?.totalPages ? recipeData.totalPages : page)
+          setLoading(false);  // Stop loading after data is fetched
+        })
+        .catch((error) => {
+          console.error(error);
+          setLoading(false);  // Stop loading even if there's an error
+        });
+    }
+  };
   
   return (
     <div
@@ -37,8 +52,8 @@ export default function FollowersList() {
     >
       <InfiniteScroll
         dataLength={data.length}
-        next={loadMoreData}
-        hasMore={data.length < 50}
+        next={loadMore}
+        hasMore={maxPage >= page}
         loader={
           <Skeleton
             avatar
@@ -54,13 +69,13 @@ export default function FollowersList() {
         <List
           dataSource={data}
           renderItem={(item) => (
-            <List.Item key={item.email}>
+            <List.Item key={item.user.email}>
               <List.Item.Meta
-                avatar={<Avatar src={item.picture.large} />}
-                title={<a href="https://ant.design">{item.name.last}</a>}
-                description={item.email}
+                avatar={<Avatar />}
+                title={item.user.userName}
+                description={item.user.email}
               />
-              <div>Content</div>
+              <FollowButton isFollow={true}></FollowButton>
             </List.Item>
           )}
         />

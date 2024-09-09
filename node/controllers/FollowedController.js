@@ -1,4 +1,5 @@
 import FollowedModels from "../models/FollowedModel.js"
+import UserModel from "../models/UserModel.js" 
 
 const FollowedCTRL = {}
 
@@ -11,6 +12,47 @@ FollowedCTRL.getAllFolloweds = async (req, res) => {
        res.json(followed)
     } catch (error) {
        res.json({message: error.message}) 
+    }
+}
+
+//followed paginados
+
+FollowedCTRL.getFollowedPaginated = async (req, res) => {
+    console.log("entro");
+    
+    try {
+        
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const userId = req.query.userId; // Get the userId from query parameters
+
+        // Calculate the offset
+        const offset = (page - 1) * limit;
+
+        // Find posts with pagination
+        const followed = await FollowedModels.findAll({
+            where: {
+                userId: userId
+            },
+            include: { model: UserModel},
+            offset: offset,
+            limit: limit
+        });
+
+        console.log("hola", followed);
+        
+        // Find the total number of posts
+        const totalfollowed = await FollowedModels.count();
+
+        res.json({
+            currentPage: page,
+            totalPages: Math.ceil(totalfollowed / limit),
+            totalPosts: totalfollowed,
+            posts: followed
+        });
+        
+    } catch (error) {
+        res.json({ message: error.message });
     }
 }
 
