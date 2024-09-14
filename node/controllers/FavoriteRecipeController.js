@@ -16,7 +16,64 @@ FavoriteRecipeCTRL.getAllFavorites = async (req, res) => {
     }
 }
 
-///Mostrara registros paginados
+/* Regsitrso paginados de otros usuario */
+FavoriteRecipeCTRL.getOterUserFavsPaginated = async (req, res) => {
+    try {
+        
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const userId = req.query.userId; // Get the userId from query parameters
+        const userCurrent = req.query.userCurrent;
+
+        // Calculate the offset
+        const offset = (page - 1) * limit;
+
+        // Find posts with pagination
+        const posts = await FavoriteRecipeModel.findAll({
+            where: {
+                userId: userId
+            },
+            include: [
+                {
+                    model: PostModel,
+                }
+            ],
+            offset: offset,
+            limit: limit
+        });
+
+        // Find the total number of posts
+        const totalPosts = await FavoriteRecipeModel.count();
+
+        // Add isLiked field to each post
+        const postsWithLikes = await Promise.all(posts.map(async post => {
+            
+            const isLiked = await FavoriteRecipeModel.findOne({
+                where: {
+                    userId: userCurrent,
+                    recipeId: post.recipe.id
+                }
+            });
+
+            return {
+                ...post.recipe.toJSON(), // Convert the post instance to a plain object
+                isLiked: !!isLiked // Convert to boolean
+            };
+        }));
+
+        res.json({
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts: totalPosts,
+            posts: postsWithLikes
+        });
+        
+    } catch (error) {
+        res.json({ message: error.message });
+    }
+}
+
+///Muestra registros paginados
 
 FavoriteRecipeCTRL.getPostsPaginated = async (req, res) => {
     try {

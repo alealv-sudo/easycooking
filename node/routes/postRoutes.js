@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.get('/', PostCTRL.getAllPost);
 router.get('/paginated', PostCTRL.getPostsPaginated);
+router.get('/paginatedUser', PostCTRL.getOterUserPostsPaginated);
 router.get('/:id', PostCTRL.getPost);
 router.get('/user/:id',PostCTRL.getPostUser);
 router.post('/', PostCTRL.createPost);

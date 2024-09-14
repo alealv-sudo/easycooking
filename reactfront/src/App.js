@@ -22,7 +22,7 @@ import PrivateRoute from './components/routes/PrivateRoute';
 import CompShowBlog from './components/blog/showBlog';
 import Prueba from './components/Pruebas/prueba';
 import Prueba2 from './components/Pruebas/prueba2';
-import Usuario from './components/Pruebas/user';
+import Usuario from './components/profile/user';
 import Publicar from './components/recipes/post';
 import UpdateRecipes from './components/recipes/postUpdates';
 import ShowPostRecipes from './components/recipes/postShowRecipes';
