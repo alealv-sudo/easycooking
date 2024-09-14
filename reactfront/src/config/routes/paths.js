@@ -7,7 +7,7 @@ export const LOGOUT = '/private/logout'
 
 export const PROFILE = '/private/profile'
 export const BLOG = '/private/blog'
-export const USER = '/private/user'
+export const USER = '/private/user/:id'
 export const PRUEBA = '/private/recomendations'
 export const PRUEBA2 = '/private/prueba2'
 export const POSTR = '/private/post'

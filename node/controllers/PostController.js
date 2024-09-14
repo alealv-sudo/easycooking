@@ -17,6 +17,67 @@ PostCTRL.getAllPost = async (req, res) => {
        res.json({message: error.message}) 
     }
 }
+
+/* Post paginados para el perfil de otros usuarios */
+
+PostCTRL.getOterUserPostsPaginated = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 12;
+        const userId = req.query.userId; // Get the userId from query parameters
+        const userCurrent = req.query.userCurrent;
+
+        // Calculate the offset
+        const offset = (page - 1) * limit;
+
+        console.log("hola");
+
+        // Find posts with pagination
+        const posts = await PostModel.findAll({
+            where: {
+                creatorId: userId
+            },
+            include: [
+                {
+                    model: IngredientsModel,
+                    attributes: { exclude: ['id', 'recipeId'] }
+                }
+            ],
+            offset: offset,
+            limit: limit
+        });
+
+        // Find the total number of posts
+        const totalPosts = await PostModel.count();
+
+        // Add isLiked field to each post
+        const postsWithLikes = await Promise.all(posts.map(async post => {
+            const isLiked = await FavoriteRecipeModel.findOne({
+                where: {
+                    userId: userCurrent,
+                    recipeId: post.id
+                }
+            });
+
+            return {
+                ...post.toJSON(), // Convert the post instance to a plain object
+                isLiked: !!isLiked // Convert to boolean
+            };
+        }));
+
+        res.json({
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts: totalPosts,
+            posts: postsWithLikes
+        });
+    } catch (error) {
+        res.json({ message: error.message });
+    }
+}
+
+/* Post paginados del usuario */
+
 PostCTRL.getPostsPaginated = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;

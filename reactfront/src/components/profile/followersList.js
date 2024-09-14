@@ -2,32 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { Avatar, Divider, List, Skeleton } from 'antd';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useCookies } from 'react-cookie';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import FollowButton from './followButton';
 
-export default function FollowersList({route}) {
+export default function FollowersList({route , userId, isUser}) {
+  
+  const [cookies] = useCookies(['userToken']);
+  const navigate = useNavigate()
 
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
   const [maxPage, setMaxPage] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const URL = isUser ? process.env.REACT_APP_API_URL + route + '/paginatedUser?page=' + page + "&userId=" + userId + "&userCurrent=" + cookies.id : process.env.REACT_APP_API_URL + route + '/paginated?page=' + page + "&userId=" + userId
+
   useEffect(() => {
     loadMore();  // Initial load
   }, []);
 
-  const [cookies] = useCookies(['userToken']);
-  const userId = cookies.id;
   // Load more posts function
   const loadMore = () => {
     if ((maxPage == null || maxPage >= page) && !loading) {
       setLoading(true);
-      axios.get(process.env.REACT_APP_API_URL + route + '/paginated?page=' + page + "&userId=" + userId)
+      axios.get(URL)
         .then((response) => {
           const recipeData = response.data;
           
-          console.log(page, [...data, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]); setPage((prevPage) => prevPage + 1);
+          //console.log(page, [...data, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]); setPage((prevPage) => prevPage + 1);
           setData((prevRecipes) => [...prevRecipes, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]);
           setPage((prevPage) => prevPage + 1);
           setMaxPage(recipeData?.totalPages ? recipeData.totalPages : page)
@@ -39,7 +43,7 @@ export default function FollowersList({route}) {
         });
     }
   };
-  
+
   return (
     <div
       id="scrollableDiv"
@@ -72,10 +76,10 @@ export default function FollowersList({route}) {
             <List.Item key={item.user.email}>
               <List.Item.Meta
                 avatar={<Avatar />}
-                title={item.user.userName}
+                title={<Link relative="path" reloadDocument to={'/private/user/' + item.user.id} >{item.user.userName}</Link>}
                 description={item.user.email}
               />
-              <FollowButton isFollow={true}></FollowButton>
+              <FollowButton isFollow={item.isFollow} idData={item.id} idUser={item.user.id}></FollowButton>
             </List.Item>
           )}
         />

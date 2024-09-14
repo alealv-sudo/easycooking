@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.get('/', FavoriteRecipeCTRL.getAllFavorites);
 router.get('/paginated', FavoriteRecipeCTRL.getPostsPaginated);
+router.get('/paginatedUser', FavoriteRecipeCTRL.getOterUserFavsPaginated);
 router.get('/:id', FavoriteRecipeCTRL.getFavorite);
 router.get('/alluser/:id', FavoriteRecipeCTRL.getUserFavorites);
 router.post('/', FavoriteRecipeCTRL.createFavorite);
