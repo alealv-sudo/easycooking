@@ -7,7 +7,7 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
-import {VIEWRECIPE ,CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE, RECIPESFILTERED} from './config/routes/paths';
+import {VIEWREVIEW ,VIEWGPOST ,VIEWRECIPE ,CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE, RECIPESFILTERED} from './config/routes/paths';
 
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
@@ -31,8 +31,10 @@ import UploadTest from './components/Pruebas/UploadTest';
 import UserProfile from './components/profile/userProfile';
 import GeneralPost from './components/postExtra/generalPost'
 import EditGeneralPost from './components/postExtra/editGeneralPost'
+import ViewGeneralPost from './components/postExtra/viewGeneralPost';
 import RecipeReviewPost from './components/postExtra/recipeReviewPost'
 import EditRecipeReviewPost from './components/postExtra/editRecipeReviewPost'
+import ViewReview from './components/postExtra/viewRecipeReview';
 import MarketList from './components/marketList/marketList'
 import NewMarketList from './components/marketList/newMarketList'
 import ViewMarketList from './components/marketList/viewMarketList'
@@ -73,8 +75,10 @@ function App() {
                   <Route path={UPLOADTEST} element={<UploadTest/>} />
                   <Route path={GPOST} element={<GeneralPost/>} />
                   <Route path={EDITGPOST} element={<EditGeneralPost/>} />
+                  <Route path={VIEWGPOST} element={<ViewGeneralPost/>} />
                   <Route path={REVIEWPOST} element={<RecipeReviewPost/>} />
                   <Route path={EDITREVIEWPOST} element={<EditRecipeReviewPost/>} />
+                  <Route path={VIEWREVIEW} element={<ViewReview/>} />
                   <Route path={NEWLIST} element={<NewMarketList/>} />
                   <Route path={MARKETLIST} element={<MarketList/>} />
                   <Route path={VIEWMARKETLIST} element={<ViewMarketList/>} />

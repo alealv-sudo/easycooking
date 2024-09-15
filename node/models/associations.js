@@ -12,6 +12,7 @@ import FollowerModels from "./FollowerModel.js";
 import FollowedModels from "./FollowedModel.js";
 import RecipeComments from "./RecipeCommentsModel.js"
 import RecipeSubComments from "./RecipeSubCommentsModel.js"
+import RecipeReviewModel from "./RecipeReviewModel.js";
 
 
 /* asociación uno a muchos (post(recetas)-Ingredientes) */
@@ -215,6 +216,19 @@ RecipeSubComments.belongsTo(RecipeComments, {
     foreignKey: 'recipeCommentId',
     sourceKey: 'id'
 })
+
+/* asociación uno a uno  (recipeReview-Post)  */
+
+PostModel.hasOne(RecipeReviewModel, {
+    foreignKey: 'id_recipe_review',
+    sourceKey: 'id'
+})
+
+RecipeReviewModel.belongsTo(PostModel, {
+    foreignKey: 'id_recipe_review',
+    sourceKey: 'id'
+})
+
 
 
 
