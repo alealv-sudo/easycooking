@@ -1,5 +1,6 @@
 import { request } from "express";
 import RecipeReviewModel from "../models/RecipeReviewModel.js";
+import PostModel from "../models/PostModel.js"
 
 const RecipeReviewCTRL = {}
 
@@ -20,7 +21,8 @@ RecipeReviewCTRL.getAllPost = async (req, res) => {
 RecipeReviewCTRL.getPost = async (req, res) => {
     try {
        const post =  await RecipeReviewModel.findAll({
-        where: { id: req.params.id }
+        where: { id: req.params.id },
+        include: {model: PostModel}
        })
        res.json(post[0])
     } catch (error) {
