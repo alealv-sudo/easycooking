@@ -10,6 +10,7 @@ import {
     Button,
     Card,
     Spin,
+    Rate,
 } from 'antd';
 
 import './generalPost.css';
@@ -26,6 +27,8 @@ const ViewReview = () => {
 
     const [reviewPost, setReviewPost] = useState()
     const [recipe, setRecipe] = useState()
+    const [rating, setRating] = useState({ score: 0 });
+    const [isEmpty, setIsEmpty] = useState(true);
 
     const [ImgURL, setURL] = useState([]);
     const [state, setState] = useState({
@@ -47,6 +50,8 @@ const ViewReview = () => {
             const reviewData = response.data;
             const recipeData = reviewData.recipe
             
+            getRate(recipeData.id)
+
             DownloadFile(recipeData.image_recipe)
             setRecipe(recipeData)
             setReviewPost(reviewData)
@@ -57,6 +62,22 @@ const ViewReview = () => {
         }).catch((error) => {
             console.error(error);
         });
+    }
+
+    function getRate(favId) {
+
+        axios.get(`${process.env.REACT_APP_API_URL}ratings/${cookies.id}/recipes/${favId}`)
+        .then((response) => {
+            const ratingData = response.data;
+            if (ratingData.length !== 0 && ratingData !== undefined && ratingData !== null) {
+                setRating(ratingData);
+                setIsEmpty(false);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+        
     }
 
     const DownloadFile = (image_recipe) => {
@@ -146,6 +167,7 @@ const ViewReview = () => {
                     </Form.Item>
                 </Form>
             
+            <div className='div-card-rate'>
                 <Card
                     onClick={() => navTo(recipe.id)}
                     hoverable
@@ -165,6 +187,19 @@ const ViewReview = () => {
                     description={recipe.description}
                     />
                 </Card>
+
+                <div className="bottom-page-rating">
+                    <p className="text-rate-final">Puntuacion Final</p>
+                    <p className="text-rate">{rating.score}</p>
+                    <Rate
+                        style={{ fontSize: 35, paddingTop: 5 }}
+                        allowHalf
+                        value={rating.score}
+                        autoFocus={false}
+                        disabled={true}
+                    />
+                </div>
+            </div>
 
             </div>
 

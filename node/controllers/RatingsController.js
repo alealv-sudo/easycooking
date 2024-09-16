@@ -63,6 +63,18 @@ ratingsCTRL.updateRating = async (req, res) => {
     }
 }
 
+ratingsCTRL.updateRatingReview = async (req, res) => {
+    try {
+         await RatingsModel.update(req.body, {
+            where: { recipeId: req.body.recipeId, userId: req.body.userId }
+        })
+        res.json({"message": "Registro Actualizado correctamente"})
+    } catch (error) {
+        res.json({message: error.message}) 
+    }
+}
+
+
 //Eliminar un registro
 
 ratingsCTRL.deleteRating = async (req , res) => {

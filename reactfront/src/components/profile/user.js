@@ -213,9 +213,13 @@ export default function Profile() {
                 {profile.name} {profile.lastName}
                 </Typography.Title>
             </div>
-                <div>
+                {String(id) !== String(cookies.id) ?  
+                  <div>
                     <FollowButton  idData={isDataFollow} isFollow={isFollowed} idUser={id}></FollowButton>
-                </div>
+                  </div> 
+                  : 
+                  <></>
+                }
             </div>
         
 

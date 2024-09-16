@@ -13,7 +13,7 @@ import FollowedModels from "./FollowedModel.js";
 import RecipeComments from "./RecipeCommentsModel.js"
 import RecipeSubComments from "./RecipeSubCommentsModel.js"
 import RecipeReviewModel from "./RecipeReviewModel.js";
-
+import LikeModel from "./LikeModel.js";
 
 /* asociación uno a muchos (post(recetas)-Ingredientes) */
 
@@ -109,6 +109,31 @@ FavoriteRecipeModel.belongsTo(PostModel, {
     foreignKey: 'recipeId',
     sourceKey: 'id'
 })
+
+/* asociación uno a muchos (usuario-Likes) */
+
+UserModel.hasMany(LikeModel, {
+    foreignKey: 'userId',
+    sourceKey: 'id'
+})
+
+LikeModel.belongsTo(UserModel, {
+    foreignKey: 'userId',
+    targetKey: 'id'
+})
+
+/* asociación uno a uno  (favorito-receta)  */
+
+PostModel.hasOne(LikeModel, {
+    foreignKey: 'recipeId',
+    sourceKey: 'id'
+})
+
+LikeModel.belongsTo(PostModel, {
+    foreignKey: 'recipeId',
+    sourceKey: 'id'
+})
+
 
 /* asociación uno a muchos (usuario-marketlist) */
 
@@ -227,6 +252,18 @@ PostModel.hasOne(RecipeReviewModel, {
 RecipeReviewModel.belongsTo(PostModel, {
     foreignKey: 'id_recipe_review',
     sourceKey: 'id'
+})
+
+/* asociación uno a muchos (usuario-recipeReview) */
+
+UserModel.hasMany(RecipeReviewModel, {
+    foreignKey: 'creatorId',
+    sourceKey: 'id'
+})
+
+RecipeReviewModel.belongsTo(UserModel, {
+    foreignKey: 'creatorId',
+    targetKey: 'id'
 })
 
 

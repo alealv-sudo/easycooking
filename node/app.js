@@ -22,6 +22,7 @@ import recipeReviewRoutes from './routes/recipeReviewRoutes.js'
 import IngredientsRutes from './routes/ingredientRoutes.js'
 import RatingsRoutes from './routes/ratingRoutes.js'
 import favoriteRoutes from './routes/favoriteRoutes.js'
+import likesRoutes from './routes/likeRoutes.js'
 import marketListRoutes from './routes/marketListRoutes.js'
 import listItemRoutes from './routes/listItemRoutes.js'
 import listCalendarRoutes from './routes/listCalendarRoutes.js'
@@ -48,6 +49,7 @@ app.use('/reviewPost', recipeReviewRoutes)
 app.use('/ingredients', IngredientsRutes)
 app.use('/ratings', RatingsRoutes)
 app.use('/favorites', favoriteRoutes)
+app.use('/likes', likesRoutes)
 app.use('/marketList', marketListRoutes)
 app.use('/listItems', listItemRoutes)
 app.use('/calendar', listCalendarRoutes)

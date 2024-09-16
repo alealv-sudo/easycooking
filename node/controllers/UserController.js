@@ -1,7 +1,7 @@
 import UserModel from "../models/UserModel.js";
 import Profile from "../models/ProfileModel.js";
-import Follower from "../models/FollowerModel.js";
-import Followed from "../models/FollowedModel.js";
+import LikeModel from "../models/LikeModel.js";
+
 
 const UserCTRL = {}
 
@@ -27,8 +27,7 @@ UserCTRL.getUser = async (req, res) => {
             model: Profile,
             as: 'profile'
             },
-            {model: Followed},
-            {model: Follower}
+            {model: LikeModel}
         ]
        })
        res.json(blog[0])

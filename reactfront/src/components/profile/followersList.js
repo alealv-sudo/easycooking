@@ -79,7 +79,12 @@ export default function FollowersList({route , userId, isUser}) {
                 title={<Link relative="path" reloadDocument to={'/private/user/' + item.user.id} >{item.user.userName}</Link>}
                 description={item.user.email}
               />
-              <FollowButton isFollow={item.isFollow} idData={item.id} idUser={item.user.id}></FollowButton>
+              {console.log(item.user.id)}
+              {String(item.user.id) !== String(cookies.id) ? (
+                <FollowButton isFollow={item.isFollow} idData={item.id} idUser={item.user.id}></FollowButton>
+              ) : (
+                <></>
+              )}
             </List.Item>
           )}
         />

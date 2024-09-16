@@ -365,23 +365,18 @@ const PostShowRecipes = ({ id, onClose }) => {
                                     </Form.Item>
                                 </Form>
 
-                                {/* <div>
-                                    <TextArea placeholder="textarea with clear icon" allowClear onChange={() => { }} />
-                                </div> */}
-                            </div>
-
-                            <div className="bottom-page">
-                                <Rate
-                                    allowHalf
-                                    defaultValue={rating.score}
-                                    autoFocus={false}
-                                    onChange={onFinish}
-                                />
-                                <div className='buttom-div'>
-                                    <Button danger type="primary" onClick={() => onClose()} shape="round">
-                                        Salir
-                                    </Button>
+                                <div className="bottom-page-rating">
+                                    <p className="text-rate">{rating.score}</p>
+                                    <Rate
+                                        style={{fontSize: 35, paddingTop: 5}}
+                                        allowHalf
+                                        defaultValue={rating.score}
+                                        autoFocus={false}
+                                        onChange={onFinish}
+                                    />
+                                    <p className="text-title-score">califica esta receta</p>
                                 </div>
+                                
                             </div>
 
                             <div className="div-comments-page">
@@ -392,6 +387,15 @@ const PostShowRecipes = ({ id, onClose }) => {
                                     currentUser={user}
                                 />
                             </div>
+
+                            <div className="bottom-page">
+                                <div className='buttom-div'>
+                                    <Button danger type="primary" onClick={() => onClose()} shape="round">
+                                        Salir
+                                    </Button>
+                                </div>
+                            </div>
+
                         </div>
                     </>
                 ) : (

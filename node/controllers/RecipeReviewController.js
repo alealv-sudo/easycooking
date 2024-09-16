@@ -45,6 +45,7 @@ RecipeReviewCTRL.createPost = async (req, res) => {
 //Actualizar un registro
 
 RecipeReviewCTRL.updatePost = async (req, res) => {
+    console.log("body", req.body);
     try {
          await RecipeReviewModel.update(req.body, {
             where: { id: req.body.id }

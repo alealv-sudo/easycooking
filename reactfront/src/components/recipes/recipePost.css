@@ -5,9 +5,35 @@
   align-items: center;
 }
 
-.bottom-page{
-  padding-bottom: 10%;
+.bottom-page {
+  padding-top: 3%;
+  padding-bottom: 3%;
 }
+
+.text-rate-final{
+  font-size: 35px;
+  
+  padding-bottom: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.text-title-score{
+  font-size: 18px;
+  padding-top: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.bottom-page-rating{
+  padding-top: 2%;
+  padding-bottom: 5%;
+}
+.text-rate {
+  font-size: 40px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 .buttom-div {
   padding-top: 5%;
 }
