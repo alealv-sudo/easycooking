@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect, message } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 import {
@@ -12,10 +12,10 @@ import {
     Tag,
     notification,
     Spin,
+    Rate,
 } from 'antd';
 
 import './generalPost.css';
-const TemporalPostID = 1
 
 const customizeRequiredMark = (label, { required }) => (
     <>
@@ -27,15 +27,25 @@ const customizeRequiredMark = (label, { required }) => (
 const EditarReview = () => {
 
     const [cookies, setCookie] = useCookies(['userToken']);
+    const { id } = useParams()
+
+    const [form] = Form.useForm();
+
     const [reviewPost, setReviewPost] = useState()
     const [isLoading, setLoading] = useState(true);
+
+    const [selectData ,setSelectData] = useState([])
+    const [rating, setRating] = useState({ score: 0 });
+    const [isEmpty, setIsEmpty] = useState(true);
  
     const navigate = useNavigate();
 
     function getPost() {
-        axios.get(process.env.REACT_APP_API_URL + 'reviewPost/' + TemporalPostID,
+        axios.get(process.env.REACT_APP_API_URL + 'reviewPost/' + id,
         ).then((response) => {
             const reviewData = response.data;
+            console.log("data", reviewData);
+            getRate(reviewData.id_recipe_review)
             setReviewPost(reviewData)
             setLoading(false);
         }).catch((error) => {
@@ -43,20 +53,38 @@ const EditarReview = () => {
         });
     }
 
+    function getFavorites() {
+        axios.get(process.env.REACT_APP_API_URL + 'favorites/alluser/'  + cookies.id)
+        .then((response) => {
+            const FavoritesRes = response.data
+            const favData = FavoritesRes.map((e) => {
+                return{
+                    value: e.recipe.id,
+                    label: e.recipe.recipe_name
+                }
+            })
+            setSelectData(favData)
+            //setFavoritesData(FavoritesRes)
+        })
+        .catch((error) => {
+            console.log(error)
+        });
+    }
+
     const onFinish = (values) => {
+
+            const favId = values.favorito.value !== undefined ? values.favorito.value : values.favorito
+
             const reviewPostSend = {
                 id: reviewPost.id,
                 title_post: values.title_post,
                 review_post: values.review_post,
-                id_recipe_review: 0,
+                id_recipe_review: favId,
             }
     
             axios.put(process.env.REACT_APP_API_URL + 'reviewPost/', reviewPostSend)
                 .then(function response(response) {
-                    notification.success({
-                        message: 'Post editado con exito'
-                    });
-                    Salir();
+                    onFinishRate(favId)
                 })
                 .catch(function error(error) {
                     console.log(error);
@@ -64,13 +92,101 @@ const EditarReview = () => {
         
     }
 
+    function getRate(favId) {
+
+        axios.get(`${process.env.REACT_APP_API_URL}ratings/${cookies.id}/recipes/${favId}`)
+        .then((response) => {
+            const ratingData = response.data;
+            if (ratingData.length !== 0 && ratingData !== undefined && ratingData !== null) {
+                setRating(ratingData);
+                setIsEmpty(false);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+        
+    }
+
+    function setRate() {
+        const favId = form.getFieldValue().favorito
+        
+        axios.get(`${process.env.REACT_APP_API_URL}ratings/${cookies.id}/recipes/${favId}`)
+        .then((response) => {
+            const ratingData = response.data;
+            if (ratingData.length !== 0 && ratingData !== undefined && ratingData !== null) {
+                form.setFieldValue("rate", ratingData.score)
+                setRating(ratingData);
+                setIsEmpty(false);
+            }else{
+                const ratingData = {
+                    score: 0,
+                }
+                form.setFieldValue("rate", ratingData.score)
+                setRating(ratingData)
+                setIsEmpty(true)
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+        
+    }
+
+    const onFinishRate = (values) => {
+        const ratingValue = {
+            userId: cookies.id,
+            recipeId: values,
+            score: rating.score,
+        };
+
+        if (isEmpty) {
+            axios.post(`${process.env.REACT_APP_API_URL}ratings/`, ratingValue)
+                .then((response) => {
+                    notification.success({
+                        message: "Post creado con exito",
+                      });
+                      Salir();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            const ratingPut = {
+                recipeId: values,
+                userId: cookies.id,
+                score: rating.score,
+            };
+
+            axios.put(`${process.env.REACT_APP_API_URL}ratings/Review/`, ratingPut)
+                .then((response) => {
+                    notification.success({
+                        message: "Post creado con exito",
+                    });
+                    Salir();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    };
+
+    function onChangeRate(values) {
+        const ratingData = {
+            score: values,
+        }
+        setRating(ratingData)
+    }
+
     useEffect(() => {
         getPost()
+        getFavorites()
     }, []);
 
     const Salir = () => {
         navigate("/private/BLOG");
     }
+
 
     /* Render */
 
@@ -87,12 +203,14 @@ const EditarReview = () => {
             {/* Form Receta */}
             <div className='div-general-post'>
                 <Form
+                    form={form}
                     className='div-form-general-post'
                     layout="vertical"
                     name="recipe"
                     initialValues={{
                         title_post: reviewPost.title_post,
-                        review_post: reviewPost.review_post
+                        review_post: reviewPost.review_post,
+                        favorito: {value: reviewPost.recipe.id , label: reviewPost.recipe.recipe_name}
                     }}
                     requiredMark={customizeRequiredMark}
                     onFinish={onFinish}
@@ -136,21 +254,36 @@ const EditarReview = () => {
                             className="half-width-slot"
                             type="flex" justify="center" align="middle"
 
-                            label="Rellenar con lista de recetas agregadas a favoritos"
-                            name="type_recipe"
-                            normalize={value => (value || '').toUpperCase()}
-                            rules={[{ required: false, message: 'Por favor introduce un tipo de receta.' }]}
+                            label="Receta a reseñar"
+                            name="favorito"
+                            rules={[{ required: true, message: 'Campo requerido'}]}
                         >
                             <Select
-                                disabled={true}
+                                disabled={false}
                                 showSearch
+                                options={selectData}
+                                onChange={() => setRate()}
                             >
-                                <Select.Option value="Comida">Comida</Select.Option>
-                                <Select.Option value="Bebida">Bebida</Select.Option>
-                                <Select.Option value="Postre">Postre</Select.Option>
                             </Select>
                         </Form.Item>
                     </div>
+
+                    <Form.Item
+                label="score: "
+                name="rate"
+                valuePropName="rate"
+            >
+                <div className="bottom-page-rating">
+                    <p className="text-rate">{rating.score}</p>
+                    <Rate
+                        style={{ fontSize: 35, paddingTop: 5 }}
+                        allowHalf
+                        value={rating.score}
+                        autoFocus={false}
+                        onChange={onChangeRate}
+                    />
+                </div>
+                </Form.Item>
 
                     {/* Boton Submit */}
                     <Form.Item

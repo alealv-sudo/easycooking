@@ -41,6 +41,12 @@
     width: 70%;
 }
 
+.div-card-rate {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
 .customSizedUploadGP .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container{
     width: 450px;
     height: 200px;

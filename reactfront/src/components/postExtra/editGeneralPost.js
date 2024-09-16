@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useState, useEffect, message } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 import {
@@ -17,8 +17,6 @@ import {
 import './generalPost.css';
 const folderID = "1-tXGVcYegjmtuqVnSTSyPCujAydFonO4"
 
-const TemporalPostID = 7;
-
 const customizeRequiredMark = (label, { required }) => (
     <>
       {required ? <Tag color="error">Req</Tag> : ""}
@@ -29,6 +27,7 @@ const customizeRequiredMark = (label, { required }) => (
 const EditarGeneralPost = () => {
 
     const [cookies, setCookie] = useCookies(['userToken']);
+    const { id } = useParams()
 
     const [gPost, setGPost] = useState()
 
@@ -48,7 +47,7 @@ const EditarGeneralPost = () => {
     {/* Get post */}
 
     function getPost() {
-        axios.get(process.env.REACT_APP_API_URL + 'generalPost/' + TemporalPostID,
+        axios.get(process.env.REACT_APP_API_URL + 'generalPost/' + id,
         ).then((response) => {
             const postData = response.data;
             setGPost(postData)

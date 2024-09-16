@@ -162,6 +162,30 @@ const ViewGeneralPost = () => {
                     }}
                     autoComplete="off"
                 >
+                    {/* Input imagen */}
+                    {String(gPost.image_post_id) !== "1" ? (
+                        <div type="flex" justify="center" align="middle">
+                        <Form.Item
+                            className="customSizedUploadGP"
+                            justify="center" align="middle"
+                            name="image_post_id"
+                        >
+                            <Upload
+                                listType="picture-card"
+                                disabled={true}
+                                fileList={imgFileList}
+                                onPreview={onPreview}
+                                showUploadList={{ showRemoveIcon: false }}
+                            >
+                                {fileList.length < 1 && '+ Upload'}
+
+                            </Upload>
+
+                        </Form.Item>
+                    </div>
+                    ) : (
+                        <></>
+                    )}
 
                     {/* Input Titulo */}
                     <Form.Item
@@ -190,38 +214,6 @@ const ViewGeneralPost = () => {
                             />
                             </Form.Item>
 
-                        {/* Input imagen */}
-                    <div type="flex" justify="center" align="middle">
-                        <Form.Item
-                            className="customSizedUploadGP"
-                            justify="center" align="middle"
-                            name="image_post_id"
-                        >
-                            <Upload
-                                listType="picture-card"
-                                disabled={true}
-                                fileList={imgFileList}
-                                onPreview={onPreview}
-                                showUploadList={{ showRemoveIcon: false }}
-                            >
-                                {fileList.length < 1 && '+ Upload'}
-
-                            </Upload>
-
-                        </Form.Item>
-                    </div>
-
-                    {/* Boton Submit */}
-                    <Form.Item
-                        className="half-width-slot-generalpost"
-                    >
-                        <div className='half-width-slot-profile-btnGP'>
-                            <div>
-                                <Button  danger type="primary" shape="round" onClick={Salir}> Salir </Button>
-                            </div>
-                        </div>
-                    </Form.Item>
-
                 </Form>
             </div>
 
@@ -233,7 +225,14 @@ const ViewGeneralPost = () => {
                     currentUser={user}
                 />
             </div>
-        </div>
+
+            <div className='half-width-slot-profile-btnGP'>
+                <div>
+                    <Button  danger type="primary" shape="round" onClick={Salir}> Salir </Button>
+                </div>
+            </div>
+
+            </div>
         </React.Fragment>
     );
 
