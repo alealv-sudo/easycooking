@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import PostDetails from '../blog/showBlogI';
 
 import {
     Typography,
@@ -25,7 +26,7 @@ import {
 import './recipePost.css';
 import { Grid } from "@mui/material";
 
-const PostShowRecipes = () => {
+const ViewRecipe = () => {
 
     const navigate = useNavigate()
     const { id } = useParams()
@@ -184,11 +185,11 @@ const PostShowRecipes = () => {
 
     return (
         <>
-            <Grid>
+            <Grid container spacing={1} xs={12} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
                 {!isLoading ? (
-                    <>
-                        <Typography.Title >Receta</Typography.Title>
+                    <Grid item width={'100%'} md={9}>
                         <div className="all-page">
+                        <Typography.Title >Receta</Typography.Title>
                             <div className='div-general-recipe-post'>
                                 <Form
                                     layout="vertical"
@@ -307,17 +308,17 @@ const PostShowRecipes = () => {
                                     <label className="label-ingedient">Ingredientes</label>
 
                                     <div type="flex" justify="center" align="middle">
-                            <Form.Item
-                                name="ingredients"
-                            >
-                                <List
-                                    bordered
-                                    size="small"
-                                    dataSource={ingredientList}
-                                    renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
-                                />
-                            </Form.Item>
-                        </div>
+                                        <Form.Item
+                                            name="ingredients"
+                                        >
+                                            <List
+                                                bordered
+                                                size="small"
+                                                dataSource={ingredientList}
+                                                renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
+                                            />
+                                        </Form.Item>
+                                    </div>
 
                                     <Form.Item
                                         className="half-width-slot"
@@ -371,29 +372,33 @@ const PostShowRecipes = () => {
                                     </Form.Item>
                                 </Form>
 
-                                <div className="bottom-page-rating">
-                                    <p className="text-rate">{rating.score}</p>
-                                    <Rate
-                                        style={{fontSize: 35, paddingTop: 5}}
-                                        allowHalf
-                                        defaultValue={rating.score}
-                                        autoFocus={false}
-                                        onChange={onFinish}
-                                    />
-                                    <p className="text-title-score">califica esta receta</p>
-                                </div>
+                                <div className="div-general-recipe-post2">
+                                    <div className="bottom-page-rating">
+                                        <p className="text-rate">{rating.score}</p>
+                                        <Rate
+                                            style={{fontSize: 35, paddingTop: 5}}
+                                            allowHalf
+                                            defaultValue={rating.score}
+                                            autoFocus={false}
+                                            onChange={onFinish}
+                                        />
+                                        <p className="text-title-score">califica esta receta</p>
+                                    </div>
 
+                                    <div className="div-comments-page">
+                                        <BlogCommentSection
+                                        style={{with: "100%"}}
+                                            apiBaseUrl="http://localhost:443"
+                                            articleId={idRecipeComments}
+                                            callbacks={{ loginClickCallback: () => null }}
+                                            currentUser={user}
+                                        />
+                                    </div>
+                                </div> 
+                                           
                             </div>
 
-                            <div className="div-comments-page">
-                                <BlogCommentSection
-                                    apiBaseUrl="http://localhost:443"
-                                    articleId={idRecipeComments}
-                                    callbacks={{ loginClickCallback: () => null }}
-                                    currentUser={user}
-                                />
-                            </div>
-
+                    
                             <div className="bottom-page">
                                 <div className='buttom-div'>
                                     <Button danger type="primary" shape="round" onClick={() => navTo()}>
@@ -401,14 +406,19 @@ const PostShowRecipes = () => {
                                     </Button>
                                 </div>
                             </div>
+          
                         </div>
-                    </>
+
+                    </Grid>
                 ) : (
                     <Spin color="#000106" tip="Loading..." />
                 )}
+
+                
+
             </Grid>
         </>
     );
 }
 
-export default PostShowRecipes;
+export default ViewRecipe;

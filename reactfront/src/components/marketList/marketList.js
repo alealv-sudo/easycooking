@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { PlusOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Grid } from '@mui/material';
 
 import {
     Form,
@@ -211,6 +212,14 @@ export default function Profile() {
 
     return (
         <React.Fragment>
+        <Grid
+        container
+        spacing={1}
+        xs={12}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        alignContent={"center"}
+        >
+        <Grid item width={"100%"} md={9}>
         <div className='div-general-list'>
         <Card
         className='div-form-general-recipe-post'
@@ -260,6 +269,8 @@ export default function Profile() {
             </Form>
         </Modal>
         </div>
+        </Grid>
+        </Grid>
         </React.Fragment>
     );
 }

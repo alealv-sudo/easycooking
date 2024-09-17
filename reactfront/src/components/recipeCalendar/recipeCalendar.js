@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
+import { Grid } from '@mui/material';
 
 import ListDay from './listDay.js'
 
@@ -93,7 +94,14 @@ export default function RecipeCalendar() {
 
     return (
         <React.Fragment>
-            
+        <Grid
+        container
+        spacing={1}
+        xs={12}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        alignContent={"center"}
+        >
+        <Grid item width={"100%"} md={9}>
             <div className='div-general-calendar'>
             <Card className='div-tab-calendar'>
             <Tabs
@@ -104,7 +112,8 @@ export default function RecipeCalendar() {
             />
             </Card>
             </div>
-            
+        </Grid>
+        </Grid>   
         </React.Fragment>
     );
 }

@@ -6,39 +6,36 @@
 }
   
 .div-general-post{
-    margin-top: 3%;
-    width: 70%;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #fff;
-    border: 1px solid black;
-    margin-bottom: 10px;
-    padding-top: 20px;
+    margin-bottom: 15px;
+    padding-top: 10px;
 }
 
 .div-general-post-view-review{
     margin-top: 3%;
-    width: 70%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: #fff;
-    border: 1px solid black;
     margin-bottom: 10px;
     padding-top: 20px;
     padding-bottom: 20px;
 }
 
 .div-comments-review {
-    width: 70%;
+    width: 100%;
     background-color: #fff;
     padding: 10px;
   }
 
 .div-form-general-post{
-    width: 70%;
+    width: 95%;
 }
 
 .div-card-rate {

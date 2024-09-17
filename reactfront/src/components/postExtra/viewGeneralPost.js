@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { useParams } from 'react-router-dom';
 import { BlogCommentSection } from "replyke";
+import { Grid } from '@mui/material';
 
 import {
     Typography,
@@ -148,7 +149,14 @@ const ViewGeneralPost = () => {
 
     return (
         <React.Fragment>
-
+        <Grid
+        container
+        spacing={1}
+        xs={12}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        alignContent={"center"}
+        >
+        <Grid item width={"100%"} md={9}>
         <div className='all-page'>
             {/* Form Receta */}
             <div className='div-general-post'>
@@ -233,6 +241,8 @@ const ViewGeneralPost = () => {
             </div>
 
             </div>
+            </Grid>
+        </Grid>
         </React.Fragment>
     );
 

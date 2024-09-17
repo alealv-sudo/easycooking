@@ -65,7 +65,7 @@ const CompShowBlog = () => {
     <>
       <Grid item container xs={12} minHeight={"100%"} py={2} px={2}>
         {openRecipe && (
-          <Grid item container spacing={2} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
+          <Grid item container  spacing={2} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
             <PostShowRecipes
               id={openRecipe}
               onClose={setOpenRecipe}

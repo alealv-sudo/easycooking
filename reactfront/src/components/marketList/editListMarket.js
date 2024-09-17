@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Grid } from '@mui/material';
 
 import { CloseOutlined, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -109,7 +110,15 @@ export default function EditListMarket() {
     }
 
     return (
-        <React.Fragment>       
+        <React.Fragment>
+        <Grid
+        container
+        spacing={1}
+        xs={12}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        alignContent={"center"}
+        >
+        <Grid item width={"100%"} md={9}>      
         <div className='div-general-list'>
             <Form
             onFinish={onFinish}
@@ -212,6 +221,8 @@ export default function EditListMarket() {
             </Card>       
             </Form>
         </div>
+        </Grid> 
+        </Grid> 
         </React.Fragment>
     );
 }

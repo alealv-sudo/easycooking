@@ -3,6 +3,7 @@ import React, { useState, useEffect} from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { BlogCommentSection } from "replyke";
+import { Grid } from '@mui/material';
 
 import {
     Form,
@@ -126,7 +127,14 @@ const ViewReview = () => {
 
     return (
         <React.Fragment>
-
+        <Grid
+        container
+        spacing={1}
+        xs={12}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        alignContent={"center"}
+      >
+        <Grid item width={"100%"} md={9}>
         <div className='all-page'>
             {/* Form Receta */}
             <div className='div-general-post-view-review'>
@@ -219,6 +227,8 @@ const ViewReview = () => {
             </div>
 
         </div>
+        </Grid>
+        </Grid>
         </React.Fragment>
     );
 
