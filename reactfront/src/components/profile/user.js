@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { useParams, useNavigate } from "react-router-dom";
+import { Grid } from "@mui/material";
 import axios from "axios";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -176,6 +177,9 @@ export default function Profile() {
 
   return (
     <React.Fragment>
+
+      <Grid container spacing={1} xs={12} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
+      <Grid item width={'100%'} md={9}>
       {/*Form Imagen */}
       <div className="general-page">
         <div className="profile-div">
@@ -264,6 +268,8 @@ export default function Profile() {
 
         </div>
     </div>
+     </Grid>
+    </Grid>
     </React.Fragment>
   );
 }

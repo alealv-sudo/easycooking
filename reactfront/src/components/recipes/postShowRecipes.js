@@ -181,8 +181,9 @@ const PostShowRecipes = ({ id, onClose }) => {
             <Grid>
                 {!isLoading ? (
                     <>
-                        <Typography.Title >Receta</Typography.Title>
+                        
                         <div className="all-page">
+                            <Typography.Title >Receta</Typography.Title>
                             <div className='div-general-recipe-post'>
                                 <Form
                                     layout="vertical"

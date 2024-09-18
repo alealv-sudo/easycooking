@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Grid } from '@mui/material';
 
 import {
     Input,
@@ -70,7 +71,15 @@ export default function Profile() {
     }
 
     return (
-        <React.Fragment>       
+        <React.Fragment>    
+        <Grid
+        container
+        spacing={1}
+        xs={12}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        alignContent={"center"}
+        >
+        <Grid item width={"100%"} md={9}>  
         <div className='div-general-list'>
             <Form
             form={form}
@@ -151,6 +160,8 @@ export default function Profile() {
             </Card>       
             </Form>
         </div>
+        </Grid> 
+        </Grid> 
         </React.Fragment>
     );
 }

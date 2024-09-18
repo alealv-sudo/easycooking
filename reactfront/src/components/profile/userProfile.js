@@ -3,6 +3,7 @@ import { useCookies } from "react-cookie";
 import axios from "axios";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
+import { Grid } from "@mui/material";
 
 import countriesData from "../recipes/countries.json";
 import FollowersList from "./followersList.js";
@@ -541,6 +542,8 @@ export default function Profile() {
 
   return (
     <React.Fragment>
+      <Grid container spacing={1} xs={12} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
+      <Grid item width={'100%'} md={9}>
       {/*Form Imagen */}
       <div className="general-page">
         <div className="profile-div">
@@ -844,6 +847,8 @@ export default function Profile() {
           </Card>
         </div>
       </div>
+        </Grid>
+      </Grid>
     </React.Fragment>
   );
 }

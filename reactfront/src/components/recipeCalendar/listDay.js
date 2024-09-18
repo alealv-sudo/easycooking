@@ -127,9 +127,9 @@ export default function ListDay({favSelect, favorites, userId, day}) {
     {
       idRecipe: e.id,
       idList: listData[i].id,
-      title: <Link to={'/private/postShowRecipe/' + e.id} relative='route'>{e.recipe_name}</Link>,
+      title: <Link to={'/private/viewRecipe/' + e.id} relative='route'>{e.recipe_name}</Link>,
       description: <br></br>,
-      content: <Link to={'/private/postShowRecipe/' + e.id} relative='route'>{e.description}</Link>,
+      content: <Link to={'/private/viewRecipe/' + e.id} relative='route'>{e.description}</Link>,
   }));
 
   return (

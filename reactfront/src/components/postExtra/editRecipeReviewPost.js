@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState, useEffect, message } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { Grid } from '@mui/material';
 
 import {
     Typography,
@@ -197,6 +198,14 @@ const EditarReview = () => {
 
     return (
         <React.Fragment>
+        <Grid
+        container
+        spacing={1}
+        xs={12}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        alignContent={"center"}
+      >
+        <Grid item width={"100%"} md={9}>
             <Typography.Title level={2}>Editar Reseña</Typography.Title>
 
         <div className='all-page'>
@@ -302,6 +311,8 @@ const EditarReview = () => {
                 </Form>
             </div>
         </div>
+        </Grid>
+        </Grid>
         </React.Fragment>
     );
 

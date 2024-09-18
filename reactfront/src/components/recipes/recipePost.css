@@ -5,6 +5,32 @@
   align-items: center;
 }
 
+.div-general-recipe-post{
+  width: 100%;
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  flex-flow: row wrap;
+  background: #fff;
+}
+
+.div-general-recipe-post2{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.div-comments-page {
+  width: 100%;
+  background-color: #fff;
+  padding: 10px;
+}
+
+.div-form-general-recipe-post{
+  width: 95%;
+}
+
+
 .bottom-page {
   padding-top: 3%;
   padding-bottom: 3%;
@@ -38,25 +64,6 @@
   padding-top: 5%;
 }
 
-.div-general-recipe-post{
-  margin-top: 3%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background: #fff;
-  border: 1px solid black;
-  margin-bottom: 10px;
-  padding-top: 10px;
-}
-
-.div-comments-page {
-  width: 100%;
-  background-color: #fff;
-  padding: 10px;
-}
-
 .post-card-recipe.ant-card-bordered{
   width: 100%;
 }
@@ -69,10 +76,6 @@
   border-radius: 0 0 8px 8px;
 }
  
-.div-form-general-recipe-post{
-    width: 100%;
-}
-
 .customSizedUploadRP .ant-upload-wrapper.ant-upload-picture-card-wrapper .ant-upload-list.ant-upload-list-picture-card .ant-upload-list-item-container{
     width: 450px;
     height: 200px;

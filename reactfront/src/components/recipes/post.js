@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useState, useEffect, message } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { Grid } from '@mui/material';
 
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -259,6 +260,8 @@ const Publicar = () => {
 
     return (
         <React.Fragment>
+            <Grid container spacing={1} xs={12} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
+            <Grid item width={'100%'} md={9}>
             <Typography.Title level={2}>Nueva Receta</Typography.Title>
 
             <div className='div-general-recipe-post'>
@@ -551,8 +554,10 @@ const Publicar = () => {
 
                 </Form>
             </div>
-
+            </Grid>
+        </Grid>                            
         </React.Fragment>
+    
     );
 
 }
