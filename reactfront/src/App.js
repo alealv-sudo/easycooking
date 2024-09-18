@@ -14,6 +14,8 @@ import Logout from './components/Login/Logout';
 import Register from './components/Login/Register';
 import { AuthContextProvider } from './components/contexts/authContext';
 
+import NotFound from './components/NotFound/NotFound';
+
 ///
 import PublicRoute from './components/routes/publicRoute';
 import PrivateRoute from './components/routes/PrivateRoute';
@@ -53,38 +55,39 @@ function App() {
           <Router>
             <Routes>
 
-              <Route path='/' element={<PublicRoute />}>
-                <Route index element={<Login />} />
+              <Route path='/' exact element={<PublicRoute />}>
+                <Route index exact element={<Login />} />
                 <Route path={LOGIN} exact element={<Login />} />
                 <Route path={REGISTER} exact element={<Register />} />
               </Route>
 
-              <Route path={PRIVATE} element={<PrivateRoute />}>
-                <Route element={<LayoutFront />}>
+              <Route path={PRIVATE} exact element={<PrivateRoute />}>
+                <Route exact element={<LayoutFront />}>
                   <Route index exact element={<CompShowBlog />} />
-                  <Route path={BLOG} element={<CompShowBlog />} />
-                  <Route path={USER} element={<Usuario />} />
-                  <Route path={POSTR} element={<Publicar />} />
-                  <Route path={UPDATER} element={<UpdateRecipes />} />
-                  <Route path={SHOWPOSTR} element={<ShowPostRecipes />} />
-                  <Route path={VIEWRECIPE} element={<ViewRecipe/>} />
-                  <Route path={PRUEBA} element={<Prueba />} />
-                  <Route path={PRUEBA2} element={<Prueba2 />} />
-                  <Route path={LOGOUT} element={<Logout />} />
-                  <Route path={PROFILE} element={<UserProfile />} />
-                  <Route path={UPLOADTEST} element={<UploadTest/>} />
-                  <Route path={GPOST} element={<GeneralPost/>} />
-                  <Route path={EDITGPOST} element={<EditGeneralPost/>} />
-                  <Route path={VIEWGPOST} element={<ViewGeneralPost/>} />
-                  <Route path={REVIEWPOST} element={<RecipeReviewPost/>} />
-                  <Route path={EDITREVIEWPOST} element={<EditRecipeReviewPost/>} />
-                  <Route path={VIEWREVIEW} element={<ViewReview/>} />
-                  <Route path={NEWLIST} element={<NewMarketList/>} />
-                  <Route path={MARKETLIST} element={<MarketList/>} />
-                  <Route path={VIEWMARKETLIST} element={<ViewMarketList/>} />
-                  <Route path={EDITLIST} element={<EditListMarket/>} />
-                  <Route path={CALENDAR} element={<RecipeCalendar/>} />
-                  <Route path={RECIPESFILTERED} element={<RecipesFiltered/>} />
+                  <Route path={BLOG} exact element={<CompShowBlog />} />
+                  <Route path={USER} exact element={<Usuario />} />
+                  <Route path={POSTR} exact element={<Publicar />} />
+                  <Route path={UPDATER} exact element={<UpdateRecipes />} />
+                  <Route path={SHOWPOSTR} exact element={<ShowPostRecipes />} />
+                  <Route path={VIEWRECIPE} exact element={<ViewRecipe/>} />
+                  <Route path={PRUEBA} exact element={<Prueba />} />
+                  <Route path={PRUEBA2} exact element={<Prueba2 />} />
+                  <Route path={LOGOUT} exact element={<Logout />} />
+                  <Route path={PROFILE} exact element={<UserProfile />} />
+                  <Route path={UPLOADTEST} exact element={<UploadTest/>} />
+                  <Route path={GPOST} exact element={<GeneralPost/>} />
+                  <Route path={EDITGPOST} exact element={<EditGeneralPost/>} />
+                  <Route path={VIEWGPOST} exact element={<ViewGeneralPost/>} />
+                  <Route path={REVIEWPOST} exact element={<RecipeReviewPost/>} />
+                  <Route path={EDITREVIEWPOST} exact element={<EditRecipeReviewPost/>} />
+                  <Route path={VIEWREVIEW} exact element={<ViewReview/>} />
+                  <Route path={NEWLIST} exact element={<NewMarketList/>} />
+                  <Route path={MARKETLIST} exact element={<MarketList/>} />
+                  <Route path={VIEWMARKETLIST} exact element={<ViewMarketList/>} />
+                  <Route path={EDITLIST} exact element={<EditListMarket/>} />
+                  <Route path={CALENDAR} exact element={<RecipeCalendar/>} />
+                  <Route path={RECIPESFILTERED} exact element={<RecipesFiltered/>} />
+                  <Route path={'*'} element={<NotFound/>} />
                 </Route>
               </Route>
 
