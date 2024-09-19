@@ -141,7 +141,7 @@ const ViewRecipe = () => {
         axios.get(`${process.env.REACT_APP_API_URL}google/download/${image_recipe}`, { responseType: "blob" })
             .then((res) => {
 
-                let url
+                let url = ''
                 
                 if (image_recipe === '1') {
                     url = "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"

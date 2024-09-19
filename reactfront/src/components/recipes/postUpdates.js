@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Grid } from "@mui/material";
@@ -23,10 +23,9 @@ import "./recipePost.css";
 
 const folderID = "1v-Q_3LzdTfinD3bq51YaWg0VA1vymj1b";
 
-const IDRECIPE = "6";
-
 const UpdateRecipes = () => {
   const [cookies, setCookie] = useCookies(["userToken"]);
+  const { id } = useParams()
 
   const [imgFileList, setFileList] = useState([]);
 
@@ -47,9 +46,10 @@ const UpdateRecipes = () => {
 
   function getRecipe() {
     axios
-      .get(process.env.REACT_APP_API_URL + "post/" + IDRECIPE)
+      .get(process.env.REACT_APP_API_URL + 'post/' + id + "?userId=" + cookies.id)
       .then((response) => {
-        const recipeData = response.data;
+        const recipeData = response.data.post;
+        
         console.log("Data", recipeData);
         setRecipe(recipeData);
         DownloadFile(recipeData.image_recipe);

@@ -4,6 +4,7 @@ import axios from "axios";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import { Grid } from "@mui/material";
+import ImgCrop from "antd-img-crop";
 
 import countriesData from "../recipes/countries.json";
 import FollowersList from "./followersList.js";
@@ -24,8 +25,6 @@ import {
   Spin,
   Card,
 } from "antd";
-
-import ImgCrop from "antd-img-crop";
 
 import "./Profile.css";
 import { Tabs } from "antd";
@@ -302,9 +301,7 @@ export default function Profile() {
     const { fileListBG } = stateBG;
     const formDataBG = new FormData();
 
-    {
-      /* Filelist profile */
-    }
+    {/* Filelist profile */}
     if (isUpProfile) {
       fileList.forEach((file) => {
         formData.append("myFiles", file, "-" + file.name);
@@ -313,9 +310,7 @@ export default function Profile() {
       formData.append("folderId", folderId);
     }
 
-    {
-      /* filielist background */
-    }
+    { /* filielist background */}
     if (isUpBackground) {
       fileListBG.forEach((file) => {
         formDataBG.append("myFiles", file, "-" + file.name);
@@ -324,9 +319,7 @@ export default function Profile() {
       formDataBG.append("folderId", folderIdBackground);
     }
 
-    {
-      /* Consulta Imagen Perfil */
-    }
+    {/* Consulta Imagen Perfil */}
     if (isUpProfile && isUpBackground) {
       axios
         .post(process.env.REACT_APP_API_URL + "google/upload/", formData)
@@ -426,6 +419,8 @@ export default function Profile() {
           new Blob([res.data], { type: "image/png" })
         );
 
+        console.log("url profile", url);
+        
         const imageUpload = [
           {
             uid: "-1",
@@ -507,7 +502,7 @@ export default function Profile() {
     {
       label: "Publicaciones",
       key: "Publicaciones",
-      children: <ProfilePost route={postRoute} userId={userId} isUser={false} />,
+      children: <ProfilePost route={postRoute} userId={userId} isUser={true} />,
     },
     {
       label: "Favoritos",
@@ -552,9 +547,6 @@ export default function Profile() {
               <Image
                 width={"100%"}
                 height={"100%"}
-                //className="profile-img-br"
-                //src={"https://drive.google.com/uc?export=view&id=" + user.profile_picture}
-                //alt={user.name}
                 fallback={placeholderBackground}
               />
             </div>
@@ -565,18 +557,8 @@ export default function Profile() {
                   width={180}
                   height={180}
                   className="profile-img-br"
-                  //src={"https://drive.google.com/uc?export=view&id=" + user.profile_picture}
-                  //alt={user.name}
                   fallback={placeholderProfile}
                 />
-                {/* <div>
-                                <ImgCrop >
-                                    <Upload showUploadList={false} {...props}> {/*onChange={handleUpload}> shape='round' grid={true} rotate={true}*/
-                /*}
-                                        <Button icon={<UploadOutlined />}>Cambiar foto de perfil</Button>
-                                    </Upload>
-                                </ImgCrop> 
-                            </div> */}
                 <Typography.Title level={5} strong>
                   {profile.name} {profile.lastName}
                 </Typography.Title>
@@ -603,36 +585,38 @@ export default function Profile() {
                   >
                     <div>
                       <Text strong>Imagen de Perfil</Text>
+                      <ImgCrop cropShape="round" showGrid rotationSlider aspectSlider showReset>
                       <Upload
                         //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                         className="customSizedUpload"
                         listType="picture-circle"
                         {...props}
-                        showUploadList={{ showPreviewIcon: false }}
+                        showUploadList={{ showPreviewIcon: true }}
                         fileList={imgFileList}
                         onChange={handleFileSubmit}
-                        onPreview={false}
                         //beforeUpload={() => false} // Evita la carga automática de la imagen
                       >
-                        {fileList.length < 1 && "+ Upload"}
+                        {imgFileList.length < 1 && "+ Upload"}
                       </Upload>
+                      </ImgCrop>
                     </div>
 
                     <div>
                       <Text strong>Fondo de Perfil</Text>
+                      <ImgCrop showGrid rotationSlider aspectSlider showReset>
                       <Upload
                         //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                         className="customSizedUploadBG"
                         listType="picture-card"
                         {...propsBG}
-                        showUploadList={{ showPreviewIcon: false }}
+                        showUploadList={{ showPreviewIcon: true }}
                         fileList={imgFileListBG}
                         onChange={handleFileSubmitBG}
-                        onPreview={false}
                         //beforeUpload={() => false} // Evita la carga automática de la imagen
                       >
                         {fileListBG.length < 1 && "+ Upload"}
                       </Upload>
+                      </ImgCrop>
                     </div>
                   </div>
 
