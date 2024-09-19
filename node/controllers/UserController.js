@@ -84,4 +84,29 @@ UserCTRL.deleteUser = async (req , res) => {
     }
 }
 
+// Mostrar lista de recetas por similitud de nombre
+UserCTRL.compareUserNames = async (req, res) => {
+    try {
+        const user =  await UserModel.findAll({
+            where: { userName: req.params.value }
+        })
+        res.json(user[0])
+    } catch (error) {
+        res.json({message: error.message})
+    }
+};
+
+// Mostrar lista de recetas por similitud de nombre
+UserCTRL.compareEmail = async (req, res) => {
+    try {
+        const user =  await UserModel.findAll({
+            where: { email: req.params.value }
+        })
+        res.json(user[0])
+    } catch (error) {
+        res.json({message: error.message})
+    }
+};
+
+
 export default UserCTRL

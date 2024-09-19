@@ -8,6 +8,94 @@ import './Login.css'
 
 const Register = () => {
 
+  const petitionUserName = (value) => {
+    return axios
+      .get(process.env.REACT_APP_API_URL + 'user/username/' + value)
+      .then((response) => {
+        if (!response.data) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return false; // En caso de error, asumimos que el nombre de usuario existe
+      });
+  };
+
+  const validateUserName = (_, value) => {
+    if (!value) {
+      return Promise.reject(new Error('Ingrese el nombre de usuario'));
+    }
+    else {
+      return petitionUserName(value).then((isAvailable) => {
+        if (!isAvailable) {
+          return Promise.reject(new Error('Nombre de usuario existente. Intente otro'));
+        }
+      });
+    }
+
+  }
+
+  const petitionMail = (value) => {
+    return axios
+      .get(process.env.REACT_APP_API_URL + 'user/email/' + value)
+      .then((response) => {
+        if (!response.data) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        return false; // En caso de error, asumimos que el nombre de usuario existe
+      });
+  };
+
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const validateMail = (_, value) => {
+    if (!value) {
+      return Promise.reject(new Error('Ingrese su Correo'));
+    }
+    else {
+      if (!emailRegex.test(value)) {
+        return Promise.reject(new Error('Ingrese un correo Valido'));
+      }
+      else {
+        return petitionMail(value).then((isAvailable) => {
+          if (!isAvailable) {
+            return Promise.reject(new Error('Correo existente. Intente otro'));
+          }
+        });
+      }
+    }
+  };
+
+  const validatePassword = (_, value) => {
+    if (!value) {
+      return Promise.reject(new Error('Ingrese su Contraseña'));
+    }
+    if (value.length < 8) {
+      return Promise.reject(new Error('La contraseña debe tener al menos 8 caracteres'));
+    }
+    if (!/[A-Z]/.test(value)) {
+      return Promise.reject(new Error('La contraseña debe tener al menos una letra mayúscula'));
+    }
+    if (!/[a-z]/.test(value)) {
+      return Promise.reject(new Error('La contraseña debe tener al menos una letra minúscula'));
+    }
+    if (!/\d/.test(value)) {
+      return Promise.reject(new Error('La contraseña debe tener al menos un dígito'));
+    }
+    if (!/[.@$!%*?&]/.test(value)) {
+      return Promise.reject(new Error('La contraseña debe tener al menos un carácter especial (.@$!%*?&)'));
+    }
+    return Promise.resolve();
+  };
+
+
   const onFinish = (values) => {
 
     const user = {
@@ -61,7 +149,9 @@ const Register = () => {
           <Form.Item
             // label={<span style={{ color: '#fff' }}>Username</span>}
             name="username"
-            rules={[{ required: true, message: "Ingrese el nombre de Usuario" }]}
+            rules={[
+              { validator: validateUserName }
+            ]}
           >
             <Input placeholder="Username"
               prefix={<SmileOutlined className='icon' />}
@@ -73,7 +163,10 @@ const Register = () => {
           <Form.Item
             // label={<span style={{ color: '#fff' }}>Numbre</span>}
             name="name"
-            rules={[{ required: true, message: "Ingrese su Nombre" }]}
+            rules={[
+              { required: true, message: "Ingrese su Nombre" },
+              { pattern: /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/, message: "Solo se admiten letras, espacios y acentos" }
+            ]}
           >
             <Input placeholder="Nombre"
               prefix={<UserOutlined className='icon' />}
@@ -85,7 +178,10 @@ const Register = () => {
           <Form.Item
             // label={<span style={{ color: '#fff' }}>Apellido</span>}
             name="lastName"
-            rules={[{ required: true, message: "Ingrese su Apellido" }]}
+            rules={[
+              { required: true, message: "Ingrese su Apellido" },
+              { pattern: /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/, message: "Solo se admiten letras, espacios y acentos" }
+            ]}
           >
             <Input placeholder="Apellido"
               prefix={<UserSwitchOutlined className='icon' />}
@@ -97,7 +193,7 @@ const Register = () => {
           <Form.Item
             // label={<span style={{ color: '#fff' }}>Correo</span>}
             name="email"
-            rules={[{ required: true, message: "Ingrese su Correo" }]}
+            rules={[{ validator: validateMail }]}
           >
             <Input placeholder="Correo"
               prefix={<MailOutlined className='icon' />}
@@ -109,7 +205,7 @@ const Register = () => {
           <Form.Item
             // label={<span style={{ color: '#fff' }}>Contraseña</span>}
             name="password"
-            rules={[{ required: true, message: "Ingrese su Contraseña" }]}
+            rules={[{ validator: validatePassword }]}
           >
             <Input placeholder="Contraseña"
               prefix={<LockOutlined className='icon' />}

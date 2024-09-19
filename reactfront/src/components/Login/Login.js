@@ -11,6 +11,9 @@ import './Login.css'
 const Login = () => {
   const { loginUser } = useAuthContext();
 
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const [warning, setWarning] = useState('');
+
   const onFinish = (values) => {
 
     axios.post(process.env.REACT_APP_API_URL + 'user/email/', { email: values.email })
@@ -19,6 +22,23 @@ const Login = () => {
         const userData = response.data
         if (userData.email === values.email && userData.password === values.password) {
           loginUser(userData);
+        }
+        else {
+          setTimeout(() => {
+            const alertBox = document.createElement('div');
+            alertBox.textContent = 'Usuario o Contraseña incorrecta';
+            alertBox.style.position = 'fixed';
+            alertBox.style.top = '10px';
+            alertBox.style.right = '10px';
+            alertBox.style.backgroundColor = 'red';
+            alertBox.style.color = 'white';
+            alertBox.style.padding = '10px';
+            document.body.appendChild(alertBox);
+        
+            setTimeout(() => {
+                alertBox.remove();
+            }, 3000);
+          }, 0);
         }
       })
       .catch(function error(error) {
@@ -41,7 +61,10 @@ const Login = () => {
             <Form.Item
               // label="Correo"
               name="email"
-              rules={[{ required: true, message: "Ingrese su Correo" }]}
+              rules={[
+                { required: true, message: "Ingrese su Correo" },
+                { pattern: emailRegex, message: "Ingrese un correo válido" }
+              ]}
             >
               <Input placeholder="Correo"
                 prefix={<MailOutlined className='icon' />}

@@ -9,5 +9,7 @@ router.post('/', UserCTRL.createUser);
 router.post('/email/', UserCTRL.getUserByEmailC);
 router.put('/', UserCTRL.updateUser);
 router.delete('/:id', UserCTRL.deleteUser);
+router.get('/username/:value', UserCTRL.compareUserNames);
+router.get('/email/:value', UserCTRL.compareEmail);
 
 export default router

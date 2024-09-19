@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 //layout Component  
 import { Layout, theme } from 'antd';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Home as HomeIcon, ExitToApp as LogoutIcon, AddCircleOutline as CreatePostIcon, AccountCircle as AccountCircleIcon, ArrowBack as ArrowBackIcon} from '@mui/icons-material';
+import { Home as HomeIcon, ExitToApp as LogoutIcon, AddCircleOutline as CreatePostIcon, AccountCircle as AccountCircleIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 // import {ArrowBackIcon} from '@mui/icons-material/ArrowBack';
 import './Layout.css';
 import TodayIcon from '@mui/icons-material/Today';
@@ -103,6 +103,13 @@ const LayoutFront = (props) => {
         <Header className='siteHeader' color={colorBgContainer}>
           <Grid container justifyContent={'space-evenly'} height={"100%"} alignContent={"center"}>
             <Grid item xs={1}>
+              <IconButton
+                sx={{ p: '10px', color: 'white' }}
+              >
+                <Icon>
+                  <img src="/EasyLogo512.jpg" style={{ width: '100%', height: '100%' }} />
+                </Icon>
+              </IconButton>
             </Grid>
             <Grid item container xs={9} justifyContent={"center"}>
               <Paper
@@ -165,7 +172,7 @@ const LayoutFront = (props) => {
                     <AccountCircleIcon />
                     Mi perfil
                   </MenuItem>
-                  <Divider/>
+                  <Divider />
 
                   <MenuItem onClick={() => navigateAncloseMenu('/private/marketlist')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <ChecklistIcon />
@@ -180,7 +187,7 @@ const LayoutFront = (props) => {
                     Recomendaciones
                   </MenuItem>
 
-                  <Divider/>
+                  <Divider />
                   <MenuItem onClick={() => navigateAncloseMenu('/private/logout')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <LogoutIcon />
                     Logout
