@@ -58,7 +58,7 @@ export default function RecipeCalendar() {
         {
             label: 'LUNES',
             key: 'LUNES',
-            children: <ListDay favSelect={selectData} favorites={FavoritesData} userId={userID} day={"LUNES"}/>,  
+            children:  <ListDay favSelect={selectData} favorites={FavoritesData} userId={userID} day={"LUNES"}/>,  
         },
         {
             label: 'MARTES',

@@ -46,16 +46,21 @@ const ViewReview = () => {
     }
 
     function getPost() {
+        console.log(id);
+        
         axios.get(process.env.REACT_APP_API_URL + 'reviewPost/' + id,
         ).then((response) => {
             const reviewData = response.data;
             const recipeData = reviewData.recipe
+            console.log("log", recipeData);
             
             getRate(recipeData.id)
 
             DownloadFile(recipeData.image_recipe)
             setRecipe(recipeData)
             setReviewPost(reviewData)
+            
+            
 
             /* Ids comentarios */
             const idRecipeCM = "review " + recipeData.id + ""

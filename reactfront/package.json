@@ -12,7 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.12.4",
-    "antd-img-crop": "^4.22.0",
+    "antd-img-crop": "^4.23.0",
     "axios": "^1.6.2",
     "mongodb": "^6.8.0",
     "mui": "^0.0.1",
