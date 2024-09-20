@@ -23,13 +23,10 @@ import PrivateRoute from './components/routes/PrivateRoute';
 //componentes
 import CompShowBlog from './components/blog/showBlog';
 import Prueba from './components/Pruebas/prueba';
-import Prueba2 from './components/Pruebas/prueba2';
 import Usuario from './components/profile/user';
 import Publicar from './components/recipes/post';
 import UpdateRecipes from './components/recipes/postUpdates';
-import ShowPostRecipes from './components/recipes/postShowRecipes';
 import ViewRecipe from './components/recipes/viewRecipe'
-import UploadTest from './components/Pruebas/UploadTest';
 import UserProfile from './components/profile/userProfile';
 import GeneralPost from './components/postExtra/generalPost'
 import EditGeneralPost from './components/postExtra/editGeneralPost'
@@ -69,13 +66,10 @@ function App() {
                   <Route path={USER} exact element={<Usuario />} />
                   <Route path={POSTR} exact element={<Publicar />} />
                   <Route path={UPDATER} exact element={<UpdateRecipes />} />
-                  <Route path={SHOWPOSTR} exact element={<ShowPostRecipes />} />
                   <Route path={VIEWRECIPE} exact element={<ViewRecipe/>} />
                   <Route path={PRUEBA} exact element={<Prueba />} />
-                  <Route path={PRUEBA2} exact element={<Prueba2 />} />
                   <Route path={LOGOUT} exact element={<Logout />} />
                   <Route path={PROFILE} exact element={<UserProfile />} />
-                  <Route path={UPLOADTEST} exact element={<UploadTest/>} />
                   <Route path={GPOST} exact element={<GeneralPost/>} />
                   <Route path={EDITGPOST} exact element={<EditGeneralPost/>} />
                   <Route path={VIEWGPOST} exact element={<ViewGeneralPost/>} />

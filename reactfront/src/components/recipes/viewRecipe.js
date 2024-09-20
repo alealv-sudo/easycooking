@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { RollbackOutlined } from '@ant-design/icons';
 import PostDetails from '../blog/showBlogI';
 
 import {
@@ -401,8 +401,8 @@ const ViewRecipe = () => {
                     
                             <div className="bottom-page">
                                 <div className='buttom-div'>
-                                    <Button danger type="primary" shape="round" onClick={() => navTo()}>
-                                        Salir
+                                    <Button type="primary" shape="round" onClick={() => navTo()}>
+                                        <RollbackOutlined /> {/*Salir*/}
                                     </Button>
                                 </div>
                             </div>

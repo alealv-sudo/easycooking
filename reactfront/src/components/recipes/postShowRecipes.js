@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { RollbackOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -391,8 +391,8 @@ const PostShowRecipes = ({ id, onClose }) => {
 
                             <div className="bottom-page">
                                 <div className='buttom-div'>
-                                    <Button danger type="primary" onClick={() => onClose()} shape="round">
-                                        Salir
+                                    <Button type="primary" onClick={() => onClose()} shape="round">
+                                        <RollbackOutlined /> {/*Salir*/}
                                     </Button>
                                 </div>
                             </div>

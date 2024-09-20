@@ -10,7 +10,6 @@ export const USER = "/private/user/:id";
 export const PRUEBA = "/private/recomendations";
 export const POSTR = "/private/post";
 export const UPDATER = "/private/postUpdates/:id";
-export const SHOWPOSTR = "/private/postShowRecipe/:id";
 export const VIEWRECIPE = "/private/viewRecipe/:id";
 export const GPOST = "/private/gpost";
 export const EDITGPOST = "/private/editGPost/:id";
@@ -26,5 +25,3 @@ export const CALENDAR = "/private/calendar";
 export const RECIPESFILTERED = "/private/recipesFiltered";
 export const RECIPESADM = "/private/recipesAdministrator";
 
-export const UPLOADTEST = "/private/uploadTest";
-export const PRUEBA2 = "/private/prueba2";
