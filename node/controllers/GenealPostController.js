@@ -66,4 +66,15 @@ GeneralPostCTRL.deletePost = async (req , res) => {
     }
 }
 
+
+GeneralPostCTRL.getPostsByUser = async (req, res) => {
+    try {
+       const post =  await GeneralPostModel.findAll({
+        where: { creatorId: req.params.id }
+       })
+       res.json(post)
+    } catch (error) {
+       res.json({message: error.message}) 
+    }
+}
 export default GeneralPostCTRL

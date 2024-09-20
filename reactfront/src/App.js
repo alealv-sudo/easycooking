@@ -7,7 +7,7 @@ import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
-import {VIEWREVIEW ,VIEWGPOST ,VIEWRECIPE ,CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE, RECIPESFILTERED} from './config/routes/paths';
+import {VIEWREVIEW ,VIEWGPOST ,VIEWRECIPE ,CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE, RECIPESFILTERED, RECIPESADM} from './config/routes/paths';
 
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
@@ -43,6 +43,7 @@ import ViewMarketList from './components/marketList/viewMarketList'
 import EditListMarket from './components/marketList/editListMarket';
 import RecipeCalendar from './components/recipeCalendar/recipeCalendar'
 import RecipesFiltered from './components/blog/recipesFiltered';
+import RecipesAdministrator from './components/recipes/recipesAdministrator'
 
 ///Layout
 import LayoutFront from './components/Layaout/Layout';
@@ -87,6 +88,8 @@ function App() {
                   <Route path={EDITLIST} exact element={<EditListMarket/>} />
                   <Route path={CALENDAR} exact element={<RecipeCalendar/>} />
                   <Route path={RECIPESFILTERED} exact element={<RecipesFiltered/>} />
+                  <Route path={RECIPESADM}  exact element={<RecipesAdministrator/>} />
+                  
                   <Route path={'*'} element={<NotFound/>} />
                 </Route>
               </Route>

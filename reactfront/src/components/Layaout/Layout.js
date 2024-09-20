@@ -10,6 +10,7 @@ import ChecklistIcon from '@mui/icons-material/Checklist';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import { alpha, Button, Grid, Icon, IconButton, Input, InputBase, Menu, MenuItem, Paper, styled, TextField, Divider } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import BookIcon from '@mui/icons-material/Book';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Footer } from 'antd/es/layout/layout';
 import { useAuthContext } from '../contexts/authContext';
@@ -181,6 +182,10 @@ const LayoutFront = (props) => {
                   <MenuItem onClick={() => navigateAncloseMenu('/private/calendar')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <TodayIcon />
                     Dieta
+                  </MenuItem>
+                  <MenuItem onClick={() => navigateAncloseMenu('/private/recipesAdministrator')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <BookIcon />
+                    Mis Publicaciones
                   </MenuItem>
                   <MenuItem onClick={() => navigateAncloseMenu('/private/recomendations')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <LocalFireDepartmentIcon />
