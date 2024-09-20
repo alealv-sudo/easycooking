@@ -8,5 +8,6 @@ router.get('/:id', RecipeReviewCTRL.getPost);
 router.post('/', RecipeReviewCTRL.createPost);
 router.put('/', RecipeReviewCTRL.updatePost);
 router.delete('/:id', RecipeReviewCTRL.deletePost);
+router.get('/user/:id', RecipeReviewCTRL.getPostByUser);
 
 export default router

@@ -50,6 +50,11 @@ const UpdateRecipes = () => {
       .then((response) => {
         const recipeData = response.data.post;
         
+        if (recipeData.creatorId !== cookies.id) {
+          // console.log("creador no autorizado a editar");
+          navigate("/private/viewRecipe/"+id)
+        }
+
         console.log("Data", recipeData);
         setRecipe(recipeData);
         DownloadFile(recipeData.image_recipe);
@@ -65,7 +70,7 @@ const UpdateRecipes = () => {
   }, []);
 
   const Salir = () => {
-    navigate("/private/blog");
+    navigate(-1);
   };
 
   /* Peticiones BD */
@@ -131,6 +136,7 @@ const UpdateRecipes = () => {
             notification.success({
               message: "Receta editada con exito",
             });
+            Salir();
           }
         })
         .catch(function error(error) {
@@ -156,12 +162,12 @@ const UpdateRecipes = () => {
         notification.success({
           message: "Receta editada con exito",
         });
+        Salir();
       })
       .catch(function error(error) {
         console.log(error);
       });
 
-    Salir();
   };
 
   /* Funciones Imagenes */
@@ -342,7 +348,7 @@ const UpdateRecipes = () => {
         <Grid item width={'100%'} md={9}>
             
         <div className="all-page">
-        <Typography.Title level={2}>Publicar</Typography.Title>
+        <Typography.Title level={2}>Editar</Typography.Title>
         {/* Form Receta */}
           <div className="div-general-recipe-post">
             <Form

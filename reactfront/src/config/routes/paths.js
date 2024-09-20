@@ -24,6 +24,7 @@ export const EDITLIST = "/private/editlist/:id";
 export const VIEWMARKETLIST = "/private/viewlist/:id";
 export const CALENDAR = "/private/calendar";
 export const RECIPESFILTERED = "/private/recipesFiltered";
+export const RECIPESADM = "/private/recipesAdministrator";
 
 export const UPLOADTEST = "/private/uploadTest";
 export const PRUEBA2 = "/private/prueba2";

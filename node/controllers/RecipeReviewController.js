@@ -69,4 +69,17 @@ RecipeReviewCTRL.deletePost = async (req , res) => {
     }
 }
 
+
+RecipeReviewCTRL.getPostByUser = async (req, res) => {
+    try {
+       const post =  await RecipeReviewModel.findAll({
+        where: { creatorId: req.params.id },
+        include: {model: PostModel}
+       })
+       res.json(post)
+    } catch (error) {
+       res.json({message: error.message}) 
+    }
+}
+
 export default RecipeReviewCTRL
