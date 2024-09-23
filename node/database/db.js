@@ -5,6 +5,7 @@ const db = new Sequelize('easycooking_db', 'EasyCooking', 'FdL3fMV1CijO', {
     port: 5432,
     dialect: 'postgres',
     protocol: 'postgres',
+    dialectModule: pg,
     dialectOptions: {
         ssl:{
             rejectUnauthorized: false, 
