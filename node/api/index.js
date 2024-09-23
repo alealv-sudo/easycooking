@@ -3,30 +3,30 @@ import cors from "cors";
 import fileUpload from "express-fileupload";
 
 //Importa Conexion a la base de datos
-import db from "./database/db.js";
+import db from "../database/db.js";
 
 //Importa Asociasiones
-import {} from './models/associations.js'
+import {} from '../models/associations.js'
 
 db.sync()
 //Importa Rutas
-import blogRoutes from './routes/routes.js'
-import userRoutes from './routes/userRoutes.js'
-import postRoutes from './routes/postRoutes.js'
-import generalPostRoutes from './routes/generalPostRoutes.js'
-import profileRoutes from './routes/profileRoutes.js'
-import followerRoutes from "./routes/followerRoutes.js";
-import followedRoutes from "./routes/followedRoutes.js";
-import googleRoutes  from './routes/googleRoutes.js'
-import recipeReviewRoutes from './routes/recipeReviewRoutes.js'
-import IngredientsRutes from './routes/ingredientRoutes.js'
-import RatingsRoutes from './routes/ratingRoutes.js'
-import favoriteRoutes from './routes/favoriteRoutes.js'
-import likesRoutes from './routes/likeRoutes.js'
-import marketListRoutes from './routes/marketListRoutes.js'
-import listItemRoutes from './routes/listItemRoutes.js'
-import listCalendarRoutes from './routes/listCalendarRoutes.js'
-import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
+import blogRoutes from '../routes/routes.js'
+import userRoutes from '../routes/userRoutes.js'
+import postRoutes from '../routes/postRoutes.js'
+import generalPostRoutes from '../routes/generalPostRoutes.js'
+import profileRoutes from '../routes/profileRoutes.js'
+import followerRoutes from "../routes/followerRoutes.js";
+import followedRoutes from "../routes/followedRoutes.js";
+import googleRoutes  from '../routes/googleRoutes.js'
+import recipeReviewRoutes from '../routes/recipeReviewRoutes.js'
+import IngredientsRutes from '../routes/ingredientRoutes.js'
+import RatingsRoutes from '../routes/ratingRoutes.js'
+import favoriteRoutes from '../routes/favoriteRoutes.js'
+import likesRoutes from '../routes/likeRoutes.js'
+import marketListRoutes from '../routes/marketListRoutes.js'
+import listItemRoutes from '../routes/listItemRoutes.js'
+import listCalendarRoutes from '../routes/listCalendarRoutes.js'
+import recipeCommentsRoutes from "../routes/recipeCommentsRoutes.js";
 
 const app = express()
 
