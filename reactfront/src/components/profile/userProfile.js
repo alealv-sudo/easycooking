@@ -417,7 +417,7 @@ export default function Profile() {
       .then((res) => {
         // Get IMG in format BLOB
         // Crear una URL a partir del blob
-        console.log("antes blolb", res.data);
+        console.log("info res", res);
         const url = URL.createObjectURL(
           new Blob([res.data], { type: "image/png" })
         );
