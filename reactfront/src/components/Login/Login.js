@@ -15,8 +15,9 @@ const Login = () => {
   const [warning, setWarning] = useState('');
 
   const onFinish = (values) => {
-
-    axios.post(process.env.REACT_APP_API_URL + 'user/email/', { email: values.email })
+    console.log(process.env.REACT_APP_API_URL);
+    
+    axios.post(`https://${process.env.REACT_APP_API_URL}/` + 'user/email/', {email: values.email })
       .then(function response(response) {
 
         const userData = response.data
