@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { RollbackOutlined } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
 
 import {
     Typography,
