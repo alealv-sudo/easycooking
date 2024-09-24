@@ -28,13 +28,16 @@ import listItemRoutes from './routes/listItemRoutes.js'
 import listCalendarRoutes from './routes/listCalendarRoutes.js'
 import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
-var corsOptions = {
-    origin:'*',
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    exposedHeaders:'*',
-    credentials: true,
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+const whitelist = ['https://easycooking-server.vercel.app'];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if ((whitelist.indexOf(origin) !== -1 || !origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
   
 const app = express()
 
@@ -64,7 +67,7 @@ app.use('/calendar', listCalendarRoutes)
 app.use('/recipeComments', recipeCommentsRoutes)
 
 //GOOGLE
-app.use("/google", cors(corsOptions), googleRoutes)
+app.use("/google" , googleRoutes)
 
 try {
     db.authenticate().then(() => {
