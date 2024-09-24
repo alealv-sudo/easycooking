@@ -412,6 +412,7 @@ export default function Profile() {
     
     axios
       .get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, {
+        headers:{'Access-Control-Allow-Origin': '*'},
         responseType: "blob",
       })
       .then((res) => {
