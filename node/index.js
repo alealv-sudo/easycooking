@@ -29,9 +29,9 @@ import listCalendarRoutes from './routes/listCalendarRoutes.js'
 import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
 var corsOptions = {
-    origin: true,
+    origin:'*',
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    exposedHeaders: '*',
+    exposedHeaders:'*',
     credentials: true,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
