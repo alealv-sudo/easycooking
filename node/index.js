@@ -28,7 +28,7 @@ import listItemRoutes from './routes/listItemRoutes.js'
 import listCalendarRoutes from './routes/listCalendarRoutes.js'
 import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
-const whitelist = ['https://easycooking-server.vercel.app/'];
+const whitelist = ['http://easycooking-server.vercel.app/'];
 const corsOptions = {
   origin: function (origin, callback) {
     if ((whitelist.indexOf(origin) !== -1 || !origin)) {
