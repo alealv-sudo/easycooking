@@ -408,6 +408,8 @@ export default function Profile() {
   };
 
   const DownloadFile = (image_recipe, typeI) => {
+    console.log("src drive", image_recipe);
+    
     axios
       .get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, {
         responseType: "blob",
@@ -415,6 +417,7 @@ export default function Profile() {
       .then((res) => {
         // Get IMG in format BLOB
         // Crear una URL a partir del blob
+        console.log("antes blolb", res.data);
         const url = URL.createObjectURL(
           new Blob([res.data], { type: "image/png" })
         );
@@ -830,6 +833,19 @@ export default function Profile() {
             </Card>
           </Card>
         </div>
+      </div>
+
+      <div>
+        <img
+        alt={"prueba"}
+        src={placeholderProfile}
+        >
+        </img>
+        <img
+        alt={"prueba"}
+        src={placeholderBackground}
+        >
+        </img>
       </div>
         </Grid>
       </Grid>
