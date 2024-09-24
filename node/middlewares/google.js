@@ -199,6 +199,7 @@ google_Ctrl.getDownload = async (req, res) => {
       const fileName = "file" + "." + fileType;
       const fileData = request.data;
       // res.set(request.headers)
+      res.header("Access-Control-Allow-Origin", "*");
       res.set("Content-Type", fileType);
       res.set("Content-Disposition", "attachment; filename='archivo.png'");
       fileData.pipe(res);
