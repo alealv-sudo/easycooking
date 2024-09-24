@@ -29,13 +29,12 @@ import listCalendarRoutes from './routes/listCalendarRoutes.js'
 import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
 var corsOptions = {
-    origin: 'https://easycooking-server.vercel.app',
+    origin: '*',
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
   
-
 const app = express()
 
 app.use(cors(corsOptions))
@@ -64,7 +63,7 @@ app.use('/calendar', listCalendarRoutes)
 app.use('/recipeComments', recipeCommentsRoutes)
 
 //GOOGLE
-app.use("/google", googleRoutes)
+app.use("/google", cors(corsOptions), googleRoutes)
 
 try {
     db.authenticate().then(() => {
