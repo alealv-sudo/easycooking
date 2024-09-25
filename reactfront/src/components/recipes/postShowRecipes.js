@@ -381,7 +381,7 @@ const PostShowRecipes = ({ id, onClose }) => {
 
                             <div className="div-comments-page">
                                 <BlogCommentSection
-                                    apiBaseUrl="http://localhost:443"
+                                    apiBaseUrl={process.env.REACT_APP_API_COMMENTS_URL}
                                     articleId={idRecipeComments}
                                     callbacks={{ loginClickCallback: () => null }}
                                     currentUser={user}
