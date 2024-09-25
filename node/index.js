@@ -29,19 +29,20 @@ import listCalendarRoutes from './routes/listCalendarRoutes.js'
 import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
 var allowlist = ['https://easycooking-xi.vercel.app', 'https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
-var corsOptionsDelegate = function (req, callback) {
-  var corsOptions;
-  if (allowlist.indexOf(req.header('Origin')) !== -1) {
-    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
-  } else {
-    corsOptions = { origin: false } // disable CORS for this request
-  }
-  callback(null, corsOptions) // callback expects two parameters: error and options
-}
-
+const corsOptions = {
+    origin: function (origin, callback) {
+      console.log(origin, process.env.ORIGIN);
+      if ((whitelist.indexOf(origin) !== -1 || !origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  };
+  
 const app = express()
 
-app.use(cors(corsOptionsDelegate))
+app.use(cors(corsOptions))
 app.use(express.json())
 app.use(fileUpload({
     useTempFiles : true,
@@ -67,7 +68,7 @@ app.use('/calendar', listCalendarRoutes)
 app.use('/recipeComments', recipeCommentsRoutes)
 
 //GOOGLE
-app.use("/google", cors(corsOptions), googleRoutes)
+app.use("/google", googleRoutes)
 
 try {
     db.authenticate().then(() => {
