@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 import math
 
 # URL del endpoint de tu servidor Node.js
-url = 'http://localhost:8000/ratings'
-
+url = 'https://easycooking-server.vercel.app/ratings'
 
 def executeIA(num_userid):
     

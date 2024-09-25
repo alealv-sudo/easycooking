@@ -388,7 +388,7 @@ const ViewRecipe = () => {
                                     <div className="div-comments-page">
                                         <BlogCommentSection
                                         style={{with: "100%"}}
-                                            apiBaseUrl="http://localhost:443"
+                                            apiBaseUrl={process.env.REACT_APP_API_COMMENTS_URL}
                                             articleId={idRecipeComments}
                                             callbacks={{ loginClickCallback: () => null }}
                                             currentUser={user}

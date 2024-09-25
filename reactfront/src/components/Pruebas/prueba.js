@@ -22,7 +22,7 @@ import {
 
 const URI = 'http://localhost:8000/blogs/'
 
-const URIIA = 'http://localhost:5000/executeIA/'
+const URIIA = process.env.REACT_APP_API_URL + 'executeIA/'
 
 const Prueba = () => {
 
