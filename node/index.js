@@ -28,18 +28,20 @@ import listItemRoutes from './routes/listItemRoutes.js'
 import listCalendarRoutes from './routes/listCalendarRoutes.js'
 import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
-var corsOptions = {
-    origin:'*',
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    allowedHeaders:'*',
-    exposedHeaders:'*',
-    credentials: true,
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+var allowlist = ['https://easycooking-xi.vercel.app', 'https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (allowlist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false } // disable CORS for this request
+  }
+  callback(null, corsOptions) // callback expects two parameters: error and options
 }
-  
+
 const app = express()
 
-app.use(cors(corsOptions))
+app.use(cors(corsOptionsDelegate))
 app.use(express.json())
 app.use(fileUpload({
     useTempFiles : true,
