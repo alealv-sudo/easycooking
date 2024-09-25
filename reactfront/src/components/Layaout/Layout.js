@@ -81,14 +81,23 @@ const LayoutFront = (props) => {
     navigate("/private/post");
   };
 
+  const handleClose = () => {
+    setAnchorElpost(null);
+  };
+
   const handlePrevieusPage = () => {
     navigate(-1);
   }
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElpost, setAnchorElpost] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl == null ? event.currentTarget : null);
+  };
+
+  const handleClickPost = (event) => {
+    setAnchorElpost(anchorElpost == null ? event.currentTarget : null);
   };
 
   const navigateAncloseMenu = (data) => {
@@ -96,7 +105,14 @@ const LayoutFront = (props) => {
     if (data !== "") navigate(data);
   };
 
+  const navigateAncloseMenuPost = (data) => {
+    setAnchorElpost(null);
+    if (data !== "") navigate(data);
+  };
+
   const open = Boolean(anchorEl);
+  const openpost = Boolean(anchorElpost);
+
   return (
     <Layout>
 
@@ -219,17 +235,62 @@ const LayoutFront = (props) => {
         <Footer className='siteFooter' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '10px 0' }}>
           <Grid container justifyContent={'space-evenly'} height={"100%"} alignContent={"center"}>
             <Grid xs={3}>
-              <IconButton onClick={handlePrevieusPage} color="primary">
+              <IconButton
+                onClick={handlePrevieusPage}
+                color="black"
+                style={{backgroundColor:"lightgray"}}
+              >
                 <ArrowBackIcon />
               </IconButton>
             </Grid>
+
             <Grid xs={3}>
-              <IconButton onClick={handleCreatePost} color="primary">
+              <IconButton
+                onClick={handleClickPost}
+                color="black"
+                style={{backgroundColor:"lightgray"}}
+              >
                 <CreatePostIcon />
               </IconButton>
+              <Menu
+                disableRipple
+                id="demo-customized-menu"
+                MenuListProps={{
+                  'aria-labelledby': 'demo-customized-button',
+                }}
+                anchorEl={anchorElpost}
+                open={Boolean(anchorElpost)}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+              >
+                <MenuItem onClick={() => navigateAncloseMenuPost("/private/post")} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <CreatePostIcon />
+                  Nueva Receta
+                </MenuItem>
+                <MenuItem onClick={() => navigateAncloseMenuPost("/private/gpost")} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <CreatePostIcon />
+                  Nueva Publicación
+                </MenuItem>
+                <MenuItem onClick={() => navigateAncloseMenuPost("/private/newreview")} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <CreatePostIcon />
+                  Nueva Reseña
+                </MenuItem>
+              </Menu>
             </Grid>
+
             <Grid xs={3}>
-              <IconButton onClick={handleHome} color="primary">
+              <IconButton
+                onClick={handleHome}
+                color="black"
+                style={{backgroundColor:"lightgray"}}
+              >
                 <HomeIcon />
               </IconButton>
             </Grid>
