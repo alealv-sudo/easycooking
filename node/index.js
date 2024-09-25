@@ -31,13 +31,16 @@ import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 var allowlist = ['https://easycooking-xi.vercel.app', 'https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
 const corsOptions = {
     origin: function (origin, callback) {
-      if ((whitelist.indexOf(origin) !== -1 || !origin)) {
+      if ((allowlist.indexOf(origin) !== -1 || !origin)) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
       }
     },
-  };
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+};
   
 const app = express()
 
