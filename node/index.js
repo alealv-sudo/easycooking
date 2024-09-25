@@ -31,7 +31,6 @@ import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 var allowlist = ['https://easycooking-xi.vercel.app', 'https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
 const corsOptions = {
     origin: function (origin, callback) {
-      console.log(origin, process.env.ORIGIN);
       if ((whitelist.indexOf(origin) !== -1 || !origin)) {
         callback(null, true);
       } else {
