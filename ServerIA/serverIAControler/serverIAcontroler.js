@@ -32,7 +32,7 @@ function runPythonScript(scriptPath, args, callback) {
 
 serverIACTRL.executeIA = async (req, res) => {
     const number = req.params.id;
-    let archivePath = path.join(process.cwd(), 'serverIAControler/data_procesator.py');
+    let archivePath = path.join(process.cwd(), 'data_procesator.py');
     
     "C:/Users/Lenovo/Desktop/easyCooking/ServerIA/serverIAControler/data_procesator.py"
     'C:/Users/franc/Desktop/Easy Cooking/easycooking/ServerIA/serverIAControler/data_procesator.py'
