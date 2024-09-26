@@ -10,8 +10,6 @@ import countriesData from "../recipes/countries.json";
 import FollowersList from "./followersList.js";
 import ProfilePost from "./profilepost.js";
 
-
-
 import {
   Typography,
   Input,
@@ -43,8 +41,6 @@ const postRoute = "post";
 const favoriteRoute = "favorites";
 const followedRoute = "followeds";
 const followerRoute = "followers";
-
-const url = 'http://localhost:8000/'
 
 export default function Profile() {
   const [cookies, setCookie] = useCookies(["userToken"]);
@@ -415,7 +411,7 @@ export default function Profile() {
     console.log("src drive", image_recipe);
     
     axios
-      .get(url + "google/download/" + image_recipe, {
+      .get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, {
         headers:{'Access-Control-Allow-Origin': '*'},
         responseType: "blob",
       })
