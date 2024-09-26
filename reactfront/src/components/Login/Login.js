@@ -5,7 +5,6 @@ import { Button, Col, Flex, Form, Input, Row } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { Link, useBeforeUnload } from 'react-router-dom'
 
-
 import './Login.css'
 
 const Login = () => {
