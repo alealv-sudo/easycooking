@@ -18,6 +18,8 @@ import {
     List,
 } from 'antd';
 
+import { Link } from 'react-router-dom';
+
 import {
     BlogCommentSection,
 } from "replyke";
@@ -50,6 +52,8 @@ const PostShowRecipes = ({ id, onClose }) => {
     const { fileList } = state;
     const navigate = useNavigate();
 
+    const [creator, setCreator] = useState([])
+
     useEffect(() => {
         getRecipe();
     }, []);
@@ -66,7 +70,8 @@ const PostShowRecipes = ({ id, onClose }) => {
             setIdRecipeComments(idRecipe)
             setIngredientList(recipeData.Ingredients)
             DownloadFile(recipeData.image_recipe)
-            
+
+            getCreator(recipeData.creatorId);
         })
             .catch((error) => {
                 console.error(error);
@@ -85,6 +90,18 @@ const PostShowRecipes = ({ id, onClose }) => {
             .catch((error) => {
                 console.error(error);
             });
+    }
+
+    function getCreator (creatorId) {
+        axios.get(`${process.env.REACT_APP_API_URL}user/${creatorId}`)
+        .then((response) => {
+            const userData = response.data;
+        
+            setCreator(userData.userName)
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     }
 
     const onFinish = (values) => {
@@ -138,10 +155,10 @@ const PostShowRecipes = ({ id, onClose }) => {
             .then((res) => {
 
                 let url
-                
+
                 if (image_recipe === '1') {
                     url = "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"
-                }else{
+                } else {
                     url = URL.createObjectURL(new Blob([res.data], { type: 'image/png' }));
                 }
 
@@ -161,7 +178,7 @@ const PostShowRecipes = ({ id, onClose }) => {
                 setState({
                     fileList: imageUpload,
                 });
-        
+
                 setLoading(false);
 
                 return () => {
@@ -180,10 +197,14 @@ const PostShowRecipes = ({ id, onClose }) => {
             <Grid>
                 {!isLoading ? (
                     <>
-                        
+
                         <div className="all-page">
                             <Typography.Title >Receta</Typography.Title>
                             <div className='div-general-recipe-post'>
+                                <Typography.Link>
+                                    <Link to={`/private/user/${recipe.creatorId}`}>
+                                    Creador: {creator}</Link>
+                                </Typography.Link>
                                 <Form
                                     layout="vertical"
                                     className='div-form-general-recipe-post'
@@ -301,17 +322,17 @@ const PostShowRecipes = ({ id, onClose }) => {
                                     <label className="label-ingedient">Ingredientes</label>
 
                                     <div type="flex" justify="center" align="middle">
-                            <Form.Item
-                                name="ingredients"
-                            >
-                                <List
-                                    bordered
-                                    size="small"
-                                    dataSource={ingredientList}
-                                    renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
-                                />
-                            </Form.Item>
-                        </div>
+                                        <Form.Item
+                                            name="ingredients"
+                                        >
+                                            <List
+                                                bordered
+                                                size="small"
+                                                dataSource={ingredientList}
+                                                renderItem={(item) => <List.Item>{item.ingredient}</List.Item>}
+                                            />
+                                        </Form.Item>
+                                    </div>
 
                                     <Form.Item
                                         className="half-width-slot"
@@ -368,7 +389,7 @@ const PostShowRecipes = ({ id, onClose }) => {
                                 <div className="bottom-page-rating">
                                     <p className="text-rate">{rating.score}</p>
                                     <Rate
-                                        style={{fontSize: 35, paddingTop: 5}}
+                                        style={{ fontSize: 35, paddingTop: 5 }}
                                         allowHalf
                                         defaultValue={rating.score}
                                         autoFocus={false}
@@ -376,7 +397,7 @@ const PostShowRecipes = ({ id, onClose }) => {
                                     />
                                     <p className="text-title-score">califica esta receta</p>
                                 </div>
-                                
+
                             </div>
 
                             <div className="div-comments-page">

@@ -18,6 +18,8 @@ import {
     message
 } from 'antd';
 
+import { Link } from 'react-router-dom';
+
 import './generalPost.css';
 const folderID = "1-tXGVcYegjmtuqVnSTSyPCujAydFonO4"
 
@@ -49,6 +51,8 @@ const ViewGeneralPost = () => {
         name: nameUserToComment
     }
 
+    const [creator, setCreator] = useState([])
+
     {/* Get post */}
 
     function getPost() {
@@ -67,10 +71,23 @@ const ViewGeneralPost = () => {
             /* Ids comentarios */
             const idRecipeCM = "gpost " + postData.id + ""
             setIdRecipeComments(idRecipeCM)
-        
+            
+            getCreator(postData.creatorId);
         }).catch((error) => {
             console.error(error);
         });
+    }
+
+    function getCreator(creatorId) {
+        axios.get(`${process.env.REACT_APP_API_URL}user/${creatorId}`)
+            .then((response) => {
+                const userData = response.data;
+
+                setCreator(userData.userName)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
      /* UseEffect */
@@ -159,6 +176,11 @@ const ViewGeneralPost = () => {
         >
         <Grid item width={"100%"} md={9}>
         <div className='all-page'>
+            <Typography.Link>
+                <Link to={`/private/user/${gPost.creatorId}`}>
+                    Creador: {creator}</Link>
+            </Typography.Link>
+
             {/* Form Receta */}
             <div className='div-general-post'>
                 <Form
