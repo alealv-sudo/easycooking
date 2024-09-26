@@ -3,13 +3,13 @@ import  fs  from "fs";
 
 const google_Ctrl = {};
 //const credentials = require("./credentials.json");
-//import credentials from './easycookingCredentials.json'  assert  { type: "json" }; 
+import credentials from './easycookingCredentials.json'  assert  { type: "json" }; 
 //import  file  from "googleapis/build/src/apis/file";
 
 const recipesID = "1v-Q_3LzdTfinD3bq51YaWg0VA1vymj1b";
 const profileID = "1VTuf7vltW-AFEO2NkhYtdCgISH9zsezu";
 
-const credentials = {
+/* const credentials = {
     type: "service_account",
     project_id: "easycooking-423220",
     private_key_id: "80bf11b7280bd038d46099f369ca9c4fe2e292eb",
@@ -21,7 +21,7 @@ const credentials = {
     auth_provider_x509_cert_url: "https://www.googleapis.com/oauth2/v1/certs",
     client_x509_cert_url: "https://www.googleapis.com/robot/v1/metadata/x509/easycookingdrive%40easycooking-423220.iam.gserviceaccount.com",
     universe_domain: "googleapis.com"
-}
+} */
   
 //const backupId = "1MpIbGA2F5yAmGcMibp7z-spOsDsOH7de";
 
@@ -213,7 +213,6 @@ google_Ctrl.getDownload = async (req, res) => {
       const fileName = "file" + "." + fileType;
       const fileData = request.data;
       // res.set(request.headers)
-      res.header("Access-Control-Allow-Origin", "*");
       res.set("Content-Type", fileType);
       res.set("Content-Disposition", "attachment; filename='archivo.png'");
       fileData.pipe(res);

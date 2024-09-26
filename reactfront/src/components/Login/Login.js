@@ -7,6 +7,7 @@ import { Link, useBeforeUnload } from 'react-router-dom'
 
 
 import './Login.css'
+const url = 'https://easycooking-server-2.onrender.com/'
 
 const Login = () => {
   const { loginUser } = useAuthContext();
@@ -17,7 +18,7 @@ const Login = () => {
   const onFinish = (values) => {
     console.log(process.env.REACT_APP_API_URL);
     
-    axios.post(process.env.REACT_APP_API_URL + 'user/email/', {email: values.email })
+    axios.post(url + 'user/email/', {email: values.email })
       .then(function response(response) {
 
         const userData = response.data
