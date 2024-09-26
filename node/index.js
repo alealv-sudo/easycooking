@@ -28,7 +28,7 @@ import listItemRoutes from './routes/listItemRoutes.js'
 import listCalendarRoutes from './routes/listCalendarRoutes.js'
 import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
-var allowlist = ['https://easycooking-xi.vercel.app', 'https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
+var allowlist = ['https://localhost:3000/','https://easycooking-xi.vercel.app','https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
 const corsOptions = {
     origin: function (origin, callback) {
       if ((allowlist.indexOf(origin) !== -1 || !origin)) {
