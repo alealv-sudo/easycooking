@@ -4,7 +4,7 @@ import cors from "cors";
 const serverIA = express();
 const port = 5000;
 
-var allowlist = ['https://localhost:3000/','https://easycooking-xi.vercel.app','https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
+var allowlist = ['http://localhost:3000','https://easycooking-xi.vercel.app','https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
 const corsOptions = {
     origin: function (origin, callback) {
       if ((allowlist.indexOf(origin) !== -1 || !origin)) {
