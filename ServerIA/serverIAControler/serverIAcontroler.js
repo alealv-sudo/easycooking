@@ -1,8 +1,13 @@
 import spawn  from 'node:child_process';
 import { log } from 'node:console';
+import fs from 'fs'
+import path from 'path';
 const serverIACTRL = {}
 
 function runPythonScript(scriptPath, args, callback) {
+
+    console.log("hola", scriptPath);
+    
     const pythonProcess = spawn.spawn('python', [scriptPath].concat(args));
  
     let data = '';
@@ -27,10 +32,12 @@ function runPythonScript(scriptPath, args, callback) {
 
 serverIACTRL.executeIA = async (req, res) => {
     const number = req.params.id;
+    let archivePath = path.join(process.cwd(), 'serverIAControler/data_procesator.py');
+    
     "C:/Users/Lenovo/Desktop/easyCooking/ServerIA/serverIAControler/data_procesator.py"
     'C:/Users/franc/Desktop/Easy Cooking/easycooking/ServerIA/serverIAControler/data_procesator.py'
     'D:/Bibliotecas/Documentos/Codes/School/modular/easycooking/ServerIA/serverIAControler/data_procesator.py'
-    runPythonScript('.vercel/data_procesator.py' , [number], (err, result) => {
+    runPythonScript(archivePath , [number], (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
