@@ -6,6 +6,7 @@ import { BlogCommentSection } from "replyke";
 import { Grid } from '@mui/material';
 
 import {
+    Typography,
     Form,
     Input,
     Button,
@@ -13,6 +14,8 @@ import {
     Spin,
     Rate,
 } from 'antd';
+
+import { Link } from 'react-router-dom';
 
 import './generalPost.css';
 
@@ -45,6 +48,8 @@ const ViewReview = () => {
         name: nameUserToComment
     }
 
+    const [creator, setCreator] = useState([])
+
     function getPost() {
         console.log(id);
         
@@ -65,9 +70,23 @@ const ViewReview = () => {
             /* Ids comentarios */
             const idRecipeCM = "review " + recipeData.id + ""
             setIdRecipeComments(idRecipeCM)
+
+            getCreator(reviewData.creatorId);
         }).catch((error) => {
             console.error(error);
         });
+    }
+
+    function getCreator(creatorId) {
+        axios.get(`${process.env.REACT_APP_API_URL}user/${creatorId}`)
+            .then((response) => {
+                const userData = response.data;
+
+                setCreator(userData.userName)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     function getRate(favId) {
@@ -141,6 +160,11 @@ const ViewReview = () => {
       >
         <Grid item width={"100%"} md={9}>
         <div className='all-page'>
+            <Typography.Link>
+                <Link to={`/private/user/${reviewPost.creatorId}`}>
+                    Creador: {creator}</Link>
+            </Typography.Link>
+
             {/* Form Receta */}
             <div className='div-general-post-view-review'>
                 <Form
