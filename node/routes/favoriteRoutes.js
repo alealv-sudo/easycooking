@@ -12,5 +12,6 @@ router.post('/', FavoriteRecipeCTRL.createFavorite);
 router.put('/', FavoriteRecipeCTRL.updateFavorite);
 router.delete('/:id', FavoriteRecipeCTRL.deleteFavorite);
 router.post('/like', FavoriteRecipeCTRL.handleLikeClicked);
+router.post('/fav', FavoriteRecipeCTRL.handleFavClicked);
 
 export default router

@@ -12,18 +12,34 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import BookmarkIcon from '@mui/icons-material/Bookmark';
 import { Grid } from '@mui/material';
 
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { useState } from 'react';
-const PostComponent = ({ title, userName, postPhoto, description, likesCounter, publishDate, postId, isLiked, avatar, onClick }) => {
+const PostComponent = ({ title, userName, postPhoto, description, likesCounter, publishDate, postId, isLiked, avatar, onClick, showLikesAndFavs,hasImage }) => {
     const [tempLiked, setTempLiked] = useState(isLiked)
     const [countLikes, setCountLikes] = useState(likesCounter || 0);
     const [cookies] = useCookies(['userToken']);
     const handleLikeClick = () => {
         const userId = cookies.id;
         axios.post(process.env.REACT_APP_API_URL + 'favorites/like', {
+            postId: postId,
+            userId: userId
+        })
+            .then(response => {
+                const isLiked1 = response.data.isLiked;
+                setCountLikes(prevCount => isLiked1 ? prevCount + 1 : Math.max(prevCount - 1, 0));
+                setTempLiked(isLiked1)
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
+    const handleFavsClick = () => {
+        const userId = cookies.id;
+        axios.post(process.env.REACT_APP_API_URL + 'favorites/fav', {
             postId: postId,
             userId: userId
         })
@@ -44,36 +60,35 @@ const PostComponent = ({ title, userName, postPhoto, description, likesCounter, 
                         <Avatar sx={{ bgcolor: red[500] }} aria-label="avatar">
                         </Avatar>
                     }
-                    action={
-                        <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                        </IconButton>
-                    }
+                    
                     title={title}
                     subheader={publishDate}
+                    onClick={() => onClick(postId)} // Add the onClick handler here
+                    sx={{
+                        cursor: 'pointer' // Set cursor to pointer to indicate clickability
+                    }}
                 />
-                <CardMedia sx={{maxHeight: "350px"}} onClick={() => onClick(postId)}
+                {hasImage && <CardMedia sx={{maxHeight: "350px", cursor: 'pointer' }} onClick={() => onClick(postId)}
                     component="img"
                     image={postPhoto}
                     alt={title}
-                />
-                <CardContent>
+                />}
+                <CardContent sx={{maxHeight: "350px", cursor: 'pointer' }} onClick={() => onClick(postId)}>
                     <Typography variant="body2" color="text.secondary">
                         {description}
                     </Typography>
                 </CardContent>
-                <CardActions disableSpacing>
+               {showLikesAndFavs && <CardActions disableSpacing>
                     <Grid container justifyContent={"space-between"}>
-
-                        <IconButton aria-label="share">
-                            <ShareIcon />
+                        <IconButton aria-label="add to favorites"  onClick={() => handleFavsClick()}>
+                            <BookmarkIcon />
                         </IconButton>
-                        <IconButton aria-label="add to favorites" onClick={() => handleLikeClick()}>
+                        <IconButton aria-label="add to likes" onClick={() => handleLikeClick()}>
                             {tempLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
                             {countLikes}
                         </IconButton>
                     </Grid>
-                </CardActions>
+                </CardActions>}
             </Card></>
     )
 }

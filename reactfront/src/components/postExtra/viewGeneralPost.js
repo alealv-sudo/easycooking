@@ -5,6 +5,7 @@ import { useCookies } from 'react-cookie';
 import { useParams } from 'react-router-dom';
 import { BlogCommentSection } from "replyke";
 import { Grid } from '@mui/material';
+import { RollbackOutlined } from '@ant-design/icons';
 
 import {
     Typography,
@@ -21,12 +22,9 @@ import {
 import { Link } from 'react-router-dom';
 
 import './generalPost.css';
-const folderID = "1-tXGVcYegjmtuqVnSTSyPCujAydFonO4"
 
-const ViewGeneralPost = () => {
+const ViewGeneralPost = ({id, onClose}) => {
 
-    const navigate = useNavigate();
-    const { id } = useParams()
 
     const [cookies, setCookie] = useCookies(['userToken']);
 
@@ -93,6 +91,7 @@ const ViewGeneralPost = () => {
      /* UseEffect */
 
      useEffect(() => {
+        console.log(13212312312)
         getPost()
      }, []);
  
@@ -154,9 +153,6 @@ const ViewGeneralPost = () => {
         imgWindow?.document.write(image.outerHTML);
     };
 
-    const Salir = () => {
-        navigate("/private/BLOG");
-    }
 
     /* Render */
 
@@ -257,12 +253,14 @@ const ViewGeneralPost = () => {
                 />
             </div>
 
-            <div className='half-width-slot-profile-btnGP'>
-                <div>
-                    <Button  danger type="primary" shape="round" onClick={Salir}> Salir </Button>
+  
+            <div className="bottom-page">
+                <div className='buttom-div'>
+                    <Button type="primary" onClick={() => onClose()} shape="round">
+                        <RollbackOutlined /> {/*Salir*/}
+                    </Button>
                 </div>
             </div>
-
             </div>
             </Grid>
         </Grid>

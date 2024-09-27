@@ -1,8 +1,12 @@
 import { request } from "express";
 import PostModel from "../models/PostModel.js";
+import RecipeReviewModel from "../models/RecipeReviewModel.js";
 import IngredientsModel from "../models/IngredientsModel.js";
+import GeneralPostModel from "../models/GeneralPostModel.js";
 import { Op } from "sequelize";
 import FavoriteRecipeModel from "../models/FavoriteRecipeModel.js";
+import FollowerModels from "../models/FollowerModel.js";
+import FollowedModels from "../models/FollowedModel.js";
 
 const PostCTRL = {}
 
@@ -81,26 +85,88 @@ PostCTRL.getOterUserPostsPaginated = async (req, res) => {
 PostCTRL.getPostsPaginated = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
-        const limit = parseInt(req.query.limit) || 12;
+        const limit = parseInt(req.query.limit) || 4;
         const userId = req.query.userId; // Get the userId from query parameters
+        const followeds = await FollowedModels.findAll({
+            where: {
+                userId: userId
+            },
+            attributes: ['followedId'] 
+        });
 
+        // If no followeds are found, return empty response
+        if (!followeds.length) {
+            return res.json({
+                currentPage: page,
+                totalPages: 0,
+                totalPosts: 0,
+                posts: []
+            });
+        }
+
+        const followedIds = followeds.map(followed => followed.followedId);
+        console.error(followedIds);
         // Calculate the offset
+        
         const offset = (page - 1) * limit;
 
+        console.error(followedIds,followedIds,followedIds)
         // Find posts with pagination
-        const posts = await PostModel.findAll({
+        const posts = await PostModel.findAll({ 
+            where: {
+                creatorId: {
+                    [Op.in]: followedIds // Filter by creatorId in followedIds array
+                }
+            },
+            offset: offset,
+            limit: limit,
+            order: [
+                ['createdAt', 'DESC'] // Sort by date in descending order
+            ],
             include: [
                 {
                     model: IngredientsModel,
                     attributes: { exclude: ['id', 'recipeId'] }
                 }
             ],
+        });
+
+        // Find recipe reviews with pagination
+        const reviews = await RecipeReviewModel.findAll({
+            where: {
+                creatorId: {
+                    [Op.in]: followedIds // Filter by creatorId in followedIds array
+                }
+            },
             offset: offset,
-            limit: limit
+            limit: limit,
+            order: [
+                ['createdAt', 'DESC'] // Sort by date in descending order
+            ]
+        });
+
+        // Find general posts with pagination
+        const generalPost = await GeneralPostModel.findAll({
+            where: {
+                creatorId: {
+                    [Op.in]: followedIds // Filter by creatorId in followedIds array
+                }
+            },
+            offset: offset,
+            limit: limit,
+            order: [
+                ['createdAt', 'DESC'] // Sort by date in descending order
+            ]
         });
 
         // Find the total number of posts
-        const totalPosts = await PostModel.count();
+        const totalPosts = await PostModel.count({
+            where: {
+                creatorId: {
+                    [Op.in]: followedIds // Count only posts from followed creators
+                }
+            }
+        });
 
         // Add isLiked field to each post
         const postsWithLikes = await Promise.all(posts.map(async post => {
@@ -117,11 +183,15 @@ PostCTRL.getPostsPaginated = async (req, res) => {
             };
         }));
 
+        // Combine posts, reviews, and general posts into one response array
+        const response = [...postsWithLikes, ...reviews, ...generalPost]
+        .filter(item => item.createdAt !== null) // Exclude items with null createdAt
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         res.json({
             currentPage: page,
             totalPages: Math.ceil(totalPosts / limit),
             totalPosts: totalPosts,
-            posts: postsWithLikes
+            posts: response
         });
     } catch (error) {
         res.json({ message: error.message });

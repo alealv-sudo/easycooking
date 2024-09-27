@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import { BlogCommentSection } from "replyke";
 import { Grid } from '@mui/material';
+import { RollbackOutlined } from '@ant-design/icons';
 
 import {
     Typography,
@@ -21,10 +22,7 @@ import './generalPost.css';
 
 const { Meta } = Card;
 
-const ViewReview = () => {
-
-    const navigate = useNavigate()
-    const { id } = useParams()
+const ViewReview = ({id,onClose}) => {
 
     const [cookies, setCookie] = useCookies(['userToken']);
     const [isLoading, setLoading] = useState(true);
@@ -249,9 +247,11 @@ const ViewReview = () => {
                 />
             </div>
 
-            <div className='half-width-slot-profile-btnGP'>
-                <div>
-                    <Button  danger type="primary" shape="round" onClick={Salir}> Salir </Button>
+            <div className="bottom-page">
+                <div className='buttom-div'>
+                    <Button type="primary" onClick={() => onClose()} shape="round">
+                        <RollbackOutlined /> {/*Salir*/}
+                    </Button>
                 </div>
             </div>
 
