@@ -46,6 +46,7 @@ const ViewReview = ({id,onClose}) => {
         name: nameUserToComment
     }
 
+    const navigate = useNavigate()
     const [creator, setCreator] = useState([])
 
     function getPost() {
