@@ -22,7 +22,7 @@ import {
 
 const URI = 'http://localhost:8000/blogs/'
 
-const URIIA = 'https://easycooking-serveria.vercel.app/executeIA/'
+const URIIA =  process.env.REACT_APP_API_IA_URL + 'executeIA/'
 
 const Prueba = () => {
 
