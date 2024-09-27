@@ -28,7 +28,7 @@ import listItemRoutes from './routes/listItemRoutes.js'
 import listCalendarRoutes from './routes/listCalendarRoutes.js'
 import recipeCommentsRoutes from "./routes/recipeCommentsRoutes.js";
 
-var allowlist = ['https://www.googleapis.com/auth/drive','http://localhost:3000','https://easycooking-xi.vercel.app','https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
+var allowlist = ['https://easycooking-server-2.onrender.com','https://www.googleapis.com/auth/drive','http://localhost:3000','https://easycooking-xi.vercel.app','https://easycooking-serveria.vercel.app','https://easycooking-server-comments.vercel.app']
 const corsOptions = {
     origin: function (origin, callback) {
       if ((allowlist.indexOf(origin) !== -1 || !origin)) {
