@@ -33,12 +33,13 @@ function runPythonScript(scriptPath, args, callback) {
 serverIACTRL.executeIA = async (req, res) => {
     const number = req.params.id;
     let archivePath = path.resolve(process.cwd(), 'serverIAControler/data_procesator.py');
-
+    console.log("hola", archivePath);
     
+
     "C:/Users/Lenovo/Desktop/easyCooking/ServerIA/serverIAControler/data_procesator.py"
     'C:/Users/franc/Desktop/Easy Cooking/easycooking/ServerIA/serverIAControler/data_procesator.py'
     'D:/Bibliotecas/Documentos/Codes/School/modular/easycooking/ServerIA/serverIAControler/data_procesator.py'
-    runPythonScript(archivePath , [number], (err, result) => {
+    runPythonScript('~/project/src/ServerIA/serverIAControler/data_procesator.py' , [number], (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
