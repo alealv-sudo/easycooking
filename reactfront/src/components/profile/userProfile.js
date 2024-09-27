@@ -413,7 +413,7 @@ export default function Profile() {
     console.log("src drive", image_recipe);
     
     axios
-      .get(url + "google/download/" + image_recipe, {
+      .get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, {
         headers:{'Access-Control-Allow-Origin': '*'},
         responseType: "blob",
       })

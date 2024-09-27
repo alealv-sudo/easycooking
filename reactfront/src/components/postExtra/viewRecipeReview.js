@@ -241,7 +241,7 @@ const ViewReview = ({id,onClose}) => {
 
             <div className="div-comments-review">
                 <BlogCommentSection
-                    apiBaseUrl="http://localhost:443"
+                    apiBaseUrl={process.env.REACT_APP_API_COMMENTS_URL}
                     articleId={idRecipeComments}
                     callbacks={{ loginClickCallback: () => null }}
                     currentUser={user}
