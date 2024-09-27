@@ -39,7 +39,7 @@ serverIACTRL.executeIA = async (req, res) => {
     "C:/Users/Lenovo/Desktop/easyCooking/ServerIA/serverIAControler/data_procesator.py"
     'C:/Users/franc/Desktop/Easy Cooking/easycooking/ServerIA/serverIAControler/data_procesator.py'
     'D:/Bibliotecas/Documentos/Codes/School/modular/easycooking/ServerIA/serverIAControler/data_procesator.py'
-    runPythonScript('~/project/src/ServerIA/serverIAControler/data_procesator.py' , [number], (err, result) => {
+    runPythonScript('/opt/render/project/src/ServerIA/serverIAControler/data_procesator.py' , [number], (err, result) => {
         if (err) {
             res.status(500).send(err);
         } else {
