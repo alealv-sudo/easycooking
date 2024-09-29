@@ -40,7 +40,7 @@ def executeIA(num_userid):
     # print(ratings_df.head())
 
     
-    userGroup = []
+    userGroup = pd.DataFrame()
     OtherUsersGroupes = []
     
     ##########################################################################################################
@@ -50,14 +50,19 @@ def executeIA(num_userid):
     for user_id, group in ratings_df:
 
         if user_id == num_userid:
-            userGroup = ratings_df.get_group(user_id) ### userGroup.append(group)
+            userGroup = group # ratings_df.get_group(user_id) ### userGroup.append(group)
             # print(f"Usuario Separado \n {userGroup}")
         else:
             auxiliarGroup = group.drop(columns=['id'])
             OtherUsersGroupes.append(auxiliarGroup)
             # print(f"Usuario adicional {user_id}: \n {group}")
 
-    userGroup = userGroup.drop(columns=['id']) # 'id', 'userId'
+    if userGroup.empty:
+        userGroup = OtherUsersGroupes.pop(0)
+
+    if 'id' in userGroup.columns:
+        userGroup = userGroup.drop(columns=['id']) # 'id', 'userId'
+
     inputRecipes = userGroup
     # print("InputRecipes", inputRecipes)
     
