@@ -203,6 +203,10 @@ const LayoutFront = (props) => {
                     <BookIcon />
                     Mis Publicaciones
                   </MenuItem>
+                  <MenuItem onClick={() => navigateAncloseMenu('/private/recipesFiltered')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <SearchIcon />
+                    IngrediSearch
+                  </MenuItem>
                   <MenuItem onClick={() => navigateAncloseMenu('/private/recomendations')} disableRipple sx={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <LocalFireDepartmentIcon />
                     Recomendaciones
