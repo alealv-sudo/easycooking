@@ -342,7 +342,10 @@ PostCTRL.getPostSimilar = async (req, res) => {
 
 // Mostrar lista de recetas por similitud de ingrediente
 PostCTRL.getPostIngredientSimilar = async (req, res) => {
-    const valueStyle = req.params.value.split(',').map(ingredient => `%${ingredient.trim()}%`);
+    const decodedURI = decodeURI(req.params.value);
+    const valueStyle = decodedURI.split('*').map(ingredient => `%${ingredient.trim()}%`);
+
+    console.log("Perro", valueStyle);
 
 
     try {
@@ -359,10 +362,13 @@ PostCTRL.getPostIngredientSimilar = async (req, res) => {
             include: [
                 {
                     model: IngredientsModel,
-                    where: {ingredient: {[Op.or]: valueStyle.map(value => ({ [Op.iLike]: value }))}},
+                    where: { ingredient: { [Op.or]: valueStyle.map(value => ({ [Op.iLike]: value })) } },
                     attributes: { exclude: ['id', 'recipeId'] }
                 }
             ],
+            group: ['recipes.id'],
+            // having: sequelize.literal(`COUNT(DISTINCT Ingredients.ingredient) = ${valueStyle.length}`),
+            order: [['createdAt', 'DESC']],
             offset: offset,
             limit: limit
         });

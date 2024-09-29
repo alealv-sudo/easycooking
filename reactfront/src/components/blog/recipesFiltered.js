@@ -1,10 +1,12 @@
 import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
 import PostComponent from './postComponent';
+import PostShowRecipes from '../recipes/postShowRecipes';
 import { CircularProgress, Grid, Skeleton } from '@mui/material';
 import PostDetails from './showBlogI';
 import { useCookies } from 'react-cookie';
-import { Input, Select, Dropdown, Menu } from 'antd'
+import { Input, Select, Dropdown, Menu, Form, Button, Space, Divider } from 'antd'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 const RecipesFiltered = () => {
   const [recipes, setRecipes] = useState([]);
@@ -13,6 +15,7 @@ const RecipesFiltered = () => {
   const [loading, setLoading] = useState(false);
   const observerRef = useRef(null);
   useEffect(() => {
+    // searchALLIngredients()
     loadMore();  // Initial load
   }, []);
 
@@ -41,65 +44,55 @@ const RecipesFiltered = () => {
   const [cookies] = useCookies(['userToken']);
   const userId = cookies.id;
 
+  const [ingredientList, setIngredientList] = useState([]);
+
   //////////// SARCH DECLARATIONS /////////////////////////////////////////////
   const [valueSearch, setValueSearch] = useState('');
-  const [category, setCategory] = useState('nombre'); // Estado para la categoría seleccionada
+  const [category, setCategory] = useState(''); // Estado para la categoría seleccionada
   const [recipesFilter, setRecipesFilter] = useState('');
   const { Option } = Select;
 
 
-  const onChange = (event) => {
-    setValueSearch(event.target.value);
-  };
+  const searchALLIngredients = () => {
 
-  const handleChange = (value) => {
-    setCategory(value);
-    console.log(`Categoría seleccionada: ${value}`);
-  };
-
-  const onSearch = (value) => {
-    console.log(value);
-    
-    loadMore()
-    // if (category === 'nombre') {
-    //   searchByName(value);
-    // } else if (category === 'ingredientes') {
-    //   searchByIngredients(value);
-    // }
-  };
-
-  const searchByName = (name) => {
-    // Lógica para buscar por nombre
-    console.log(`Buscando por nombre: ${name}`);
-
-    axios.get(process.env.REACT_APP_API_URL + 'post/recipe_name/' + name
+    axios.get(process.env.REACT_APP_API_URL + 'ingredients/'
     ).then((response) => {
-      const recipeData = response.data;
-      // setRecipesFilter(recipeData)
-      
-      console.log(recipeData);
-      console.log(page, [...recipes, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]); setPage((prevPage) => prevPage + 1);
-      setRecipes((prevRecipes) => [...prevRecipes, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]);
-      setPage((prevPage) => prevPage + 1);
-      setMaxPage(recipeData?.totalPages ? recipeData.totalPages : page)
-      setLoading(false);  // Stop loading after data is fetched
+      const ingredientListData = response.data;
+
+      console.log(ingredientListData[0].ingredient);
+
+      const chunkedData = [];
+
+      // for (let i = 0; i < ingredientListData.length; i += pageSize) {
+      //   chunkedData.push(ingredientListData[i].ingredient.slice(i, i + pageSize));
+      // }
+
+      setIngredientList(chunkedData);
+
     })
       .catch((error) => {
         console.error(error);
       });
 
-    console.log(recipesFilter);
-  };
+  }
+
 
   const searchByIngredients = (ingredients) => {
     // Lógica para buscar por ingredientes
-    console.log(`Buscando por ingredientes: ${ingredients}`);
+    console.log('Buscando por ingredientes:', ingredients.ingredients);
 
-    axios.get(process.env.REACT_APP_API_URL + 'post/recipes/ingredients/' + ingredients
+    let concatenatedIngredients = ingredients.ingredients.map(item => item.ingredient).join('*');
+    let encodedIngredients = encodeURIComponent(concatenatedIngredients);
+
+    console.log('Buscando por ingredientes:', process.env.REACT_APP_API_URL + 'post/recipes/ingredients/' + encodedIngredients);
+
+
+
+    axios.get(process.env.REACT_APP_API_URL + 'post/recipes/ingredients/' + encodedIngredients
     ).then((response) => {
       const recipeData = response.data;
-      // setRecipesFilter(recipeData)
-      
+      setRecipesFilter(recipeData)
+
       console.log(recipeData);
       console.log(page, [...recipes, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]); setPage((prevPage) => prevPage + 1);
       setRecipes((prevRecipes) => [...prevRecipes, ...(recipeData?.posts?.length > 0 ? recipeData.posts : [])]);
@@ -117,42 +110,75 @@ const RecipesFiltered = () => {
 
   // Load more posts function
   const loadMore = () => {
-    if (category === 'nombre') {
-      searchByName(valueSearch);
-    } else if (category === 'ingredientes') {
+    if (category === 'ingredientes') {
       searchByIngredients(valueSearch);
+    }
+    else {
+      // Nothing
     }
 
   };
   const [openRecipe, setOpenRecipe] = useState(false)
 
+  const [form] = Form.useForm();
 
 
   return (
     <>
       <div>
-        <div>
-          <Select defaultValue="nombre" style={{ width: 120 }} onChange={handleChange}>
-            <Option value="nombre">Nombre</Option>
-            <Option value="ingredientes">Ingredientes</Option>
-          </Select>
-          <Input.Search
-            placeholder="Buscar..."
-            value={valueSearch}
-            onChange={onChange}
-            onSearch={onSearch}
-            enterButton
-            style={{ width: '400px' }}
-          />
-          {/* Resto del código */}
+        <Divider />
+        {/* Input Ingredientes */}
+        <div type="flex" justify="center" align="middle">
+          <Form form={form} name="dynamic_form_nest_item" onFinish={searchByIngredients}>
+            <Form.List name="ingredients">
+              {(fields, { add, remove }) => (
+                <>
+                  {fields.map(({ key, name, fieldKey, ...restField }) => (
+                    <Space key={key} style={{ display: 'flex', justifyContent: 'center' }} align="baseline">
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'ingredient']}
+                        fieldKey={[fieldKey, 'ingredient']}
+                        rules={[{ required: true, message: 'Por favor ingrese un ingrediente' }]}
+                      >
+                        <Input placeholder="Ingrediente" />
+                      </Form.Item>
+                      <MinusCircleOutlined onClick={() => remove(name)} />
+                    </Space>
+                  ))}
+                  <Form.Item>
+                    <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                      Añadir ingrediente
+                    </Button>
+                  </Form.Item>
+
+                  <Form.Item>
+                    <Button
+                      type="primary"
+                      htmlType="submit"
+                      disabled={!form.getFieldValue('ingredients') || form.getFieldValue('ingredients').length < 1}
+                    >
+                      Buscar sugerencia
+                    </Button>
+                  </Form.Item>
+                </>
+              )}
+            </Form.List>
+          </Form>
         </div>
 
-        <Grid container minHeight={"100%"} py={2} px={2}>
+        <Divider />
+
+
+
+        <Grid item container xs={12} minHeight={"100%"} py={2} px={2}>
           {openRecipe && (
-            <PostDetails
-              postId={openRecipe}
-              onClose={setOpenRecipe}
-            />
+            <Grid item container spacing={2} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
+              <PostShowRecipes
+                id={openRecipe}
+                onClose={setOpenRecipe}
+              />
+            </Grid>
           )}
           <Grid item container spacing={2} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'}>
             {recipes.length > 0 ? (
