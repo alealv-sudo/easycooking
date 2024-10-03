@@ -1,6 +1,7 @@
 import { request } from "express";
 import RecipeReviewModel from "../models/RecipeReviewModel.js";
 import PostModel from "../models/PostModel.js"
+import { Op } from "sequelize";
 
 const RecipeReviewCTRL = {}
 
@@ -39,6 +40,47 @@ RecipeReviewCTRL.createPost = async (req, res) => {
         res.json(post)
     } catch (error) {
         res.json({message: error.message}) 
+    }
+}
+
+/* Post paginados para el perfil de otros usuarios */
+RecipeReviewCTRL.getUserPostsPaginated = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit =  12;
+        const userId = req.query.userId; // Get the userId from query parameters
+        const userCurrent = req.query.userCurrent;
+
+        // Calculate the offset
+        const offset = (page - 1) * limit;
+
+        // Find posts with pagination
+        const posts = await RecipeReviewModel.findAll({
+            where: {
+                creatorId: userId
+            },
+            offset: offset,
+            limit: limit,
+            order: [
+                ['createdAt', 'DESC'] // Sort by date in descending order
+            ],
+        });
+
+        // Find the total number of posts
+        const totalPosts = await RecipeReviewModel.count({
+            where: {
+                creatorId: userId
+            }
+        });
+
+        res.json({
+            currentPage: page,
+            totalPages: Math.ceil(totalPosts / limit),
+            totalPosts: totalPosts,
+            posts: posts
+        });
+    } catch (error) {
+        res.json({ message: error.message });
     }
 }
 
@@ -81,5 +123,38 @@ RecipeReviewCTRL.getPostByUser = async (req, res) => {
        res.json({message: error.message}) 
     }
 }
+
+// Mostrar lista de recetas por similitud de nombre
+RecipeReviewCTRL.getPostSimilar = async (req, res) => {
+    const valueStyle = `%${req.params.value}%`
+    
+    try {
+        // Find posts with pagination
+        const reviews = await RecipeReviewModel.findAll({
+            where: {
+                title_post: {[Op.iLike]: valueStyle},
+            },
+            order: [
+                ['createdAt', 'DESC'] // Sort by date in descending order
+            ]
+        });
+
+        // Find the total number of posts
+        const totalPosts = await RecipeReviewModel.count({where: {
+            title_post: {[Op.iLike]: valueStyle},
+        }});
+
+        res.json({
+            currentPage: 1,
+            totalPages: 1,
+            totalPosts: totalPosts,
+            posts: reviews
+        });
+    } catch (error) {
+        res.json({ message: error.message });
+    }
+
+
+};
 
 export default RecipeReviewCTRL

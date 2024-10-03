@@ -191,6 +191,7 @@ const RecipesFiltered = () => {
                     postPhoto={record.postPhoto}
                     userName={record.userName}
                     isLiked={record.isLiked}
+                    isFaved={record.isFaved}
                     description={record.description}
                     publishDate={record.publishDate}
                     postId={record.id}

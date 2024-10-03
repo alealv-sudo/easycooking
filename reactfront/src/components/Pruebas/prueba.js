@@ -104,7 +104,31 @@ const Prueba = () => {
     }, [fact])
 
     const DownloadFile = (image_recipe) => {
-        axios.get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, { responseType: "blob" })
+        if (image_recipe.length > 33) {
+            let url = "";
+            url = image_recipe
+      
+            const imageUpload = [
+              {
+                uid: "-1",
+                name: "image.png",
+                status: "done",
+                url: url,
+              },
+            ];
+      
+            setState({
+              fileList: [],
+            });
+            setFileList(imageUpload);
+            setState({
+              fileList: imageUpload,
+            });
+      
+            setLoading(false);
+        }
+        else {
+            axios.get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, { responseType: "blob" })
             .then((res) => {
                 // Get IMG in format BLOB
                 // Crear una URL a partir del blob
@@ -140,6 +164,7 @@ const Prueba = () => {
                 console.error(error);
                 // message.error("Descarga fallida.");
             });
+        }
     };
 
     return (
@@ -162,13 +187,15 @@ const Prueba = () => {
                                         onClick={setOpenRecipe}
                                         avatar={record.avatar}
                                         title={record.recipe_name}
-                                        postPhoto={record.postPhoto && record.postPhoto == "" ? record.postPhoto : "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"}
+                                        postPhoto = {record.image_recipe && record.image_recipe !== "1" ? record.image_recipe : "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505"}
                                         userName={record.userName}
                                         isLiked={record.isLiked}
+                                        isFaved={record.isFaved}
                                         description={record.description}
                                         publishDate={record.publishDate}
                                         postId={record.id}
                                         likesCounter={record.likes}
+                                        hasImage={(record.id_recipe_review)?false:true}
                                     />
                                 </Grid>
                             ))

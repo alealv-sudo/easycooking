@@ -18,13 +18,14 @@ import { Grid } from '@mui/material';
 import { useCookies } from 'react-cookie';
 import axios from 'axios';
 import { useState } from 'react';
-const PostComponent = ({ title, userName, postPhoto, description, likesCounter, publishDate, postId, isLiked, avatar, onClick, showLikesAndFavs,hasImage }) => {
+const PostComponent = ({ title, userName, postPhoto, description, likesCounter, publishDate, postId, isLiked, isFaved, avatar, onClick, showLikesAndFavs,hasImage }) => {
     const [tempLiked, setTempLiked] = useState(isLiked)
+    const [tempFaved, setTempFaved] = useState(isFaved)
     const [countLikes, setCountLikes] = useState(likesCounter || 0);
     const [cookies] = useCookies(['userToken']);
     const handleLikeClick = () => {
         const userId = cookies.id;
-        axios.post(process.env.REACT_APP_API_URL + 'favorites/like', {
+        axios.post(process.env.REACT_APP_API_URL + 'likes/like', {
             postId: postId,
             userId: userId
         })
@@ -44,9 +45,8 @@ const PostComponent = ({ title, userName, postPhoto, description, likesCounter, 
             userId: userId
         })
             .then(response => {
-                const isLiked1 = response.data.isLiked;
-                setCountLikes(prevCount => isLiked1 ? prevCount + 1 : Math.max(prevCount - 1, 0));
-                setTempLiked(isLiked1)
+                const isLiked1 = response.data.isFaved;
+                setTempFaved(isLiked1)
             })
             .catch(error => {
                 console.error(error);
@@ -81,7 +81,7 @@ const PostComponent = ({ title, userName, postPhoto, description, likesCounter, 
                {showLikesAndFavs && <CardActions disableSpacing>
                     <Grid container justifyContent={"space-between"}>
                         <IconButton aria-label="add to favorites"  onClick={() => handleFavsClick()}>
-                            <BookmarkIcon />
+                        {tempFaved ? <BookmarkIcon style={{ color: 'gold' }} /> : <BookmarkIcon />}
                         </IconButton>
                         <IconButton aria-label="add to likes" onClick={() => handleLikeClick()}>
                             {tempLiked ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}

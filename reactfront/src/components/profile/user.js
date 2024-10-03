@@ -25,6 +25,9 @@ const postRoute = "post";
 const favoriteRoute = "favorites";
 const followedRoute = "followeds";
 const followerRoute = "followers";
+const generalPostRoute = "generalPost";
+const reviewPostRoute = "reviewPost";
+const likesRoute = "likes"
 
 export default function Profile() {
 
@@ -154,11 +157,31 @@ export default function Profile() {
       label: "Publicaciones",
       key: "Publicaciones",
       children: <ProfilePost route={postRoute} userId={id} isUser={true} />,
+      forceRender: true,
+    },
+    {
+      label: "Post",
+      key: "Post",
+      children: <ProfilePost route={generalPostRoute} userId={id} isUser={true} />,
+      forceRender: true,
+    },
+    {
+      label: "Reseñas",
+      key: "Review",
+      children: <ProfilePost route={reviewPostRoute} userId={id} isUser={true} />,
+      forceRender: true,
     },
     {
       label: "Favoritos",
       key: "Favoritos",
       children: <ProfilePost route={favoriteRoute} userId={id} isUser={true}/>,
+      forceRender: true,
+    },
+    {
+      label: "Me gusta",
+      key: "Likes",
+      children: <ProfilePost route={likesRoute} userId={id} isUser={true}/>,
+      forceRender: true,
     },
     {
       label: "Seguidos",

@@ -3,6 +3,7 @@ import profileCTRL  from "../controllers/ProfileController.js"
 
 const router = express.Router()
 
+router.get('/usersByName/:id', profileCTRL.getProfiles);
 router.get('/', profileCTRL.getAllProfiles);
 router.get('/:id', profileCTRL.getProfile);
 router.post('/', profileCTRL.createProfile);

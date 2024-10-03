@@ -4,10 +4,9 @@ import './App.css';
 import { CookiesProvider } from 'react-cookie'; 
 
 ///Router
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
-
-import {VIEWREVIEW ,VIEWGPOST ,VIEWRECIPE ,CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA, PRUEBA2, USER, REGISTER , POSTR, UPDATER, SHOWPOSTR, UPLOADTEST, PROFILE, RECIPESFILTERED, RECIPESADM} from './config/routes/paths';
+import {RECIPESELECTOR ,VIEWREVIEW ,VIEWGPOST ,VIEWRECIPE ,CALENDAR, EDITLIST, VIEWMARKETLIST , MARKETLIST,NEWLIST ,EDITREVIEWPOST,REVIEWPOST ,EDITGPOST ,GPOST, BLOG, HOME, LOGIN, LOGOUT, PRIVATE, PRUEBA , USER, REGISTER , POSTR, UPDATER ,PROFILE, RECIPESFILTERED, RECIPESADM, SRCHPOST, SRCHRECIPE, SRCHREVIEW, SRCHUSER} from './config/routes/paths';
 
 import Login from './components/Login/Login';
 import Logout from './components/Login/Logout';
@@ -30,10 +29,10 @@ import ViewRecipe from './components/recipes/viewRecipe'
 import UserProfile from './components/profile/userProfile';
 import GeneralPost from './components/postExtra/generalPost'
 import EditGeneralPost from './components/postExtra/editGeneralPost'
-import ViewGeneralPost from './components/postExtra/viewGeneralPost';
+import ViewGeneralPost from './components/postExtra/viewGeneralPostID';
 import RecipeReviewPost from './components/postExtra/recipeReviewPost'
 import EditRecipeReviewPost from './components/postExtra/editRecipeReviewPost'
-import ViewReview from './components/postExtra/viewRecipeReview';
+import ViewReview from './components/postExtra/viewRecipeReviewID';
 import MarketList from './components/marketList/marketList'
 import NewMarketList from './components/marketList/newMarketList'
 import ViewMarketList from './components/marketList/viewMarketList'
@@ -41,6 +40,11 @@ import EditListMarket from './components/marketList/editListMarket';
 import RecipeCalendar from './components/recipeCalendar/recipeCalendar'
 import RecipesFiltered from './components/blog/recipesFiltered';
 import RecipesAdministrator from './components/recipes/recipesAdministrator'
+import SearchByPostName from './components/searchBar/searchByPostName'
+import SearchByRecipeName from './components/searchBar/serchByRecipesName'
+import SearchByReviewName from './components/searchBar/searchByReviewName'
+import SearchByUserName from './components/searchBar/searchByUserName'
+import ShowRecipeSelector from "./components/blog/showRecipeSelector"
 
 ///Layout
 import LayoutFront from './components/Layaout/Layout';
@@ -83,6 +87,12 @@ function App() {
                   <Route path={CALENDAR} exact element={<RecipeCalendar/>} />
                   <Route path={RECIPESFILTERED} exact element={<RecipesFiltered/>} />
                   <Route path={RECIPESADM}  exact element={<RecipesAdministrator/>} />
+
+                  <Route path={SRCHPOST} exact element={<SearchByPostName/>} />
+                  <Route path={SRCHRECIPE} exact element={<SearchByRecipeName/>} />
+                  <Route path={SRCHREVIEW} exact element={<SearchByReviewName/>} />
+                  <Route path={SRCHUSER} exact element={<SearchByUserName/>} />
+                  <Route path={RECIPESELECTOR} exact element={<ShowRecipeSelector/>} />
                   
                   <Route path={'*'} element={<NotFound/>} />
                 </Route>

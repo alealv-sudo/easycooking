@@ -3,6 +3,8 @@ import LikeCTRL from "../controllers/LikeController.js";
 
 const router = express.Router()
 
+router.get('/paginated', LikeCTRL.getPostsPaginated);
+router.get('/paginatedUser', LikeCTRL.getOterUserLikePaginated);
 router.get('/', LikeCTRL.getAllLikes);
 router.get('/:id', LikeCTRL.getLike);
 router.get('/alluser/:id', LikeCTRL.getUserLikes);

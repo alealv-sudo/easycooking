@@ -1,29 +1,36 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { BlogCommentSection } from "replyke";
-import { Grid, CircularProgress } from "@mui/material";
+import { Grid } from "@mui/material";
 import { RollbackOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 
-import { Typography, Upload, Form, Input, Button, Spin, Card } from "antd";
+import { Typography, Form, Input, Button, Card, Spin, Rate } from "antd";
+
+import { Link } from "react-router-dom";
 
 import "./generalPost.css";
 
-const ViewGeneralPost = ({ id, onClose }) => {
-  const [cookies, setCookie] = useCookies(["userToken"]);
+const { Meta } = Card;
 
-  const [gPost, setGPost] = useState();
+const ViewReviewID = () => {
+  const [cookies, setCookie] = useCookies(["userToken"]);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [isLoading, setLoading] = useState(true);
-  const [imgFileList, setFileList] = useState([]);
 
+  const [reviewPost, setReviewPost] = useState();
+  const [recipe, setRecipe] = useState();
+  const [rating, setRating] = useState({ score: 0 });
+  const [isEmpty, setIsEmpty] = useState(true);
+
+  const [ImgURL, setURL] = useState([]);
   const [state, setState] = useState({
     fileList: [],
     uploading: false,
   });
-
-  const { fileList } = state;
 
   const [idRecipeComments, setIdRecipeComments] = useState(0);
   const idUserToComment = cookies.id;
@@ -35,48 +42,29 @@ const ViewGeneralPost = ({ id, onClose }) => {
 
   const [creator, setCreator] = useState([]);
 
-  {
-    /* Get post */
-  }
-
   function getPost() {
     axios
-      .get(process.env.REACT_APP_API_URL + "generalPost/" + id)
+      .get(process.env.REACT_APP_API_URL + "reviewPost/" + id)
       .then((response) => {
-        const postData = response.data;
-        setGPost(postData);
-        console.log(postData);
+        const reviewData = response.data;
+        const recipeData = reviewData.recipe;
+        getRate(recipeData.id);
 
-        if (postData.image_post_id !== "1") {
-          if (postData.image_post_id.length <= 33) {
-            DownloadFile(postData.image_post_id);
-          } else {
-            let url = postData.image_post_id;
-
-            const imageUpload = [
-              {
-                uid: "-1",
-                name: "image.png",
-                status: "done",
-                url: url,
-              },
-            ];
-
-            setFileList(imageUpload);
-            setState({
-              fileList: imageUpload,
-            });
-            setLoading(false);
-          }
-        } else {
-          setLoading(false);
+        if (recipeData.image_recipe.length <= 33) {
+          DownloadFile(recipeData.image_recipe);
+        }else{
+          setURL(recipeData.image_recipe)
+          setLoading(false)
         }
+        
+        setRecipe(recipeData);
+        setReviewPost(reviewData);
 
         /* Ids comentarios */
-        const idRecipeCM = "gpost " + postData.id + "";
+        const idRecipeCM = "review " + recipeData.id + "";
         setIdRecipeComments(idRecipeCM);
 
-        getCreator(postData.creatorId);
+        getCreator(reviewData.creatorId);
       })
       .catch((error) => {
         console.error(error);
@@ -96,82 +84,78 @@ const ViewGeneralPost = ({ id, onClose }) => {
       });
   }
 
-  /* UseEffect */
-
-  useEffect(() => {
-    console.log(13212312312);
-    getPost();
-  }, []);
-
-  /* Funciones Archivos */
-
-  const DownloadFile = (image_recipe, typeI) => {
+  function getRate(favId) {
     axios
-      .get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, {
+      .get(
+        `${process.env.REACT_APP_API_URL}ratings/${cookies.id}/recipes/${favId}`
+      )
+      .then((response) => {
+        const ratingData = response.data;
+        if (
+          ratingData.length !== 0 &&
+          ratingData !== undefined &&
+          ratingData !== null
+        ) {
+          setRating(ratingData);
+          setIsEmpty(false);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  const DownloadFile = (image_recipe) => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}google/download/${image_recipe}`, {
         responseType: "blob",
       })
       .then((res) => {
-        // Get IMG in format BLOB
-        // Crear una URL a partir del blob
-        const url = URL.createObjectURL(
-          new Blob([res.data], { type: "image/png" })
-        );
+        let url;
 
-        const imageUpload = [
-          {
-            uid: "-1",
-            name: "image.png",
-            status: "done",
-            url: url,
-          },
-        ];
+        if (image_recipe === "1") {
+          url =
+            "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505";
+        } else {
+          url = URL.createObjectURL(
+            new Blob([res.data], { type: "image/png" })
+          );
+        }
 
-        setState({
-          fileList: [],
-        });
-        setFileList(imageUpload);
-        setState({
-          fileList: imageUpload,
-        });
+        setURL(url);
 
         setLoading(false);
-        // Crear un nuevo elemento de imagen y establecer la URL como src
-        const img = document.createElement("img");
-        img.src = url;
-        setLoading(false);
-        // Revocar la URL del objeto para liberar recursos
+
         return () => {
           URL.revokeObjectURL(url);
         };
       })
       .catch((error) => {
         console.error(error);
-        // message.error("Descarga fallida.");
       });
   };
 
-  const onPreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
+  function navTo(idRecipe) {
+    navigate("/private/viewRecipe/" + idRecipe);
+  }
+
+  useEffect(() => {
+    getPost();
+  }, []);
+
+  const navExit = () => {
+    navigate(-1);
   };
 
   /* Render */
 
   if (isLoading) {
     return (
-      <Grid item width={"100%"} md={12}>
-        <CircularProgress />
-      </Grid>
+      <div style={{ textAlignLast: "center" }}>
+        <br />
+        <br />
+        <Spin color="#000106" tip="Loading..." />
+      </div>
     );
   }
 
@@ -196,22 +180,21 @@ const ViewGeneralPost = ({ id, onClose }) => {
                     height: "50px",
                     width: "90px",
                   }}
-                  onClick={() => onClose()}
+                  onClick={() => navExit()}
                 >
                   <RollbackOutlined />
                 </Button>
               </div>
             </div>
-
             {/* Form Receta */}
-            <div className="div-general-post">
+            <div className="div-general-post-view-review">
               <Card
                 className="post-card-recipe"
                 size="default"
                 actions={[
                   <Link
                     style={{ color: "black" }}
-                    to={`/private/user/${gPost.creatorId}`}
+                    to={`/private/user/${reviewPost.creatorId}`}
                   >
                     Creador: {creator}
                   </Link>,
@@ -222,60 +205,63 @@ const ViewGeneralPost = ({ id, onClose }) => {
                   layout="vertical"
                   name="recipe"
                   initialValues={{
-                    title_post: gPost.title_post,
-                    text_post: gPost.text_post,
+                    title_post: reviewPost.title_post,
+                    review_post: reviewPost.review_post,
                   }}
                   autoComplete="off"
                 >
                   {/* Input Titulo */}
                   <Form.Item
                     className="half-width-slot-generalpost"
+                    label="Titulo: "
                     name="title_post"
                   >
-                    <Input className="half-width-slot-title" disabled={true} />
+                    <Input disabled={true} />
                   </Form.Item>
 
-                  {/* Input imagen */}
-                  {String(gPost.image_post_id) !== "1" ? (
-                    <div type="flex" justify="center" align="middle">
-                      <Form.Item
-                        className="customSizedUploadGP"
-                        justify="center"
-                        align="middle"
-                        name="image_post_id"
-                      >
-                        <Upload
-                          listType="picture-card"
-                          disabled={true}
-                          fileList={imgFileList}
-                          onPreview={onPreview}
-                          showUploadList={{ showRemoveIcon: false }}
-                        >
-                          {fileList.length < 1 && "+ Upload"}
-                        </Upload>
-                      </Form.Item>
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-
-                  {/* Contenido*/}
+                  {/* Biografia*/}
                   <Form.Item
                     className="half-width-slot-generalpost"
                     style={{ height: "10%" }}
                     label="Contenido: "
-                    name="text_post"
+                    name="review_post"
                   >
                     <Input.TextArea
                       showCount={false}
-                      maxLength={500}
-                      placeholder="Contenido"
                       style={{ height: "100%", resize: "none" }}
                       disabled={true}
                     />
                   </Form.Item>
                 </Form>
-                
+
+                <div className="div-card-rate">
+                  <Card
+                    onClick={() => navTo(recipe.id)}
+                    hoverable
+                    style={{
+                      width: 300,
+                    }}
+                    cover={<img alt="img" src={ImgURL} />}
+                    actions={false}
+                  >
+                    <Meta
+                      title={recipe.recipe_name}
+                      description={recipe.description}
+                    />
+                  </Card>
+
+                  <div className="bottom-page-rating">
+                    <p className="text-rate-final">Puntuacion Final</p>
+                    <p className="text-rate">{rating.score}</p>
+                    <Rate
+                      style={{ fontSize: 35, paddingTop: 5 }}
+                      allowHalf
+                      value={rating.score}
+                      autoFocus={false}
+                      disabled={true}
+                    />
+                  </div>
+                </div>
               </Card>
             </div>
 
@@ -289,7 +275,7 @@ const ViewGeneralPost = ({ id, onClose }) => {
                     height: "50px",
                     width: "90px",
                   }}
-                  onClick={() => onClose()}
+                  onClick={() => navExit()}
                 >
                   <RollbackOutlined />
                 </Button>
@@ -311,4 +297,4 @@ const ViewGeneralPost = ({ id, onClose }) => {
   );
 };
 
-export default ViewGeneralPost;
+export default ViewReviewID;
