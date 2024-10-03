@@ -13,6 +13,7 @@ import {
   Tag,
   message,
   notification,
+  Card,
 } from "antd";
 
 import "./generalPost.css";
@@ -197,8 +198,6 @@ const PublicarPost = () => {
 
   return (
     <React.Fragment>
-      <Typography.Title level={2}>Nueva Publicacion</Typography.Title>
-
       {/* Form Receta */}
       <Grid
         container
@@ -209,91 +208,98 @@ const PublicarPost = () => {
       >
         <Grid item width={"100%"} md={9}>
           <div className="all-page">
+          <div className="bottom-page-nav"></div>
             <div className="div-general-post">
-              <Form
-                className="div-form-general-post"
-                layout="vertical"
-                name="recipe"
-                requiredMark={customizeRequiredMark}
-                onFinish={onFinish}
-                autoComplete="off"
+              <Card
+                className="post-card-recipe"
+                size="default"
+                title="Nuevo Post"
               >
-                {/* Input Titulo */}
-                <Form.Item
-                  className="half-width-slot-generalpost"
-                  label="Titulo"
-                  name="title_post"
-                  normalize={(value) => (value || "").toUpperCase()}
-                  rules={[{ required: true, message: "Campo Obligatorio." }]}
+                <Form
+                  className="div-form-general-post"
+                  layout="vertical"
+                  name="recipe"
+                  requiredMark={customizeRequiredMark}
+                  onFinish={onFinish}
+                  autoComplete="off"
                 >
-                  <Input disabled={false} />
-                </Form.Item>
-
-                {/* Biografia*/}
-                <Form.Item
-                  className="half-width-slot-generalpost"
-                  style={{ height: "10%" }}
-                  label="Contenido"
-                  name="text_post"
-                  normalize={(value) => value || ""}
-                  rules={[{ required: true, message: "Campo Obligatorio." }]}
-                >
-                  <Input.TextArea
-                    showCount
-                    maxLength={500}
-                    placeholder="Contenido"
-                    style={{ height: "100%", resize: "none" }}
-                    disabled={false}
-                  />
-                </Form.Item>
-
-                {/* Input imagen */}
-                <div type="flex" justify="center" align="middle">
+                  {/* Input Titulo */}
                   <Form.Item
-                    className="customSizedUploadGP"
-                    justify="center"
-                    align="middle"
-                    label="Imagen"
-                    name="image_post_id"
+                    className="half-width-slot-generalpost"
+                    label="Titulo"
+                    name="title_post"
+                    normalize={(value) => (value || "").toUpperCase()}
+                    rules={[{ required: true, message: "Campo Obligatorio." }]}
                   >
-                    <Upload
-                      //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                      listType="picture-card"
-                      {...props}
-                      fileList={imgFileList}
-                      onChange={handleFileSubmit}
-                      onPreview={onPreview}
-                      //beforeUpload={() => false} // Evita la carga automática de la imagen
-                    >
-                      {fileList != null && fileList.length < 1 && "+ Upload"}
-                    </Upload>
+                    <Input disabled={false} />
                   </Form.Item>
-                </div>
 
-                {/* Boton Submit */}
-                <Form.Item className="half-width-slot-generalpost">
-                  <div className="half-width-slot-profile-btnGP">
-                    <div className="btnBlueGP">
-                      <Button type="primary" shape="round" htmlType="submit">
-                        {" "}
-                        Publicar{" "}
-                      </Button>
-                    </div>
-                    <div>
-                      <Button
-                        danger
-                        type="primary"
-                        shape="round"
-                        onClick={Salir}
+                  {/* Biografia*/}
+                  <Form.Item
+                    className="half-width-slot-generalpost"
+                    style={{ height: "10%" }}
+                    label="Contenido"
+                    name="text_post"
+                    normalize={(value) => value || ""}
+                    rules={[{ required: true, message: "Campo Obligatorio." }]}
+                  >
+                    <Input.TextArea
+                      showCount
+                      maxLength={500}
+                      placeholder="Contenido"
+                      style={{ height: "100%", resize: "none" }}
+                      disabled={false}
+                    />
+                  </Form.Item>
+
+                  {/* Input imagen */}
+                  <div type="flex" justify="center" align="middle">
+                    <Form.Item
+                      className="customSizedUploadGP"
+                      justify="center"
+                      align="middle"
+                      label="Imagen"
+                      name="image_post_id"
+                    >
+                      <Upload
+                        //action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                        listType="picture-card"
+                        {...props}
+                        fileList={imgFileList}
+                        onChange={handleFileSubmit}
+                        onPreview={onPreview}
+                        //beforeUpload={() => false} // Evita la carga automática de la imagen
                       >
-                        {" "}
-                        Cancelar{" "}
-                      </Button>
-                    </div>
+                        {fileList != null && fileList.length < 1 && "+ Upload"}
+                      </Upload>
+                    </Form.Item>
                   </div>
-                </Form.Item>
-              </Form>
+
+                  {/* Boton Submit */}
+                  <Form.Item className="half-width-slot-generalpost">
+                    <div className="half-width-slot-profile-btnGP">
+                      <div className="btnBlueGP">
+                        <Button type="primary" htmlType="submit">
+                          {" "}
+                          Publicar{" "}
+                        </Button>
+                      </div>
+                      <div>
+                        <Button
+                          danger
+                          type="primary"
+                          onClick={() => Salir()}
+                        >
+                          {" "}
+                          Cancelar{" "}
+                        </Button>
+                      </div>
+                    </div>
+                  </Form.Item>
+                </Form>
+              </Card>
             </div>
+            <div className="bottom-page-nav"></div>
           </div>
         </Grid>
       </Grid>

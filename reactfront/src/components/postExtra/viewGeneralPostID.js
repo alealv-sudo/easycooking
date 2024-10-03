@@ -1,21 +1,27 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import { useParams } from "react-router-dom";
 import { BlogCommentSection } from "replyke";
-import { Grid, CircularProgress } from "@mui/material";
+import { Grid } from "@mui/material";
 import { RollbackOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 
-import { Typography, Upload, Form, Input, Button, Spin, Card } from "antd";
+import { Upload, Form, Input, Button, Card, Spin } from "antd";
+
+import { Link } from "react-router-dom";
 
 import "./generalPost.css";
 
-const ViewGeneralPost = ({ id, onClose }) => {
+const ViewGeneralPostID = () => {
   const [cookies, setCookie] = useCookies(["userToken"]);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [gPost, setGPost] = useState();
 
   const [isLoading, setLoading] = useState(true);
+  const [isImage, setIsimage] = useState(false);
   const [imgFileList, setFileList] = useState([]);
 
   const [state, setState] = useState({
@@ -113,6 +119,8 @@ const ViewGeneralPost = ({ id, onClose }) => {
       .then((res) => {
         // Get IMG in format BLOB
         // Crear una URL a partir del blob
+        console.log("entro");
+
         const url = URL.createObjectURL(
           new Blob([res.data], { type: "image/png" })
         );
@@ -165,13 +173,19 @@ const ViewGeneralPost = ({ id, onClose }) => {
     imgWindow?.document.write(image.outerHTML);
   };
 
+  const navExit = () => {
+    navigate(-1);
+  };
+
   /* Render */
 
   if (isLoading) {
     return (
-      <Grid item width={"100%"} md={12}>
-        <CircularProgress />
-      </Grid>
+      <div style={{ textAlignLast: "center" }}>
+        <br />
+        <br />
+        <Spin color="#000106" tip="Loading..." />
+      </div>
     );
   }
 
@@ -196,7 +210,7 @@ const ViewGeneralPost = ({ id, onClose }) => {
                     height: "50px",
                     width: "90px",
                   }}
-                  onClick={() => onClose()}
+                  onClick={() => navExit()}
                 >
                   <RollbackOutlined />
                 </Button>
@@ -227,14 +241,6 @@ const ViewGeneralPost = ({ id, onClose }) => {
                   }}
                   autoComplete="off"
                 >
-                  {/* Input Titulo */}
-                  <Form.Item
-                    className="half-width-slot-generalpost"
-                    name="title_post"
-                  >
-                    <Input className="half-width-slot-title" disabled={true} />
-                  </Form.Item>
-
                   {/* Input imagen */}
                   {String(gPost.image_post_id) !== "1" ? (
                     <div type="flex" justify="center" align="middle">
@@ -259,7 +265,16 @@ const ViewGeneralPost = ({ id, onClose }) => {
                     <></>
                   )}
 
-                  {/* Contenido*/}
+                  {/* Input Titulo */}
+                  <Form.Item
+                    className="half-width-slot-generalpost"
+                    label="Titulo: "
+                    name="title_post"
+                  >
+                    <Input disabled={true} />
+                  </Form.Item>
+
+                  {/* Biografia*/}
                   <Form.Item
                     className="half-width-slot-generalpost"
                     style={{ height: "10%" }}
@@ -275,7 +290,6 @@ const ViewGeneralPost = ({ id, onClose }) => {
                     />
                   </Form.Item>
                 </Form>
-                
               </Card>
             </div>
 
@@ -289,7 +303,7 @@ const ViewGeneralPost = ({ id, onClose }) => {
                     height: "50px",
                     width: "90px",
                   }}
-                  onClick={() => onClose()}
+                  onClick={() => navExit()}
                 >
                   <RollbackOutlined />
                 </Button>
@@ -311,4 +325,4 @@ const ViewGeneralPost = ({ id, onClose }) => {
   );
 };
 
-export default ViewGeneralPost;
+export default ViewGeneralPostID;

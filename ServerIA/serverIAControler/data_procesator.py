@@ -116,6 +116,9 @@ def executeIA(num_userid):
         # print(tempRatingList)
         # print(tempGroupList)
 
+        if not tempRatingList or not tempGroupList or len(tempRatingList) != len(tempGroupList):
+            continue
+
         data_corr = {'tempGroupList': tempGroupList, 'tempRatingList': tempRatingList}
         pd_corr = pd.DataFrame(data_corr)
         r = pd_corr.corr(method="pearson")["tempRatingList"]["tempGroupList"]
@@ -172,6 +175,7 @@ def executeIA(num_userid):
     final_recomendation = recipesPerId_sorted.loc[recipesPerId_sorted['recipeId'].isin(recommendation_df.head(30)['recipeId'].tolist())]
     # print(final_recomendation)
     idsToSend = final_recomendation['recipeId'].tolist()
+    idsToSend = list(set(idsToSend))
 
     return idsToSend
 

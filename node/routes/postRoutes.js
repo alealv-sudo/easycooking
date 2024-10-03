@@ -3,10 +3,11 @@ import PostCTRL  from "../controllers/PostController.js"
 
 const router = express.Router()
 
-router.get('/', PostCTRL.getAllPost);
 router.get('/paginated', PostCTRL.getPostsPaginated);
 router.get('/paginatedUser', PostCTRL.getOterUserPostsPaginated);
+router.get('/paginatedSelect', PostCTRL.getSelectPostsPaginated);
 router.get('/:id', PostCTRL.getPost);
+router.get('/', PostCTRL.getAllPost);
 router.get('/user/:id',PostCTRL.getPostUser);
 router.post('/', PostCTRL.createPost);
 router.put('/', PostCTRL.updatePost);

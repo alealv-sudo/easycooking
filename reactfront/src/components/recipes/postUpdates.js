@@ -2,11 +2,15 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  MinusCircleOutlined,
+  PlusOutlined,
+  RollbackOutlined,
+} from "@ant-design/icons";
 import { Grid } from "@mui/material";
 
 import {
-  Typography,
+  Card,
   Upload,
   Form,
   Input,
@@ -25,7 +29,7 @@ const folderID = "1v-Q_3LzdTfinD3bq51YaWg0VA1vymj1b";
 
 const UpdateRecipes = () => {
   const [cookies, setCookie] = useCookies(["userToken"]);
-  const { id } = useParams()
+  const { id } = useParams();
 
   const [imgFileList, setFileList] = useState([]);
 
@@ -46,16 +50,16 @@ const UpdateRecipes = () => {
 
   function getRecipe() {
     axios
-      .get(process.env.REACT_APP_API_URL + 'post/' + id + "?userId=" + cookies.id)
+      .get(
+        process.env.REACT_APP_API_URL + "post/" + id + "?userId=" + cookies.id
+      )
       .then((response) => {
         const recipeData = response.data.post;
-        
+
         if (recipeData.creatorId !== cookies.id) {
           // console.log("creador no autorizado a editar");
-          navigate("/private/viewRecipe/"+id)
+          navTo()
         }
-
-        console.log("Data", recipeData);
         setRecipe(recipeData);
         DownloadFile(recipeData.image_recipe);
       })
@@ -69,8 +73,12 @@ const UpdateRecipes = () => {
     setCountries(countriesData);
   }, []);
 
-  const Salir = () => {
+  const navExit = () => {
     navigate(-1);
+  };
+
+  const navTo = () => {
+    navigate("/private/recipesAdministrator");
   };
 
   /* Peticiones BD */
@@ -87,11 +95,10 @@ const UpdateRecipes = () => {
       ingredientsData.push(newElement);
     }
 
-    console.log("Ingredients data", ingredientValue);
     axios
       .post(process.env.REACT_APP_API_URL + "ingredients/", ingredientsData)
       .then(function response(response) {
-        console.log("respuesta", response);
+
       })
       .catch(function error(error) {
         console.log(error);
@@ -136,7 +143,7 @@ const UpdateRecipes = () => {
             notification.success({
               message: "Receta editada con exito",
             });
-            Salir();
+            navTo();
           }
         })
         .catch(function error(error) {
@@ -162,12 +169,11 @@ const UpdateRecipes = () => {
         notification.success({
           message: "Receta editada con exito",
         });
-        Salir();
+        navTo();
       })
       .catch(function error(error) {
         console.log(error);
       });
-
   };
 
   /* Funciones Imagenes */
@@ -225,7 +231,31 @@ const UpdateRecipes = () => {
   };
 
   const DownloadFile = (image_recipe) => {
-    axios
+    if (image_recipe.length > 33) {
+      let url = "";
+      url = image_recipe
+
+      const imageUpload = [
+        {
+          uid: "-1",
+          name: "image.png",
+          status: "done",
+          url: url,
+        },
+      ];
+
+      setState({
+        fileList: [],
+      });
+      setFileList(imageUpload);
+      setState({
+        fileList: imageUpload,
+      });
+
+      setLoading(false);
+    }
+    else {
+      axios
       .get(process.env.REACT_APP_API_URL + "google/download/" + image_recipe, {
         responseType: "blob",
       })
@@ -265,6 +295,7 @@ const UpdateRecipes = () => {
         console.error(error);
         // message.error("Descarga fallida.");
       });
+    }
   };
 
   const props = {
@@ -343,356 +374,404 @@ const UpdateRecipes = () => {
 
   return (
     <React.Fragment>
-      <Grid container spacing={1} xs={12} justifyContent={{ xs: 'center', md: 'space-evenly' }} alignContent={'center'} >
+      <Grid
+        container
+        spacing={1}
+        xs={12}
+        justifyContent={{ xs: "center", md: "space-evenly" }}
+        alignContent={"center"}
+      >
         {/*  */}
-        <Grid item width={'100%'} md={9}>
-            
-        <div className="all-page">
-        <Typography.Title level={2}>Editar</Typography.Title>
-        {/* Form Receta */}
-          <div className="div-general-recipe-post">
-            <Form
-              layout="vertical"
-              className="div-form-general-recipe-post"
-              requiredMark={false}
-              name="recipes"
-              onFinish={onFinish}
-              initialValues={{
-                id: recipe.id,
-                ingredients: recipe.Ingredients,
-                recipe_name: recipe.recipe_name,
-                preparation_time: recipe.preparation_time,
-                temperature: recipe.temperature,
-                calories: recipe.calories,
-                description: recipe.description,
-                preparation: recipe.preparation,
-                type_recipe: recipe.type_recipe,
-                originary: recipe.originary,
-                tips: recipe.tips,
-              }}
-            >
-              {/* Input imagen */}
-              <div type="flex" justify="center" align="middle">
-                <Form.Item
-                  className="customSizedUploadRP"
-                  justify="center"
-                  align="middle"
-                  label="Imagen"
-                  name="image_recipe"
+        <Grid item width={"100%"} md={9}>
+          <div className="all-page">
+            <div className="bottom-page-nav">
+              <div className="buttom-div-nav">
+                <Button
+                  type="default"
+                  size="large"
+                  style={{
+                    fontSize: "20px",
+                    height: "50px",
+                    width: "90px",
+                  }}
+                  onClick={() => navExit()}
                 >
-                  <Upload
-                    {...props}
-                    listType="picture-card"
-                    fileList={imgFileList}
-                    onChange={handleFileSubmit}
-                    onPreview={onPreview}
-                    //beforeUpload={() => false} // Evita la carga automática de la imagen
-                  >
-                    {fileList.length < 1 && "+ Upload"}
-                  </Upload>
-                </Form.Item>
+                  <RollbackOutlined />
+                </Button>
               </div>
+            </div>
 
-              {/* Input Titulo */}
-              <Form.Item
-                className="half-width-slot"
-                label="Titulo"
-                name="recipe_name"
-                normalize={(value) => (value || "").toUpperCase()}
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor introduce el numbre de la receta.",
-                  },
-                ]}
+            {/* Form Receta */}
+            <div className="div-general-recipe-post">
+              <Card className="post-card-recipe" size="default" title='Editar Receta'>
+              <Form
+                layout="vertical"
+                className="div-form-general-recipe-post"
+                requiredMark={false}
+                name="recipes"
+                onFinish={onFinish}
+                initialValues={{
+                  id: recipe.id,
+                  ingredients: recipe.Ingredients,
+                  recipe_name: recipe.recipe_name,
+                  preparation_time: recipe.preparation_time,
+                  temperature: recipe.temperature,
+                  calories: recipe.calories,
+                  description: recipe.description,
+                  preparation: recipe.preparation,
+                  type_recipe: recipe.type_recipe,
+                  originary: recipe.originary,
+                  tips: recipe.tips,
+                }}
               >
-                <Input disabled={false} />
-              </Form.Item>
-
-              <div type="flex" justify="center" align="middle">
-                {/* Input Tiempo de Preparacion */}
-                <Space className="btnBlueRP">
+                {/* Input imagen */}
+                <div type="flex" justify="center" align="middle">
                   <Form.Item
-                    className="half-width-slot"
-                    type="flex"
+                    className="customSizedUploadRP"
                     justify="center"
                     align="middle"
-                    label="Tiempo de preparacion"
-                    name="preparation_time"
-                    normalize={(value) => value || ""}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor introduce el tiempo de preparacion de la receta.",
-                      },
-                    ]}
+                    label="Imagen"
+                    name="image_recipe"
                   >
-                    <Input
-                      placeholder="Tinempo en Minutos"
-                      type="number"
-                      min="0"
-                      step="15"
-                      disabled={false}
-                    />
+                    <Upload
+                      {...props}
+                      listType="picture-card"
+                      fileList={imgFileList}
+                      onChange={handleFileSubmit}
+                      onPreview={onPreview}
+                      //beforeUpload={() => false} // Evita la carga automática de la imagen
+                    >
+                      {fileList.length < 1 && "+ Upload"}
+                    </Upload>
                   </Form.Item>
-                </Space>
-                {/* Input Temperatura de Coccion */}
-                <Space className="btnBlueRP">
-                  <Form.Item
-                    className="half-width-slot"
-                    type="flex"
-                    justify="center"
-                    align="middle"
-                    label="Temp Preparacion"
-                    name="temperature"
-                    normalize={(value) => value || ""}
-                    rules={[
-                      {
-                        required: false,
-                        message:
-                          "Por favor introduce el tiempo de preparacion de la receta.",
-                      },
-                    ]}
-                  >
-                    <Input
-                      placeholder="Temperatura en °C"
-                      type="number"
-                      min=""
-                      step="10"
-                      // disabled={isDisabledTemp}
-                      disabled={false}
-                    />
-                    {/* <Checkbox type="checkbox" label="N/A" name="N_A_Temp" onChange={handleCheckboxChange}
-                            >
-                                N/A
-                            </Checkbox> */}
-                  </Form.Item>
-                </Space>
-                {/* Input Calorias */}
-                <Space>
-                  <Form.Item
-                    className="half-width-slot"
-                    type="flex"
-                    justify="center"
-                    align="middle"
-                    label="Calorias"
-                    name="calories"
-                    normalize={(value) => value || ""}
-                    rules={[
-                      {
-                        required: false,
-                        message:
-                          "Por favor introduce el tiempo de preparacion de la receta.",
-                      },
-                    ]}
-                  >
-                    <Input
-                      placeholder="Cantidad de Calorias"
-                      type="number"
-                      min="0"
-                      // disabled={isDisabledCalories}
-                      disabled={false}
-                    />
-                    {/* <Checkbox type="checkbox" label="N/A" name="N_A_Calories" onChange={handleCheckboxChange}
-                            >
-                                N/A
-                            </Checkbox> */}
-                  </Form.Item>
-                </Space>
-              </div>
+                </div>
 
-              {/* Input Descripcion */}
-              <Form.Item
-                className="half-width-slot"
-                label="Descripcion"
-                name="description"
-                normalize={(value) => value || ""}
-                rules={[
-                  {
-                    required: false,
-                    message:
-                      "Por favor introduce una descripcion para la receta.",
-                  },
-                ]}
-              >
-                <Input.TextArea
-                  className="colors-bg"
-                  autoSize={{ minRows: 1, maxRows: 6 }}
-                  disabled={false}
-                />
-              </Form.Item>
-
-              {/* Input Ingredientes */}
-              <label className="label-ingedient">Ingredientes</label>
-
-              <div type="flex" justify="center" align="middle">
-                <Form.List
-                  name="ingredients"
+                {/* Input Titulo */}
+                <Form.Item
+                  className="half-width-slot"
+                  label="Título"
+                  name="recipe_name"
+                  normalize={(value) => (value || "").toUpperCase()}
                   rules={[
                     {
-                      validator: async (_, names) => {
-                        if (!names || names.length < 2) {
-                          return Promise.reject(
-                            new Error("Requerido Minimo 2 ingredientes")
-                          );
-                        }
-                      },
+                      required: true,
+                      message: "Por favor introduce el numbre de la receta.",
                     },
                   ]}
                 >
-                  {(fields, { add, remove }, { errors }) => (
-                    <>
-                      {fields.map(({ key, name, ...restField }) => (
-                        <div key={key} className="item-form-list">
-                          <Form.Item
-                            style={{
-                              width: "100%",
-                              marginRight: 4,
-                            }}
-                            {...restField}
-                            name={[name, "ingredient"]}
-                            rules={[
-                              {
-                                required: true,
-                                message: "Missing ingredient",
-                              },
-                            ]}
-                          >
-                            <Input placeholder="ingredient" />
-                          </Form.Item>
-                          <MinusCircleOutlined onClick={() => remove(name)} />
-                        </div>
-                      ))}
-                      <Form.Item
-                        style={{
-                          width: "60%",
-                        }}
-                      >
-                        <Button
-                          type="dashed"
-                          onClick={() => add()}
-                          block
-                          icon={<PlusOutlined />}
-                        >
-                          Add field
-                        </Button>
-                        <Form.ErrorList errors={errors} />
-                      </Form.Item>
-                    </>
-                  )}
-                </Form.List>
-              </div>
+                  <Input disabled={false} />
+                </Form.Item>
 
-              {/* Input Metodo de Preparacion */}
-              <Form.Item
-                className="half-width-slot"
-                label="Preparacion"
-                name="preparation"
-                normalize={(value) => value || ""}
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor introduce la preparacion de la receta.",
-                  },
-                ]}
-              >
-                <Input.TextArea
-                  className="colors-bg"
-                  autoSize={{ minRows: 1, maxRows: 6 }}
-                  disabled={false}
-                />
-              </Form.Item>
-
-              <div type="flex" justify="center" align="middle">
-                <Space>
-                  {/* Input Tipo */}
-                  <Form.Item
-                    className="half-width-slot"
-                    type="flex"
-                    justify="center"
-                    align="middle"
-                    label="Tipo de receta"
-                    name="type_recipe"
-                    normalize={(value) => (value || "").toUpperCase()}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor introduce un tipo de receta.",
-                      },
-                    ]}
-                  >
-                    <Select disabled={false} showSearch>
-                      <Select.Option value="Comida">Comida</Select.Option>
-                      <Select.Option value="Bebida">Bebida</Select.Option>
-                      <Select.Option value="Postre">Postre</Select.Option>
-                    </Select>
-                  </Form.Item>
-                </Space>
-
-                <Space>
-                  {/* Input Origen */}
-                  <Form.Item
-                    className="half-width-slot"
-                    type="flex"
-                    justify="center"
-                    align="middle"
-                    label="País"
-                    name="originary"
-                    normalize={(value) => (value || "").toUpperCase()}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor introduce un Lugar de origen de la receta.",
-                      },
-                    ]}
-                  >
-                    <Select disabled={false} showSearch>
-                      {countries.map((country) => (
-                        <Select.Option key={country.code} value={country.name}>
-                          {country.name}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                </Space>
-              </div>
-
-              {/* Input Tips y Notas */}
-              <Form.Item
-                className="half-width-slot"
-                label="Tips & Notes"
-                name="tips"
-                normalize={(value) => value || ""}
-              >
-                <Input.TextArea
-                  className="colors-bg"
-                  autoSize={{ minRows: 1, maxRows: 6 }}
-                  disabled={false}
-                />
-              </Form.Item>
-
-              {/* Boton Submit */}
-              <Form.Item className="my-form-container">
-                <div className="half-width-slot-profile-btnRP">
-                  <div className="btnBlueRP">
-                    <Button type="primary" shape="round" htmlType="submit">
-                      {" "}
-                      Editar{" "}
-                    </Button>
-                  </div>
-                  <div>
-                    <Button danger type="primary" shape="round">
-                      {" "}
-                      Cancelar{" "}
-                    </Button>
-                  </div>
+                <div type="flex" justify="center" align="middle">
+                  {/* Input Tiempo de Preparacion */}
+                  <Space className="btnBlueRP">
+                    <Form.Item
+                      className="half-width-slot"
+                      type="flex"
+                      justify="center"
+                      align="middle"
+                      label="Tiempo de preparación"
+                      name="preparation_time"
+                      normalize={(value) => value || ""}
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            "Por favor introduce el tiempo de preparacion de la receta.",
+                        },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Tiempo en Minutos"
+                        type="number"
+                        min="0"
+                        step="15"
+                        disabled={false}
+                      />
+                    </Form.Item>
+                  </Space>
+                  {/* Input Temperatura de Coccion */}
+                  <Space className="btnBlueRP">
+                    <Form.Item
+                      className="half-width-slot"
+                      type="flex"
+                      justify="center"
+                      align="middle"
+                      label="Temp Preparación"
+                      name="temperature"
+                      normalize={(value) => value || ""}
+                      rules={[
+                        {
+                          required: false,
+                          message:
+                            "Por favor introduce el tiempo de preparacion de la receta.",
+                        },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Temperatura en °C"
+                        type="number"
+                        min=""
+                        step="10"
+                        // disabled={isDisabledTemp}
+                        disabled={false}
+                      />
+                      {/* <Checkbox type="checkbox" label="N/A" name="N_A_Temp" onChange={handleCheckboxChange}
+                            >
+                                N/A
+                            </Checkbox> */}
+                    </Form.Item>
+                  </Space>
+                  {/* Input Calorias */}
+                  <Space>
+                    <Form.Item
+                      className="half-width-slot"
+                      type="flex"
+                      justify="center"
+                      align="middle"
+                      label="Calorias"
+                      name="calories"
+                      normalize={(value) => value || ""}
+                      rules={[
+                        {
+                          required: false,
+                          message:
+                            "Por favor introduce el tiempo de preparacion de la receta.",
+                        },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Cantidad de Calorias"
+                        type="number"
+                        min="0"
+                        // disabled={isDisabledCalories}
+                        disabled={false}
+                      />
+                      {/* <Checkbox type="checkbox" label="N/A" name="N_A_Calories" onChange={handleCheckboxChange}
+                            >
+                                N/A
+                            </Checkbox> */}
+                    </Form.Item>
+                  </Space>
                 </div>
-              </Form.Item>
-            </Form>
+
+                {/* Input Descripcion */}
+                <Form.Item
+                  className="half-width-slot"
+                  label="Descripción"
+                  name="description"
+                  normalize={(value) => value || ""}
+                  rules={[
+                    {
+                      required: false,
+                      message:
+                        "Por favor introduce una descripcion para la receta.",
+                    },
+                  ]}
+                >
+                  <Input.TextArea
+                    autoSize={{ minRows: 1, maxRows: 6 }}
+                    disabled={false}
+                  />
+                </Form.Item>
+
+                {/* Input Ingredientes */}
+                <label className="label-ingedient">Ingredientes</label>
+
+                <div type="flex" justify="center" align="middle">
+                  <Form.List
+                    name="ingredients"
+                    rules={[
+                      {
+                        validator: async (_, names) => {
+                          if (!names || names.length < 2) {
+                            return Promise.reject(
+                              new Error("Requerido Minimo 2 ingredientes")
+                            );
+                          }
+                        },
+                      },
+                    ]}
+                  >
+                    {(fields, { add, remove }, { errors }) => (
+                      <>
+                        {fields.map(({ key, name, ...restField }) => (
+                          <div key={key} className="item-form-list">
+                            <Form.Item
+                              style={{
+                                width: "100%",
+                                marginRight: 4,
+                              }}
+                              {...restField}
+                              name={[name, "ingredient"]}
+                              rules={[
+                                {
+                                  required: true,
+                                  message: "Missing ingredient",
+                                },
+                              ]}
+                            >
+                              <Input placeholder="ingredient" />
+                            </Form.Item>
+                            <MinusCircleOutlined onClick={() => remove(name)} />
+                          </div>
+                        ))}
+                        <Form.Item
+                          style={{
+                            width: "60%",
+                          }}
+                        >
+                          <Button
+                            type="dashed"
+                            onClick={() => add()}
+                            block
+                            icon={<PlusOutlined />}
+                          >
+                            Add field
+                          </Button>
+                          <Form.ErrorList errors={errors} />
+                        </Form.Item>
+                      </>
+                    )}
+                  </Form.List>
+                </div>
+
+                {/* Input Metodo de Preparacion */}
+                <Form.Item
+                  className="half-width-slot"
+                  label="Preparación"
+                  name="preparation"
+                  normalize={(value) => value || ""}
+                  rules={[
+                    {
+                      required: true,
+                      message:
+                        "Por favor introduce la preparacion de la receta.",
+                    },
+                  ]}
+                >
+                  <Input.TextArea
+                    autoSize={{ minRows: 1, maxRows: 6 }}
+                    disabled={false}
+                  />
+                </Form.Item>
+
+                <div type="flex" justify="center" align="middle">
+                  <Space>
+                    {/* Input Tipo */}
+                    <Form.Item
+                      className="half-width-slot"
+                      type="flex"
+                      justify="center"
+                      align="middle"
+                      label="Tipo de receta"
+                      name="type_recipe"
+                      normalize={(value) => (value || "").toUpperCase()}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Por favor introduce un tipo de receta.",
+                        },
+                      ]}
+                    >
+                      <Select disabled={false} showSearch>
+                          <Select.Option value={"ASADOS"}>Asados</Select.Option>
+                          <Select.Option value={"BEBIDAS"}>Bebidas</Select.Option>
+                          <Select.Option value={"COCTELES"}>Cocktails</Select.Option>
+                          <Select.Option value={"ENSALADAS"}>Ensaladas</Select.Option>
+                          <Select.Option value={"FITNESS"}>Fitness</Select.Option>
+                          <Select.Option value={"GUISOS"}>Guisos</Select.Option>
+                          <Select.Option value={"COMIDA"}>Platillos</Select.Option>
+                          <Select.Option value={"POSTRES"}>Postres</Select.Option>
+                          <Select.Option value={"SALSAS"}>Salsas</Select.Option>
+                          <Select.Option value={"SNACKS"}>Snacks</Select.Option>
+                          <Select.Option value={"SOPAS"}>Sopas</Select.Option>
+                        </Select>
+                    </Form.Item>
+                  </Space>
+
+                  <Space>
+                    {/* Input Origen */}
+                    <Form.Item
+                      className="half-width-slot"
+                      type="flex"
+                      justify="center"
+                      align="middle"
+                      label="País"
+                      name="originary"
+                      normalize={(value) => (value || "").toUpperCase()}
+                      rules={[
+                        {
+                          required: true,
+                          message:
+                            "Por favor introduce un Lugar de origen de la receta.",
+                        },
+                      ]}
+                    >
+                      <Select disabled={false} showSearch>
+                        {countries.map((country) => (
+                          <Select.Option
+                            key={country.code}
+                            value={country.name}
+                          >
+                            {country.name}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  </Space>
+                </div>
+
+                {/* Input Tips y Notas */}
+                <Form.Item
+                  className="half-width-slot"
+                  label="Tips & Notas"
+                  name="tips"
+                  normalize={(value) => value || ""}
+                >
+                  <Input.TextArea
+                    autoSize={{ minRows: 1, maxRows: 6 }}
+                    disabled={false}
+                  />
+                </Form.Item>
+
+                {/* Boton Submit */}
+                <Form.Item className="my-form-container">
+                  <div className="half-width-slot-profile-btnRP">
+                    <div className="btnBlueRP">
+                      <Button type="primary" htmlType="submit">
+                        {" "}
+                        Editar{" "}
+                      </Button>
+                    </div>
+                    <div>
+                      <Button danger type="primary" onClick={() => navTo()}>
+                        {" "}
+                        Cancelar{" "}
+                      </Button>
+                    </div>
+                  </div>
+                </Form.Item>
+              </Form>
+              </Card>
+            </div>
+            <div className="bottom-page-nav">
+              <div className="buttom-div-nav">
+                <Button
+                  type="default"
+                  size="large"
+                  style={{
+                    fontSize: "20px",
+                    height: "50px",
+                    width: "90px",
+                  }}
+                  onClick={() => navExit()}
+                >
+                  <RollbackOutlined />
+                </Button>
+              </div>
+            </div>
           </div>
-        </div>
         </Grid>
       </Grid>
     </React.Fragment>

@@ -109,6 +109,7 @@ export default function ListDay({ userId }) {
                 size="small"
                 dataSource={data}
                 footer={false}
+                pagination={{pageSize: 4, showSizeChanger: false}}
                 renderItem={(item) => (
                     <List.Item
                         key={item.title}

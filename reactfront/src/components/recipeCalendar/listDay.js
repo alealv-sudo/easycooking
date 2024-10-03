@@ -26,9 +26,8 @@ const IconText = ({ icon, text }) => (
 const UrlTem =
   "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505";
 
-export default function ListDay({ favSelect, favorites, userId, day}) {
-
-  const [isLoading, setIsLoadin] = useState(true)
+export default function ListDay({ favSelect, favorites, userId, day }) {
+  const [isLoading, setIsLoadin] = useState(true);
   const [listData, setListData] = useState([]);
   const [data, setData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,28 +58,27 @@ export default function ListDay({ favSelect, favorites, userId, day}) {
 
   async function setDatalist(dataMa) {
     const arrayRecipe = Array.from(dataMa).map((e) => e.recipe);
-    console.log("recipe", arrayRecipe);
-    
+
     let urlOb = [];
 
     for (let index = 0; index < dataMa.length; index++) {
       const e = dataMa[index].recipe;
-      console.log("e", e);
 
       let res;
 
       if (e.image_recipe === "1") {
         res = UrlTem;
       } else {
-        let blo = await DownloadFile(e.image_recipe);
-        res = URL.createObjectURL(blo);
-        setUrl(res);
+        if (e.image_recipe.length <= 33) {
+          let blo = await DownloadFile(e.image_recipe);
+          res = window.URL.createObjectURL(blo);
+        } else {
+          res = e.image_recipe;
+        }
       }
 
       urlOb.push(res);
     }
-
-    
 
     const dataM = Array.from(arrayRecipe).map((e, i) => ({
       idRecipe: e.id,
@@ -202,8 +200,13 @@ export default function ListDay({ favSelect, favorites, userId, day}) {
   };
 
   if (isLoading) {
-    return <div style={{textAlignLast:"center" }} ><br/><br/>
-        <Spin color="#000106" tip="Loading..."/></div>;
+    return (
+      <div style={{ textAlignLast: "center" }}>
+        <br />
+        <br />
+        <Spin color="#000106" tip="Loading..." />
+      </div>
+    );
   }
 
   return (
@@ -243,6 +246,7 @@ export default function ListDay({ favSelect, favorites, userId, day}) {
         size="small"
         dataSource={data}
         footer={false}
+        pagination={{ pageSize: 4, showSizeChanger: false }}
         renderItem={(item) => (
           <List.Item
             key={item.title}
@@ -282,10 +286,7 @@ export default function ListDay({ favSelect, favorites, userId, day}) {
               </div>
             }
           >
-            <List.Item.Meta
-              title={item.title}
-              description={item.description}
-            />
+            <List.Item.Meta title={item.title} description={item.description} />
             {item.content}
           </List.Item>
         )}

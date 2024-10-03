@@ -39,7 +39,10 @@ FollowerCTRL.getOterUserFollowerPaginated = async (req, res) => {
         });
     
         // Find the total number of posts
-        const totalfollower = await FollowerModels.count();
+        const totalfollower = await FollowerModels.count({
+            where: {
+                userId: userId
+        }});
 
          // Add isFollow field to each post
          const postsWithFollows = await Promise.all(follower.map(async follow => {

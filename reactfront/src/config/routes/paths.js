@@ -25,3 +25,8 @@ export const CALENDAR = "/private/calendar";
 export const RECIPESFILTERED = "/private/recipesFiltered";
 export const RECIPESADM = "/private/recipesAdministrator";
 
+export const SRCHPOST = "/private/seacrhByPostName/:id";
+export const SRCHRECIPE = "/private/seacrhByRecipesName/:id";
+export const SRCHREVIEW = "/private/seacrhByReviewName/:id";
+export const SRCHUSER = "/private/seacrhByUserName/:id";
+export const RECIPESELECTOR = "/private/showrecipe/:id";

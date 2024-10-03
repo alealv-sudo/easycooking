@@ -2,21 +2,23 @@ import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import PostComponent from "./postComponent";
 import { CircularProgress, Grid, Skeleton } from "@mui/material";
-import PostDetails from "./showBlogI";
 import { useCookies } from "react-cookie";
 import PostShowRecipes from "../recipes/postShowRecipes";
-import ViewGeneralPost from "../postExtra/viewGeneralPost";
-import ViewReview from "../postExtra/viewRecipeReview";
+import { useParams } from "react-router-dom";
 
 const UrlTem =
   "https://images.immediate.co.uk/production/volatile/sites/30/2020/08/chorizo-mozarella-gnocchi-bake-cropped-9ab73a3.jpg?quality=90&resize=556,505";
 
-const CompShowBlog = () => {
+const ShowRecipeSelctor = () => {
+
+  const { id } = useParams()
+
   const [recipes, setRecipes] = useState([]);
   const [page, setPage] = useState(0);
   const [maxPage, setMaxPage] = useState(null);
   const [loading, setLoading] = useState(false);
   const observerRef = useRef(null);
+
   useEffect(() => {
     loadMore(); // Initial load
   }, []);
@@ -52,13 +54,21 @@ const CompShowBlog = () => {
   const loadMore = () => {
     if ((maxPage == null || maxPage >= page) && !loading) {
       setLoading(true);
+      console.log("url",process.env.REACT_APP_API_URL +
+        "post/paginatedSelect?page=" +
+        page +
+        "&userId=" +
+        userId + 
+        "&typeRecipe=" + id);
+      
       axios
         .get(
           process.env.REACT_APP_API_URL +
-            "post/paginated?page=" +
+            "post/paginatedSelect?page=" +
             page +
             "&userId=" +
-            userId
+            userId + 
+            "&typeRecipe=" + id
         )
         .then((response) => {
           const recipeData = response.data;
@@ -79,11 +89,15 @@ const CompShowBlog = () => {
   async function setImg(recipeData) {
     let urlOb = [];
 
-    for (let index = 0; index < recipeData?.posts?.length?recipeData.posts.length:0; index++) {
+    for (
+      let index = 0;
+      index < recipeData?.posts?.length ? recipeData.posts.length : 0;
+      index++
+    ) {
       const e = recipeData.posts[index];
 
       let res;
-      
+
       if (e.recipe_name) {
         if (e.image_recipe === "1") {
           res = UrlTem;
@@ -129,10 +143,8 @@ const CompShowBlog = () => {
           urlOb.push(newRecipe);
         }
       }
-
     }
 
-    
     setRecipes((prevRecipes) => [
       ...prevRecipes,
       ...(recipeData?.posts?.length > 0 ? urlOb : []),
@@ -165,31 +177,6 @@ const CompShowBlog = () => {
             alignContent={"center"}
           >
             <PostShowRecipes id={openRecipe} onClose={setOpenRecipe} />
-          </Grid>
-        )}
-        {openGeneralPost && (
-          <Grid
-            item
-            container
-            spacing={2}
-            justifyContent={{ xs: "center", md: "space-evenly" }}
-            alignContent={"center"}
-          >
-            <ViewGeneralPost
-              id={openGeneralPost}
-              onClose={setOpenGeneralPost}
-            />
-          </Grid>
-        )}
-        {openReview && (
-          <Grid
-            item
-            container
-            spacing={2}
-            justifyContent={{ xs: "center", md: "space-evenly" }}
-            alignContent={"center"}
-          >
-            <ViewReview id={openReview} onClose={setOpenReview} />
           </Grid>
         )}
         {
@@ -260,4 +247,4 @@ const CompShowBlog = () => {
   );
 };
 
-export default CompShowBlog;
+export default ShowRecipeSelctor;

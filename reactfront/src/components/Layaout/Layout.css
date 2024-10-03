@@ -4,7 +4,7 @@
     left: 0;
     width: 100dvw;
     height: 10dvh;
-    background-color: #004500;
+    background-color:#63a91f;
     color: #fff;
 }
 
@@ -14,7 +14,7 @@
     left: 0;
     width: 100dvw;
     height: 10dvh;
-    background-color: #004500;
+    background-color: #63a91f;;
     color: #fff;
 }
 
@@ -23,4 +23,13 @@
     margin: 25px 16px;
     padding: 24;
     background-color: #fff;
+}
+
+.color-buuton .css-i4bv87-MuiSvgIcon-root {
+    color: black;
+}
+
+.color-icon .css-kp9ftd-MuiIcon-root{
+    width: 55px;
+    height: 55px;
 }
